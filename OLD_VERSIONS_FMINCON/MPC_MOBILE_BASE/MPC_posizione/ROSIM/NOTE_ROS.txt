@@ -1,0 +1,20 @@
+rosinit('192.168.1.1'); % posso mettere senza o con indirizzo IP del ROS esterno
+
+simu = RobotSimulator % usa le RST e avvia un simulatore, ha diversi sensori ed è differential drive
+
+rosnode list % prende la lista dei nodi
+
+rostopic list % mi dice i topic, ovvero i dati che si scambiano
+
+ristopic info % posso prendere info su quel topic
+
+odometry = rostopic('echo','/odom'); % mi fa vedere il valore che acquista in quel momento quel topic
+
+rosmsg show sensors_msgs/LaserScan % mi mostra quello che il messaggio passa
+
+scanner = rossubscriber('scan'); %posso crease subscribers
+
+laserdata = scanner.LatestMessage % mi alloca l'ultimo valore di quel subscriber
+
+laserdata = recive(scanner,5); % mi passa tutti i dati del messaggio laser
+

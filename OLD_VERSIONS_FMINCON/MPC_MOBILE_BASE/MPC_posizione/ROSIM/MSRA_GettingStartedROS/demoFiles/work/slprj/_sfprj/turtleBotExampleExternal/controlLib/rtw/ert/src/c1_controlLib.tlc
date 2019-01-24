@@ -1,0 +1,93 @@
+%implements "chartSource" "C"
+%function ChartConfig(block, system) void
+  %createrecord chartConfiguration { ...
+          executeAtInitialization  0 ...
+  }
+  %return chartConfiguration
+%endfunction
+%function ChartDataMap(block, system) void
+  %createrecord ChartDataElements {\
+    NumChartData   10 \
+    ChartDataDefaults {\
+      RecordType   "ChartData"\
+      Dimensions   []\
+      IsTestPoint  0\
+    }\
+    ChartData {\
+      Name         "sfEvent"\
+      Description  "ActiveChartEvent"\
+      SFName       ""\
+      Path         ""\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "is_active_c1_controlLib"\
+      Description  "StateIsActive"\
+      SFName       "is_active_c1_controlLib"\
+      Path         "is_active_c1_controlLib"\
+      SrcLocation  ""\
+      IsTestPoint  1\
+    }\
+    ChartData {\
+      Name         "is_TrackMarker"\
+      Description  "StateActiveChild"\
+      SFName       "is_TrackMarker"\
+      Path         "TrackMarker.is_TrackMarker"\
+      SrcLocation  ""\
+      IsTestPoint  1\
+    }\
+    ChartData {\
+      Name         "is_active_TrackMarker"\
+      Description  "StateIsActive"\
+      SFName       "is_active_TrackMarker"\
+      Path         "TrackMarker.is_active_TrackMarker"\
+      SrcLocation  ""\
+      IsTestPoint  1\
+    }\
+    ChartData {\
+      Name         "is_Abnormal"\
+      Description  "StateActiveChild"\
+      SFName       "is_Abnormal"\
+      Path         "TrackMarker.Abnormal.is_Abnormal"\
+      SrcLocation  ""\
+      IsTestPoint  1\
+    }\
+    ChartData {\
+      Name         "is_active_DetectOutliers"\
+      Description  "StateIsActive"\
+      SFName       "is_active_DetectOutliers"\
+      Path         "DetectOutliers.is_active_DetectOutliers"\
+      SrcLocation  ""\
+      IsTestPoint  1\
+    }\
+    ChartData {\
+      Name         "sizeFilt"\
+      Description  "ChartLocal"\
+      SFName       ""\
+      Path         "sizeFilt"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "xFilt"\
+      Description  "ChartLocal"\
+      SFName       ""\
+      Path         "xFilt"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "count"\
+      Description  "ChartLocal"\
+      SFName       ""\
+      Path         "count"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "xPrev"\
+      Description  "ChartLocal"\
+      SFName       ""\
+      Path         "xPrev"\
+      SrcLocation  ""\
+    }\
+  }
+  %return ChartDataElements
+%endfunction
