@@ -1,4 +1,4 @@
-function [A, B, C] = dyn_matrices(psi,u)
+function [A, B, C] = dynamics_MM(psi,u)
 
 import casadi.*
 
