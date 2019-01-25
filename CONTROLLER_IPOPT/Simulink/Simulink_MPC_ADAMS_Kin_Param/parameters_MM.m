@@ -22,7 +22,7 @@ d_man=sqrt(z_man_base^2 + y_man_base^2);
 X=q(1); Y=q(2); TH=q(3); th1=q(4); th2=q(5); th3=q(6); th4=q(7); th5=q(8); th6=q(9); 
 
 DHtable = [ 0       , pi/2  , X       , pi/2;
-            0       , -pi/2 , Y       , -pi/2;
+            0       , pi/2 , Y       , pi/2;
             a_man   , 0     , d_man   , TH;
             0       , pi/2  , 0.08916 , th1;
             -0.425  , 0     , 0       , th2;
