@@ -4,7 +4,7 @@ clear
 %%%%%%%%%%%%  DATA  %%%%%%%%%%%%%
 
 T = 0.25;    %TIME STEP [s]
-N = 35;      %N 
+N = 25;      %N 
 disturb=3;%disturbance 
 
 t0 = 0;     %START TIME [s]
