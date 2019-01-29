@@ -4,13 +4,13 @@ clear
 %%%%%%%%%%%%  DATA  %%%%%%%%%%%%%
 
 T = 0.25;    %TIME STEP [s]
-N = 35;      %N 
-disturb=3;%disturbance 
+N = 25;      %N 
+disturb=0;%disturbance 
 
 t0 = 0;     %START TIME [s]
-tc = 5;     %tempo per fare una curva
+tc = 3;     %tempo per fare una curva
 Ncurve=4;  %numero di curve
-r=0.6;      %raggio della curva
+r=0.3;      %raggio della curva
 t_acc=6;
 Tsample=0.01;
 
@@ -29,10 +29,10 @@ for i=1:length(tt)
         om(i) = 0;
     elseif mod(ncurva,2)==1
         v(i)=vc;
-        om(i)=omc;
+        om(i)=-omc;
     else
         v(i)=vc;
-        om(i)=-omc;
+        om(i)=omc;
     end
     if mod(tt(i)-t_acc,tc)==0
         ncurva=ncurva+1;

@@ -26,6 +26,7 @@ grid on;
 plot(xd(1,:),xd(2,:),'-*')
 legend('Simulated Trajectory','Real Trajectory')
 title('X-Y trajectory')
+axis equal
 
 finpos=[ x(length(xd)) y(length(xd)) th(length(xd))];
 
@@ -56,7 +57,7 @@ grid on
 
 
 
-savefile=['MPC_kin_Param_N=',num2str(N),'_trajCurves_r=0.6_dist=',num2str(disturb)];
+savefile=['MPC_kin_Param_N=',num2str(N),'_trajCurves_r=0.3_NoDist'];
 
 save(savefile);
 
