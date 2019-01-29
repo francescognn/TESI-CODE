@@ -72,28 +72,28 @@ for i=1:length(tt)
         dom(i) = -omc/tc;
     end
 end
-% 
-% figure;
-% subplot(3,1,1)
-% plot(tt,s)
-% title('s');
-% subplot(3,1,2)
-% plot(tt,v)
-% title('v');
-% subplot(3,1,3)
-% plot(tt,dv)
-% title('a');
-% 
-% figure;
-% subplot(3,1,1)
-% plot(tt,th)
-% title('th');
-% subplot(3,1,2)
-% plot(tt,om)
-% title('om');
-% subplot(3,1,3)
-% plot(tt,dom)
-% title('om dot');
+
+figure;
+subplot(3,1,1)
+plot(tt,s)
+title('s');
+subplot(3,1,2)
+plot(tt,v)
+title('v');
+subplot(3,1,3)
+plot(tt,dv)
+title('a');
+
+figure;
+subplot(3,1,1)
+plot(tt,th)
+title('th');
+subplot(3,1,2)
+plot(tt,om)
+title('om');
+subplot(3,1,3)
+plot(tt,dom)
+title('om dot');
 
 th_d = om;
 x_d = v.*cos(th);
@@ -106,9 +106,9 @@ for i = 2:length(tt)
     y(i) = y(i-1) + v(i-1)*T*sin(th(i-1));    
 end
 
-% figure;
-% plot(x,y,'*')
-% axis([0 30 0 30]);
+figure;
+plot(x,y,'*')
+axis([0 30 0 30]);
 
 Ttot=tf;
 

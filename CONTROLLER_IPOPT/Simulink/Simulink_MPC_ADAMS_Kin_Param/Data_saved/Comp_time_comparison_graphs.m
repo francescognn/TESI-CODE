@@ -1,4 +1,4 @@
-clear all
+aclear all
 close all
 clc
 
