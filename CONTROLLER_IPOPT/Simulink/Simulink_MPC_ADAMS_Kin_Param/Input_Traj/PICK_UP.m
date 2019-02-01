@@ -8,7 +8,7 @@ N=15;
 Tsample=0.01;
 Tf=20;
 
-q0=[0 0 0 pi/4 pi pi/4 pi/4 pi/4 pi/4]';
+q0=[0 0 0 pi/4 pi pi/4 -pi/4 pi/4 pi/4]';
 [Pee0,A]=jacobian_MM(q0);
 
 x0_val = [q0;Pee0];

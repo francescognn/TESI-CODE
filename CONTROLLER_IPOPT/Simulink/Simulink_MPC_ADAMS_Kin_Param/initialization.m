@@ -8,13 +8,13 @@ import casadi.*
 m_b       = 3; 
 m_m       = m_b;
 m_j       = m_m;
-Ak_base   = diag([0  0  0]);
+Ak_base   = diag([10  10  0]);
 Ak_joints = diag([100 100 100 100 100 100]);
-Ak_ee     = diag([10^3 10^3 10^3 0.1 0.1 0.1]);
-Ak_mm     = 0.1;
+Ak_ee     = diag([10^6 10^6 10^6 0.1 0.1 0.1]);
+Ak_mm     = 0.01;
 
 
-const_vec = [  3    1.5    4        4       4       4       4       4   ].'; 
+const_vec = [  3    1.5    2        2       2       2       2       2   ].'; 
 %         = [Vpmax Wpmax TH1pmax TH2pmax TH3pmax TH4pmax TH5pmax TH6pmax] 
 %          [m/s^2][rad/s^2][rad/s][rad/s] [rad/s][rad/s] [rad/s] [rad/s]  
 const_vec = const_vec*T;
@@ -141,24 +141,24 @@ J = J + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].'  )    + ...
 
 if i==1
     
-g = {g{:}, Usym(p,T_horizon(i))-U0};
+g = {g{:}, [Usym(p,T_horizon(i))-U0; X_forecast(4,i); X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
 
 else
 
-g = {g{:}, Usym(p,T_horizon(i))-Usym(p,T_horizon(i-1)) };
+ g = {g{:}, [Usym(p,T_horizon(i))-Usym(p,T_horizon(i-1)); X_forecast(4,i); X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
 
 
 end
     
-lbg = [lbg; -const_vec];
-ubg = [ubg;  const_vec];
+lbg = [lbg; -const_vec; -deg2rad(350); -deg2rad(180); -deg2rad(145); -deg2rad(180); -deg2rad(350); -deg2rad(350)];
+ubg = [ubg;  const_vec; deg2rad(350); deg2rad(0); deg2rad(145); deg2rad(0); deg2rad(350); deg2rad(350) ];
 
 end
 
 
 %% CREATING FUNCTION FOR J AND G
  
-Gfunction=Function('Gfunction',{p,U0}, {vertcat(g{:})});
+Gfunction=Function('Gfunction',{p,U0,x0}, {vertcat(g{:})});
 
 Costfunction=Function('Costfunction',{Xd,p,x0,sw}, {J});
 

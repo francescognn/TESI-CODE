@@ -10,7 +10,7 @@ clear
 %%%%%%%%%%%%  DATA  %%%%%%%%%%%%%
 nometraj='traj_raffronto_NO_param_vinc';
 T = 0.5;    %TIME STEP [s]
-N = 25;      %N 
+N = 15;      %N 
 
 t0 = 0;     %START TIME [s]
 tc = 10;     %ACCELERATION TIME [s]
@@ -20,7 +20,7 @@ delta_th=30;%DELTA ORIENTATION [deg]
 dis=30;     %SPATIAL DISPLACEMENT [m]
 Tsample=0.01;
 
-q0=[0 0.4 0 pi/4 pi pi/4 pi/4 pi/4 pi/4]';
+q0=[0 0 0 pi/4 -pi/4 pi/4 -pi/4 pi/4 pi/4]';
 [Pee0,A]=jacobian_MM(q0);
 
 x0_val = [q0;Pee0];
@@ -112,5 +112,5 @@ axis([0 30 0 30]);
 
 Ttot=tf;
 
-xd=[x;y;th;zeros(6,size(x,2));x;y;1.4.*ones(size(x));zeros(3,size(x,2))];
+xd=[x;y;th;zeros(6,size(x,2));x;y;1.6.*ones(size(x));zeros(3,size(x,2))];
 

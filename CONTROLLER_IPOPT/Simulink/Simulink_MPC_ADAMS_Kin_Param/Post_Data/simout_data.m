@@ -1,5 +1,5 @@
  
-close 
+close all
 clearvars -EXCEPT simout xd T_elapsed_vect X_steps N m_b m_m Ak_base Ak_ee nometraj man_index Ak_mm
 clc
 
@@ -94,9 +94,12 @@ for j=1:size(X,2)
     plot3(xd(10,:),xd(11,:),xd(12,:),'r')
     plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
     grid on
-    axis([[-1 32 -1 10 0 2]])
+    axis([[-1 2 -1 2 0 2]])
     hold off
     view(-40, 20);
+    xlabel('x')
+    ylabel('y')
+    zlabel('z')
     
     pause(0.3)
     F_video(j)=getframe(gcf); % get frame for the video

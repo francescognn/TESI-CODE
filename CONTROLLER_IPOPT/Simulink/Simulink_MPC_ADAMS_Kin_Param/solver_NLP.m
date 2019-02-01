@@ -21,7 +21,7 @@ ubg=evalin('base', 'ubg');
 
 %% Defining the problem (i.e. giving xd,u0 and x0)
 
-nlp    = struct('x', p, 'f', Costfunction(xd_val,p,x0,sw),'g', Gfunction(p,u0_val));
+nlp    = struct('x', p, 'f', Costfunction(xd_val,p,x0,sw),'g', Gfunction(p,u0_val,x0));
 options = struct;
 options.ipopt.tol=1e-3;
 solver = nlpsol('solver','ipopt', nlp, options);

@@ -5,10 +5,10 @@ if length(q) ~= N
 end
 
 %TO BE DEFINED:
-z_man_base = 1;    % height of the manipulator base from the ground
-x_man_base = 0;  % distance of the manipulator base from the center of the base 
+z_man_base = 0.7;    % height of the manipulator base from the ground
+x_man_base = 0.185;  % distance of the manipulator base from the center of the base 
                    % along its longitudinal axis 
-y_man_base = 0.; % distance of the manipulator base from the center of the base 
+y_man_base = 0; % distance of the manipulator base from the center of the base 
                    % along its trasversal axis 
 Mbase = 100;       % mass of the base
 I1 = 10;           % inertia values 
@@ -26,7 +26,7 @@ X=q(1); Y=q(2); TH=q(3); th1=q(4); th2=q(5); th3=q(6); th4=q(7); th5=q(8); th6=q
 DHtable = [ 0         , pi/2  , X       , pi/2;
             0         , pi/2 , Y       , pi/2;
             a_man     , 0     , d_man   , TH+th_man;
-            0         , pi/2  , 0.08916 , th1-th_man;
+            0         , pi/2  , 0.08916 , th1-th_man+pi/2;
            -0.425     , 0     , 0       , th2;
            -0.39225   , 0     , 0       , th3;
             0         , pi/2  , 0.10915 , th4;
