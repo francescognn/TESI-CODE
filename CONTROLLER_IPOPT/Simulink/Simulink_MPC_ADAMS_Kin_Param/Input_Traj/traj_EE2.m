@@ -2,21 +2,23 @@ close all
 clear 
 %%%%%%%%%%%%  DATA  %%%%%%%%%%%%%
 
-
+nometraj='sin_';
 
 q0=[0 0 0  -1.1352   -1.3124    1.4284   -1.9527    4.4346   -0.0100]';
 [Pee0,A]=jacobian_MM(q0);
 
 p0=Pee0(1:3);
 
+x0_val = [q0;Pee0];
+
 N=10;
-T = 0.25;
+T = 0.4;
 tf = 25;   
-deltaz=0.3;
-noscillazioni = 2;
+deltaz=0.15;
+noscillazioni = 1.5;
 
 Tsample=0.01;
-dis=0.7; 
+dis=1.5; 
 v=dis/tf;
 om=(noscillazioni*2*pi)/tf;
 tt = 0:T:tf;
@@ -33,6 +35,7 @@ end
 figure;
 plot3(x,y,z,'*')
 grid on
+axis equal
 %axis([-1 1 -1 1 0 2]);
 
 Ttot=tf;

@@ -4,7 +4,8 @@ clear
 
 p0 = [-0.448,-0.685,1.36]; %INITIAL POSITION [x,y,z] 
 
-T = 0.25;
+N = 10;
+T = 0.4;
 tc = 6;     %ACCELERATION TIME [s]
 tf = 15;    %FINISH TIME [s]
 deltaz=0.3;
