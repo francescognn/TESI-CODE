@@ -10,8 +10,8 @@ m_m       = m_b;
 m_j       = m_m;
 Ak_base   = diag([100  100  0]);
 Ak_joints = diag([100 100 100 100 100 100]);
-Ak_ee     = diag([10^6 10^6 10^6 0.1 0.1 0.1]);
-Ak_mm     = 0.001;
+Ak_ee     = diag([10^7 10^7 10^7 0.1 0.1 0.1]);
+Ak_mm     = 0.01;
 Ak_ub     = diag([1e5 1e7]);
 
 
@@ -59,10 +59,11 @@ u = [            Fb                  zeros(size(Fb,1),size(Fm,2))  ; ...
  
 [P_ee,Psi_ee,Rot_T] = FK(x(1:9));    
 % G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
-G=zeros(3,2);
+ G=zeros(3,2);
 xdot = [G zeros(3,6); zeros(6,2) eye(6); zeros(6,8)]*u;
+
 % 
-% [P_ee,A]=jacobian_MM(x(1:9))
+% [P_ee,A]=jacobian_MM(x(1:9));
 % 
 % xdot=A*u;
 
@@ -161,7 +162,7 @@ else
 
 end
     
-lbg = [lbg; -const_vec; 0;  0; -deg2rad(350); -deg2rad(180); -deg2rad(145); -deg2rad(180); -deg2rad(350); -deg2rad(350)];
+lbg = [lbg; -const_vec; 0;  -inf; -deg2rad(350); -deg2rad(180); -deg2rad(145); -deg2rad(180); -deg2rad(350); -deg2rad(350)];
 ubg = [ubg;  const_vec; inf; inf; deg2rad(350); deg2rad(0); deg2rad(145); deg2rad(0); deg2rad(350); deg2rad(350) ];
 
 end

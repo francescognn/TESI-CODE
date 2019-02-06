@@ -15,7 +15,7 @@ clc
 
 % save data = 1 (YES)
 % save data = 0 (NO)
-savedata = 1; 
+savedata = 0; 
 
 %% Richiamo e Ricostruisco vettore X
 
@@ -90,20 +90,22 @@ fig6=figure(6);
 
 fig6.Position = [0 1200-900 1440 900];
 [Xc,Yc,Zc]=cylinder(0.13,10000);
-Xc=Xc-0.76/2;
-Yc=Yc-0.4;
+
 Zc=Zc+0.5;
 [Xcc,Ycc,Zcc]=cylinder(0.7384,10000);
-Xc2=Zcc-0.4;
-Yc2=Xcc;
 Zc2=Ycc;
 
 for j=1:size(X,2)
     
+    Xc=Xc-0.76/2+X(1,j);
+    Yc=Yc-0.4+X(2,j);
+    Xc2=Zcc-0.4+X(1,j);
+    Yc2=Xcc+X(2,j);
+
     camlight;
     material metal;
     robot.visualize_mm(X(1:9,j).',fig6);
-    axis([-1 1 -1 1 0 2])
+    axis([-1 4 -1 2 0 2])
 
     plot3(xd(10,:),xd(11,:),xd(12,:),'r')
     xlabel('x')
@@ -112,8 +114,8 @@ for j=1:size(X,2)
     grid on
     hold on
     plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
-    surf(Xc,Yc,Zc)
-    surf(Xc2,Yc2,Zc2)
+    surf(Xc,Yc,Zc,'facealpha',0.02,'edgealpha',0.03)
+    surf(Xc2,Yc2,Zc2,'facealpha',0.02,'edgealpha',0.03)
     view(-10, 20);
     drawnow();
     

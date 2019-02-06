@@ -9,9 +9,9 @@ Tsample=0.01;
 Tf=20;
 
 q0=[0 0 0 -1.1352   -1.3124    1.4284   -1.9527    4.4346   -0.0100]';
-[Pee0,A]=jacobian_MM(q0);
+[Pee0,A]=FK(q0);
 
-x0_val = [q0;Pee0];
+x0_val = [q0;Pee0;0;0;0];
 
 T_drive=0.25;
 %% Base Traj
