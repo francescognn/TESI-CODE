@@ -1,11 +1,21 @@
- 
+%%%%%% DA ESEGUIRE UNA VOLTA SOLA ALL'INIZIO
+
+robot=mobile_manipulator(0.185,0,0.7,pi/2);
+
+% COMPILE MEX CODE
+cd Post_Data/PLOTMM/ur_kinematics;
+run compile_ur5kinematics.m
+cd ..
+cd ..
+cd ..
+%% 
 close all
-clearvars -EXCEPT simout xd T_elapsed_vect X_steps N m_b m_m Ak_base Ak_ee nometraj man_index Ak_mm
+clearvars -EXCEPT robot simout xd T_elapsed_vect X_steps N m_b m_m Ak_base Ak_ee nometraj man_index Ak_mm T
 clc
 
 % save data = 1 (YES)
 % save data = 0 (NO)
-savedata = 0; 
+savedata = 1; 
 
 %% Richiamo e Ricostruisco vettore X
 
@@ -55,12 +65,10 @@ plot(xd(1,:),xd(2,:),'-*')
 legend('computed','desired')
 title('MOVEMENT OF THE BASE')
 
-
 figure(3)
 plot(abs_pee_err);
 grid on
 title('ABS ERROR XYZ EE')
-
 
 fig4=figure(4);
 fig4.Position = [0 1200-900 1440 900];
@@ -79,30 +87,48 @@ title('Manipulability Index')
 
 %% PLOT DRAW
 
-fig5=figure(6);
-fig5.Position = [0 1200-900 1440 900];
+fig6=figure(6);
+
+fig6.Position = [0 1200-900 1440 900];
 for j=1:size(X,2)
-    [T,P] = TeP(X(1:9,j));
-    plot3(P(1,3:4),P(2,3:4),P(3,3:4),'b','LineWidth',10)
-    hold on
-    plot3(P(1,4:5),P(2,4:5),P(3,4:5),'color',[0.5 0.5 0.5],'LineWidth',3)
-    plot3(P(1,5:6),P(2,5:6),P(3,5:6),'k','LineWidth',3)
-    plot3(P(1,6:7),P(2,6:7),P(3,6:7),'color',[0.5 0.5 0.5],'LineWidth',3)
-    plot3(P(1,7:8),P(2,7:8),P(3,7:8),'k','LineWidth',3)
-    plot3(P(1,8:9),P(2,8:9),P(3,8:9),'color',[0.5 0.5 0.5],'LineWidth',3)
-    plot3(P(1,9:10),P(2,9:10),P(3,9:10),'k','LineWidth',3)
+    
+    camlight;
+    material metal;
+    robot.visualize_mm(X(1:9,j).',fig6);
+    axis([-1 2.5 -1 2 0 2])
+
     plot3(xd(10,:),xd(11,:),xd(12,:),'r')
-    plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
-    grid on
-    axis([[-1 2 -1 2 0 2]])
-    hold off
-    view(-40, 20);
     xlabel('x')
     ylabel('y')
     zlabel('z')
+    grid on
+    hold on
+    plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
+    view(-10, 20);
+    drawnow();
     
-    pause(0.3)
-    F_video(j)=getframe(gcf); % get frame for the video
+
+%     [T,P] = TeP(X(1:9,j));
+%     plot3(P(1,3:4),P(2,3:4),P(3,3:4),'b','LineWidth',10)
+%     hold on
+%     plot3(P(1,4:5),P(2,4:5),P(3,4:5),'color',[0.5 0.5 0.5],'LineWidth',3)
+%     plot3(P(1,5:6),P(2,5:6),P(3,5:6),'k','LineWidth',3)
+%     plot3(P(1,6:7),P(2,6:7),P(3,6:7),'color',[0.5 0.5 0.5],'LineWidth',3)
+%     plot3(P(1,7:8),P(2,7:8),P(3,7:8),'k','LineWidth',3)
+%     plot3(P(1,8:9),P(2,8:9),P(3,8:9),'color',[0.5 0.5 0.5],'LineWidth',3)
+%     plot3(P(1,9:10),P(2,9:10),P(3,9:10),'k','LineWidth',3)
+%     plot3(xd(10,:),xd(11,:),xd(12,:),'r')
+%     plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
+%     grid on
+%     axis([[-1 2 -1 2 0 2]])
+%     hold off
+%     view(-40, 20);
+%     xlabel('x')
+%     ylabel('y')
+%     zlabel('z')
+
+      delete(gca)
+%     F_video(j)=getframe(gcf); % get frame for the video
 end
 
 % video= VideoWriter('Sim_MM.avi');

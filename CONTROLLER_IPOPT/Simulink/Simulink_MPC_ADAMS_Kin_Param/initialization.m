@@ -8,10 +8,11 @@ import casadi.*
 m_b       = 3; 
 m_m       = m_b;
 m_j       = m_m;
-Ak_base   = diag([10  10  0]);
+Ak_base   = diag([0  0  0]);
 Ak_joints = diag([100 100 100 100 100 100]);
 Ak_ee     = diag([10^6 10^6 10^6 0.1 0.1 0.1]);
 Ak_mm     = 0.01;
+Ak_ub     = diag([1e5 1e7]);
 
 
 const_vec = [  3    1.5    2        2       2       2       2       2   ].'; 
@@ -130,10 +131,13 @@ ez_ee    = (X_forecast(12,i)-Xd(12,i));
 % eth3_ee = (X_forecast(15,i)-Xd(15,i));
 man_i    =  manipulability_index(X_forecast(1:9,i));
 
+u        = Usym(p,T_horizon(i));
+
 J = J + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].'  )    + ...
         ((i/N)^m_b)*(  [e_th1 e_th2 e_th3 e_th4 e_th5 e_th6]*Ak_joints*[e_th1 e_th2 e_th3 e_th4 e_th5 e_th6].'  )*(1-sw) + ...
         ((i/N)^m_b)*(  [ex_ee ey_ee ez_ee]*Ak_ee(1:3,1:3)*[ex_ee ey_ee ez_ee].'  )*sw+ ...
-        ((i/N)^m_b)*(  Ak_mm/(man_i).^2  );
+        ((i/N)^m_b)*(  Ak_mm/(man_i).^2  )+ ...
+        ((i/N)^m_b)*(  u(1:2).'*Ak_ub*u(1:2));
        
 
 % CONSTRAINTS FUNCTION ( lbg<=g<=ubg )
@@ -141,11 +145,11 @@ J = J + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].'  )    + ...
 
 if i==1
     
-g = {g{:}, [Usym(p,T_horizon(i))-U0; X_forecast(4,i); X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
+g = {g{:}, [u-U0; X_forecast(4,i); X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
 
 else
 
- g = {g{:}, [Usym(p,T_horizon(i))-Usym(p,T_horizon(i-1)); X_forecast(4,i); X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
+ g = {g{:}, [u-Usym(p,T_horizon(i-1)); X_forecast(4,i); X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
 
 
 end
