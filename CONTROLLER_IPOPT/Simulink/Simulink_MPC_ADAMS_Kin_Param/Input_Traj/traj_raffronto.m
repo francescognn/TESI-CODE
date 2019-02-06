@@ -14,10 +14,10 @@ N = 15;      %N
 
 t0 = 0;     %START TIME [s]
 tc = 10;     %ACCELERATION TIME [s]
-tf = 40;    %FINISH TIME [s]
+tf = 20;    %FINISH TIME [s]
 
 delta_th=30;%DELTA ORIENTATION [deg]
-dis=30;     %SPATIAL DISPLACEMENT [m]
+dis=10;     %SPATIAL DISPLACEMENT [m]
 Tsample=0.01;
 
 q0=[0 0 0 pi/4 -pi/4 pi/4 -pi/4 pi/4 pi/4]';
@@ -73,27 +73,27 @@ for i=1:length(tt)
     end
 end
 
-figure;
-subplot(3,1,1)
-plot(tt,s)
-title('s');
-subplot(3,1,2)
-plot(tt,v)
-title('v');
-subplot(3,1,3)
-plot(tt,dv)
-title('a');
-
-figure;
-subplot(3,1,1)
-plot(tt,th)
-title('th');
-subplot(3,1,2)
-plot(tt,om)
-title('om');
-subplot(3,1,3)
-plot(tt,dom)
-title('om dot');
+% figure;
+% subplot(3,1,1)
+% plot(tt,s)
+% title('s');
+% subplot(3,1,2)
+% plot(tt,v)
+% title('v');
+% subplot(3,1,3)
+% plot(tt,dv)
+% title('a');
+% 
+% figure;
+% subplot(3,1,1)
+% plot(tt,th)
+% title('th');
+% subplot(3,1,2)
+% plot(tt,om)
+% title('om');
+% subplot(3,1,3)
+% plot(tt,dom)
+% title('om dot');
 
 th_d = om;
 x_d = v.*cos(th);
@@ -106,11 +106,14 @@ for i = 2:length(tt)
     y(i) = y(i-1) + v(i-1)*T*sin(th(i-1));    
 end
 
-figure;
-plot(x,y,'*')
-axis([0 30 0 30]);
+% figure;
+% plot(x,y,'*')
+% axis([0 30 0 30]);
 
 Ttot=tf;
 
 xd=[x;y;th;zeros(6,size(x,2));x;y;1.6.*ones(size(x));zeros(3,size(x,2))];
 
+xb=x;
+yb=y;
+thb=th;
