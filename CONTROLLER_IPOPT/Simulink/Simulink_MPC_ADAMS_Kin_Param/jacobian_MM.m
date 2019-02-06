@@ -43,8 +43,8 @@ end
 % J_ee = [Jp_nh;Jo_nh];
 % J_ee = J_ee(4:end,4:end);
 
-G  = [cos(q(3)) 0; sin(q(3)) 0; 0 1];
-% G  = zeros(3,2);
+%  G  = [cos(q(3)) 0; sin(q(3)) 0; 0 1];
+G  = zeros(3,2);
 A    = [G zeros(3,6); zeros(6,2) eye(6);zeros(6,8)];
 
 % T{end}(1,1) = T11;

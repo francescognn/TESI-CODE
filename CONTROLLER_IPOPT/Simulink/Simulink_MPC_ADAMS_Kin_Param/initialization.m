@@ -8,14 +8,14 @@ import casadi.*
 m_b       = 3; 
 m_m       = m_b;
 m_j       = m_m;
-Ak_base   = diag([0  0  0]);
+Ak_base   = diag([100  100  0]);
 Ak_joints = diag([100 100 100 100 100 100]);
 Ak_ee     = diag([10^6 10^6 10^6 0.1 0.1 0.1]);
-Ak_mm     = 0.01;
+Ak_mm     = 0.001;
 Ak_ub     = diag([1e5 1e7]);
 
 
-const_vec = [  3    1.5    2        2       2       2       2       2   ].'; 
+const_vec = [  3    1.5    2        2       2       2       2       2 ].'; 
 %         = [Vpmax Wpmax TH1pmax TH2pmax TH3pmax TH4pmax TH5pmax TH6pmax] 
 %          [m/s^2][rad/s^2][rad/s][rad/s] [rad/s][rad/s] [rad/s] [rad/s]  
 const_vec = const_vec*T;
@@ -57,9 +57,15 @@ u = [            Fb                  zeros(size(Fb,1),size(Fm,2))  ; ...
   
 %% Writing differential equation
  
-[P_ee,A] = jacobian_MM(x(1:9));    
+[P_ee,Psi_ee,Rot_T] = FK(x(1:9));    
+% G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
+G=zeros(3,2);
+xdot = [G zeros(3,6); zeros(6,2) eye(6); zeros(6,8)]*u;
+% 
+% [P_ee,A]=jacobian_MM(x(1:9))
+% 
+% xdot=A*u;
 
-xdot = A*u;
 
 % Form an ode function
 ode = Function('ode',{x,p,t},{xdot});
@@ -78,7 +84,7 @@ xstep = [x+dt/6.0*(k1+2*k2+2*k3+k4)];
 
 %%%%%%%%%%%% Adding EE pose calculation %%%%%%%%%%%%
 
-xstep = [ xstep(1:9); P_ee];                      
+xstep = [ xstep(1:9); P_ee; [0 0 0]'];                      
 
 % Create a function that simulates one step propagation in a sample
 one_step = Function('one_step',{x, p, t},{xstep});
@@ -133,29 +139,30 @@ man_i    =  manipulability_index(X_forecast(1:9,i));
 
 u        = Usym(p,T_horizon(i));
 
-J = J + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].'  )    + ...
+J = J + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].'  )*(1-sw)    + ...
         ((i/N)^m_b)*(  [e_th1 e_th2 e_th3 e_th4 e_th5 e_th6]*Ak_joints*[e_th1 e_th2 e_th3 e_th4 e_th5 e_th6].'  )*(1-sw) + ...
         ((i/N)^m_b)*(  [ex_ee ey_ee ez_ee]*Ak_ee(1:3,1:3)*[ex_ee ey_ee ez_ee].'  )*sw+ ...
-        ((i/N)^m_b)*(  Ak_mm/(man_i).^2  )+ ...
-        ((i/N)^m_b)*(  u(1:2).'*Ak_ub*u(1:2));
+        ((i/N)^m_b)*(  Ak_mm/(man_i).^2  )*sw+ ...
+        ((i/N)^m_b)*(  u(1:2).'*Ak_ub*u(1:2))*sw;
        
 
 % CONSTRAINTS FUNCTION ( lbg<=g<=ubg )
 
+ [scav1,scav2]=SCA(X_forecast(1:9,i));
 
 if i==1
     
-g = {g{:}, [u-U0; X_forecast(4,i); X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
+g = {g{:}, [u-U0; X_forecast(4,i);scav1;scav2; X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
 
 else
 
- g = {g{:}, [u-Usym(p,T_horizon(i-1)); X_forecast(4,i); X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
+ g = {g{:}, [u-Usym(p,T_horizon(i-1));scav1;scav2; X_forecast(4,i); X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
 
 
 end
     
-lbg = [lbg; -const_vec; -deg2rad(350); -deg2rad(180); -deg2rad(145); -deg2rad(180); -deg2rad(350); -deg2rad(350)];
-ubg = [ubg;  const_vec; deg2rad(350); deg2rad(0); deg2rad(145); deg2rad(0); deg2rad(350); deg2rad(350) ];
+lbg = [lbg; -const_vec; 0;  0; -deg2rad(350); -deg2rad(180); -deg2rad(145); -deg2rad(180); -deg2rad(350); -deg2rad(350)];
+ubg = [ubg;  const_vec; inf; inf; deg2rad(350); deg2rad(0); deg2rad(145); deg2rad(0); deg2rad(350); deg2rad(350) ];
 
 end
 

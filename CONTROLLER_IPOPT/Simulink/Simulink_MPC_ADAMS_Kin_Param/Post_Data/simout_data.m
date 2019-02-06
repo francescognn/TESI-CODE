@@ -1,4 +1,4 @@
-%%%%%% DA ESEGUIRE UNA VOLTA SOLA ALL'INIZIO
+% %%%%%% DA ESEGUIRE UNA VOLTA SOLA ALL'INIZIO
 
 robot=mobile_manipulator(0.185,0,0.7,pi/2);
 
@@ -30,7 +30,6 @@ for i=1:size(simoutin,2)
     X(3,i)       = simoutin(3,i);
     X(4:9,i)     = simoutin(4:9,i);
     X(10:15,i)   = X_steps.signals.values(10:15,1,i);
-    
     
 end
 
@@ -76,7 +75,7 @@ plot3(X(10,:),X(11,:),X(12,:),'-o')
 hold on
 grid on
 plot3(xd(10,:),xd(11,:),xd(12,:),'-*')
-axis([[-1 32 -1 10 0 2]])
+axis([[-1 12 -1 5 0 2]])
 legend('computed','desired')
 title('MOVEMENT OF THE EE XYZ')
 
@@ -90,12 +89,21 @@ title('Manipulability Index')
 fig6=figure(6);
 
 fig6.Position = [0 1200-900 1440 900];
+[Xc,Yc,Zc]=cylinder(0.13,10000);
+Xc=Xc-0.76/2;
+Yc=Yc-0.4;
+Zc=Zc+0.5;
+[Xcc,Ycc,Zcc]=cylinder(0.7384,10000);
+Xc2=Zcc-0.4;
+Yc2=Xcc;
+Zc2=Ycc;
+
 for j=1:size(X,2)
     
     camlight;
     material metal;
     robot.visualize_mm(X(1:9,j).',fig6);
-    axis([-1 2.5 -1 2 0 2])
+    axis([-1 1 -1 1 0 2])
 
     plot3(xd(10,:),xd(11,:),xd(12,:),'r')
     xlabel('x')
@@ -104,6 +112,8 @@ for j=1:size(X,2)
     grid on
     hold on
     plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
+    surf(Xc,Yc,Zc)
+    surf(Xc2,Yc2,Zc2)
     view(-10, 20);
     drawnow();
     
@@ -149,6 +159,7 @@ grid on
 clc
 
 %% SAVE DATA
+F_video=0;
 
 if savedata == 1
 
