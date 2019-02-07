@@ -1,4 +1,4 @@
-function [DHtable,Abase,CoM_pos,m,In] = parameters_MM(q)
+    function [DHtable,Abase,CoM_pos,m,In] = parameters_MM(q)
 N=9;
 if length(q) ~= N
     error('q has the wrong number of elements');
@@ -31,7 +31,7 @@ DHtable = [ 0         , pi/2  , X       , pi/2;
            -0.39225   , 0     , 0       , th3;
             0         , pi/2  , 0.10915 , th4;
             0         , -pi/2 , 0.09465 , th5;
-            0         , 0     , 0.0823  , th6];
+            0         , 0     , 0.216  , th6];
 
 Abase = [0 , 0 , 1 , 0;
          1 , 0 , 0 , 0;

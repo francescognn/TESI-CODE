@@ -1,16 +1,16 @@
-close all
-clear 
+close all 
+clear all
 
 %%%%%%%%%%%%  DATA  %%%%%%%%%%%%%
 
 T = 0.25;    %TIME STEP [s]
 N = 25;      %N 
-disturb=0;%disturbance 
+disturb=0;  %disturbance 
 
 t0 = 0;     %START TIME [s]
 tc = 3;     %tempo per fare una curva
 Ncurve=4;  %numero di curve
-r=0.3;      %raggio della curva
+r=0.6;      %raggio della curva
 t_acc=6;
 Tsample=0.01;
 
