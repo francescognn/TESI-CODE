@@ -1,11 +1,11 @@
-close all
+close all 
 clear all
 
 %%%%%%%%%%%%  DATA  %%%%%%%%%%%%%
 
 T = 0.25;    %TIME STEP [s]
-N = 10;      %N 
-disturb=0;%disturbance 
+N = 25;      %N 
+disturb=0;  %disturbance 
 
 t0 = 0;     %START TIME [s]
 tc = 3;     %tempo per fare una curva

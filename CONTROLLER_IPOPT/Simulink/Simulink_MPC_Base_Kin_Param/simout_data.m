@@ -13,7 +13,7 @@ end
 if size(X,2)>=size(xd,2)
     X=X(:,1:size(xd,2));
 else
-    xd=xd(:,1:size(x,2));
+    xd=xd(:,1:size(X,2));
 end
 x=X(1,:);y=X(2,:);th=X(3,:);
 figure
@@ -55,9 +55,7 @@ ylabel('T elapsed')
 xlabel('Step')
 grid on
 
-
-
-matfile=['MPC_kin_Param2_N=',num2str(N),'_trajCurves_r=0.3_NoDist.mat'];
+matfile=['MPC_kin_Param2_N=',num2str(N),'_trajCurves_r=0.6_dist=',num2str(disturb),'.mat'];
 savefile = fullfile('Data/','Param/',matfile);
 save(savefile);
 
