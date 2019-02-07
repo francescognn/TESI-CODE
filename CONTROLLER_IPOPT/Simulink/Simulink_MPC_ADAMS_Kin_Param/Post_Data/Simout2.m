@@ -31,7 +31,7 @@ plot3(xd(10,:),xd(11,:),xd(12,:))
 hold on
 plot3(xxee,yyee,zzee,'linewidth',2)
 grid on
-view(0,0)
+view(0,90)
 % axis([-1 1 -1 1 -1 1])
 xlabel('x')
 ylabel('y')

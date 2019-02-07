@@ -24,7 +24,7 @@ ubg=evalin('base', 'ubg');
 
 nlp    = struct('x', p, 'f', Costfunction(xd_val,p,x0,sw),'g', Gfunction(p,u0_val,x0));
 options = struct;
-options.ipopt.tol=1e-9;
+options.ipopt.tol=1e-4;
 solver = nlpsol('solver','ipopt', nlp, options);
 
 %% SOLVING PROBLEM (i.e. giving p0)
@@ -48,7 +48,7 @@ unew = zeros(8,N);
 % end
 % U =  unew(:,1);
 
-U = [pnew(4);pnew(8);pnew(9:end)];
+U = [pnew(3);pnew(6);pnew(8:2:end)];
  
 %% Computing Xcomputed for the predicted Horizon 
 

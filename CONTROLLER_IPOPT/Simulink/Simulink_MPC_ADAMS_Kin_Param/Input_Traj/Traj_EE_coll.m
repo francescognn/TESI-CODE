@@ -11,7 +11,7 @@ p0=Pee0(1:3);
 
 x0_val = [0;0;0;q0(4:end);Pee0;0;0;0];
 
-N=25;
+N=15;
 T = 0.2;
 tc = 6;     %ACCELERATION TIME [s]
 tf = 15;    %FINISH TIME [s]

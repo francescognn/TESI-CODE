@@ -89,12 +89,11 @@ title('Manipulability Index')
 fig6=figure(6);
 
 fig6.Position = [0 1200-900 1440 900];
-[Xc,Yc,Zc]=cylinder(0.13,10000);
+[Xc1,Yc1,Zc1]=cylinder(0.13,10000);
 
-Zc=Zc+0.5;
+Zc=Zc1+0.5;
 [Xcc,Ycc,Zcc]=cylinder(0.7384,10000);
-Xc=Xc-0.76/2;
-Yc=Yc-0.2;
+
 Zc2=Ycc;
 [Xs,Ys,Zs] = sphere(10);
 rs=0.2;
@@ -107,7 +106,8 @@ Yc2=Xcc;
 
     
 for j=1:size(X,2)
-    
+    Xc=Xc1-0.76/2+X(1,j);
+    Yc=Yc1-0.2+X(2,j);
     [P_ee,Psi_ee,T]=FK(X(:,j));
     
     Xss=Xs+T(33,4);
@@ -127,10 +127,10 @@ for j=1:size(X,2)
     grid on
     hold on
     plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
-    surf(Xc,Yc,Zc,'facealpha',0.4,'edgealpha',0.3,'LineWidth',5)
+    surf(Xc,Yc,Zc,'facealpha',0.04,'edgealpha',0.03,'LineWidth',5)
 %     surf(Xc2,Yc2,Zc2,'facealpha',0.02,'edgealpha',0.03)
     surf(Xss,Yss,Zss,'facealpha',0.5,'edgealpha',0.06)
-    view(0,0);%-10, 20);
+    view(0,60);%-10, 20);
     drawnow();
     
 
@@ -152,8 +152,9 @@ for j=1:size(X,2)
 %     xlabel('x')
 %     ylabel('y')
 %     zlabel('z')
-
+        if j ~=size(X,2)
       delete(gca)
+        end
 %     F_video(j)=getframe(gcf); % get frame for the video
 end
 
