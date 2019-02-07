@@ -57,8 +57,8 @@ grid on
 
 
 
-savefile=['MPC_kin_Param_N=',num2str(N),'_trajCurves_r=0.3_NoDist'];
-
+matfile=['MPC_kin_Param2_N=',num2str(N),'_trajCurves_r=0.3_NoDist.mat'];
+savefile = fullfile('Data/','Param/',matfile);
 save(savefile);
 
 

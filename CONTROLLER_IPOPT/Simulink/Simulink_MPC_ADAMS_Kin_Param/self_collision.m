@@ -1,6 +1,6 @@
 function  [fun,fun1] = self_collision(q)
 x1=q(4);x2=q(5);x3=q(6);x4=q(7);x5=q(8);x6=q(9);
-xb = 0; 
+xb = 0.185; 
 yb = 0;
 zb = 0.7;  
 DHtable = [ 0         , pi/2  , 0.08916 , x1+pi/2;
@@ -20,7 +20,6 @@ cylinder_radius=sqrt(zb^2+0.235^2);
 dist=sqrt(sphere_center(2)^2+sphere_center(3)^2);
 
 fun = dist - sphere_radius - cylinder_radius;
-
 
 x_kinect = -0.76/2; y_kinect=-0.4; radius_kinect = 0.13;
 fun1=(sqrt((x_kinect-sphere_center(1))^2 + (y_kinect-sphere_center(2))^2)-sphere_radius-radius_kinect);
