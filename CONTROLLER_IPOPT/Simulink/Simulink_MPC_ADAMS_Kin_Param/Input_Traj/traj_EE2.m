@@ -4,7 +4,8 @@ clear
 
 nometraj='sin_';
 
-q0=[0 0 0  1.1352   -1.3124    1.4284   -1.9527    4.4346   -0.0100]';
+% q0=[0 0 0  1.1352   -1.3124    1.4284   -1.9527    4.4346   -0.0100]';
+q0=[0 0 0  -deg2rad(169)  -deg2rad(164)  deg2rad(101)   -deg2rad(139)   deg2rad(270)   deg2rad(83)]';
 [Pee0,A]=FK(q0);
 
 p0=Pee0(1:3);
@@ -18,7 +19,7 @@ deltaz=0.15;
 noscillazioni = 1.5;
 
 Tsample=0.01;
-dis=1.5; 
+dis=0.5; 
 v=dis/tf;
 om=(noscillazioni*2*pi)/tf;
 tt = 0:T:tf;

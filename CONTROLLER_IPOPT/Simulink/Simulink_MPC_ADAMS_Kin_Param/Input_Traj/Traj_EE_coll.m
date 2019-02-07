@@ -4,14 +4,14 @@ clear
 
 nometraj='collision_kinect';
 
-q0=[0 0 0  1.1352   -2.6124    1.4284   -1.9527    4.4346   -0.0100]';
+q0=[0 0 0  -deg2rad(169)  -deg2rad(164)  deg2rad(101)   -deg2rad(139)   deg2rad(270)   deg2rad(83)]';
 [Pee0,A]=FK(q0);
 
 p0=Pee0(1:3);
 
 x0_val = [0;0;0;q0(4:end);Pee0;0;0;0];
 
-N=15;
+N=25;
 T = 0.2;
 tc = 6;     %ACCELERATION TIME [s]
 tf = 15;    %FINISH TIME [s]

@@ -1,4 +1,4 @@
-function [pnew, U, unew, Xcomp,telapsed,man] = solver_NLP(xd_val,p0,x0,u0_val,sw)
+function [pnew, U, unew, Xcomp,telapsed,man,J_comp] = solver_NLP(xd_val,p0,x0,u0_val,sw)
 
 import casadi.*
 
@@ -7,6 +7,7 @@ tstart=tic;
 
 %% Recall the MXsym functions and variables to define the problem
 
+J_component=evalin('base', 'J_component');
 Costfunction=evalin('base', 'Costfunction');
 Gfunction=evalin('base', 'Gfunction');
 all_samples=evalin('base','all_samples');
@@ -23,7 +24,7 @@ ubg=evalin('base', 'ubg');
 
 nlp    = struct('x', p, 'f', Costfunction(xd_val,p,x0,sw),'g', Gfunction(p,u0_val,x0));
 options = struct;
-options.ipopt.tol=1e-3;
+options.ipopt.tol=1e-9;
 solver = nlpsol('solver','ipopt', nlp, options);
 
 %% SOLVING PROBLEM (i.e. giving p0)
@@ -58,6 +59,10 @@ U = [pnew(4);pnew(8);pnew(9:end)];
 
 %% TOC
 telapsed=toc(tstart);
+
+[J,h1,h2,h3,h4,h5]=(J_component(xd_val,pnew,x0,sw));
+
+J_comp=[full(J),full(h1),full(h2),full(h3),full(h4),full(h5)];
 
 end
 

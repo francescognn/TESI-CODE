@@ -10,7 +10,7 @@ cd ..
 cd ..
 %% 
 close all
-clearvars -EXCEPT robot simout xd T_elapsed_vect X_steps N m_b m_m Ak_base Ak_ee nometraj man_index Ak_mm T
+clearvars -EXCEPT robot simout xd T_elapsed_vect X_steps N m_b m_m Ak_base Ak_ee nometraj man_index Ak_mm T J_comp
 clc
 
 % save data = 1 (YES)
@@ -75,7 +75,7 @@ plot3(X(10,:),X(11,:),X(12,:),'-o')
 hold on
 grid on
 plot3(xd(10,:),xd(11,:),xd(12,:),'-*')
-axis([[-1 12 -1 5 0 2]])
+axis([[-1 4 -1 2 0 2]])
 legend('computed','desired')
 title('MOVEMENT OF THE EE XYZ')
 
@@ -93,19 +93,32 @@ fig6.Position = [0 1200-900 1440 900];
 
 Zc=Zc+0.5;
 [Xcc,Ycc,Zcc]=cylinder(0.7384,10000);
+Xc=Xc-0.76/2;
+Yc=Yc-0.2;
 Zc2=Ycc;
+[Xs,Ys,Zs] = sphere(10);
+rs=0.2;
+Xs=Xs*rs;
+Ys=Ys*rs;
+Zs=Zs*rs;
 
+Xc2=Zcc-0.4;
+Yc2=Xcc;
+
+    
 for j=1:size(X,2)
     
-    Xc=Xc-0.76/2+X(1,j);
-    Yc=Yc-0.4+X(2,j);
-    Xc2=Zcc-0.4+X(1,j);
-    Yc2=Xcc+X(2,j);
-
+    [P_ee,Psi_ee,T]=FK(X(:,j));
+    
+    Xss=Xs+T(33,4);
+    Yss=Ys+T(34,4);
+    Zss=Zs+T(35,4);
+    
+    
     camlight;
     material metal;
     robot.visualize_mm(X(1:9,j).',fig6);
-    axis([-1 4 -1 2 0 2])
+    axis([-1 1 -1 1 0 2])
 
     plot3(xd(10,:),xd(11,:),xd(12,:),'r')
     xlabel('x')
@@ -114,9 +127,10 @@ for j=1:size(X,2)
     grid on
     hold on
     plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
-    surf(Xc,Yc,Zc,'facealpha',0.02,'edgealpha',0.03)
-    surf(Xc2,Yc2,Zc2,'facealpha',0.02,'edgealpha',0.03)
-    view(-10, 20);
+    surf(Xc,Yc,Zc,'facealpha',0.4,'edgealpha',0.3,'LineWidth',5)
+%     surf(Xc2,Yc2,Zc2,'facealpha',0.02,'edgealpha',0.03)
+    surf(Xss,Yss,Zss,'facealpha',0.5,'edgealpha',0.06)
+    view(0,0);%-10, 20);
     drawnow();
     
 
