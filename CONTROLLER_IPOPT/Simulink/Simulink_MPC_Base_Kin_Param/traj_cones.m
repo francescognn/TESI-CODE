@@ -4,8 +4,8 @@ clear all
 %%%%%%%%%%%%  DATA  %%%%%%%%%%%%%
 
 T = 0.25;    %TIME STEP [s]
-N = 25;      %N 
-disturb=0;  %disturbance 
+N = 10;      %N 
+disturb=6;  %disturbance 
 
 t0 = 0;     %START TIME [s]
 tc = 3;     %tempo per fare una curva
@@ -29,10 +29,10 @@ for i=1:length(tt)
         om(i) = 0;
     elseif mod(ncurva,2)==1
         v(i)=vc;
-        om(i)=-omc;
+        om(i)=omc;
     else
         v(i)=vc;
-        om(i)=omc;
+        om(i)=-omc;
     end
     if mod(tt(i)-t_acc,tc)==0
         ncurva=ncurva+1;
