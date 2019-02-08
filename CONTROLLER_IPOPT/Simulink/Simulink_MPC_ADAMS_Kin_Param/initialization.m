@@ -10,7 +10,7 @@ m_m       = m_b;
 m_j       = m_m;
 Ak_base   = diag([100  100  100]);
 Ak_joints = diag([100 100 100 100 100 100]);
-Ak_ee     = diag([1e8 1e8 1e8 0.1 0.1 0.1]);
+Ak_ee     = diag([1e8 1e8 1e8 1e8 1e8]);
 Ak_mm     = 0;
 Ak_ub     = diag([1e7 1e7]);
 
@@ -27,12 +27,12 @@ fs = 1/T; % Sampling frequency [hz]
 T_horizon=(0:N-1)*T;
 
 %% MODELING 
-x   = MX.sym('x',15); % [x y th TH1 TH2 TH3 TH4 TH5 TH6 manipulability_index]
+x   = MX.sym('x',18); % [x y th TH1 TH2 TH3 TH4 TH5 TH6 manipulability_index]
 p   = MX.sym('p',14); % [p1 p2 p3 p4 ... p14]
-Xd  = MX.sym('Xd',15,N); % [x y th TH1 TH2 TH3 TH4 TH5 TH6 x_ee y_ee th_ee th1_ee th2_ee th3_ee]
+Xd  = MX.sym('Xd',18,N); % [x y th TH1 TH2 TH3 TH4 TH5 TH6 x_ee y_ee th_ee th1_ee th2_ee th3_ee]
 t   = MX.sym('t');
 U0  = MX.sym('U0',8,1); % [V W THP1 THP2 THP3 THP4 THP5 THP6]
-x0  = MX.sym('x0',15);
+x0  = MX.sym('x0',18);
 p0  = MX.sym('p0',14);
 sw  = MX.sym('sw',1); 
 
@@ -58,9 +58,9 @@ u = [            Fb                  zeros(size(Fb,1),size(Fm,2))  ; ...
 %% Writing differential equation
  
 [P_ee,Psi_ee,Rot_T] = FK(x(1:9));    
-%  G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
- G=zeros(3,2);
-xdot = [G zeros(3,6); zeros(6,2) eye(6); zeros(6,8)]*u;
+ G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
+%  G=zeros(3,2);
+xdot = [G zeros(3,6); zeros(6,2) eye(6); zeros(9,8)]*u;
 
 % 
 % [P_ee,A]=jacobian_MM(x(1:9));
@@ -85,7 +85,7 @@ xstep = [x+dt/6.0*(k1+2*k2+2*k3+k4)];
 
 %%%%%%%%%%%% Adding EE pose calculation %%%%%%%%%%%%
 
-xstep = [ xstep(1:9); P_ee; [0 0 0]'];                      
+xstep = [ xstep(1:9); P_ee; Psi_ee(:,1);Psi_ee(:,2)];                      
 
 % Create a function that simulates one step propagation in a sample
 one_step = Function('one_step',{x, p, t},{xstep});
@@ -133,16 +133,15 @@ e_th6    = (X_forecast(9,i)-Xd(9,i));
 ex_ee    = (X_forecast(10,i)-Xd(10,i));
 ey_ee    = (X_forecast(11,i)-Xd(11,i));
 ez_ee    = (X_forecast(12,i)-Xd(12,i));
-% eth1_ee = (X_forecast(13,i)-Xd(13,i));
-% eth2_ee = (X_forecast(14,i)-Xd(14,i));
-% eth3_ee = (X_forecast(15,i)-Xd(15,i));
+ethx_ee  = dot(X_forecast(13:15,i),Xd(13:15,i));
+ethz_ee  = dot(X_forecast(16:18,i),Xd(16:18,i));
 man_i    =  manipulability_index(X_forecast(1:9,i));
 
 u        = Usym(p,T_horizon(i));
 
         h1= h1 + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].'  )*(1-sw);
         h2= h2 + ((i/N)^m_b)*(  [e_th1 e_th2 e_th3 e_th4 e_th5 e_th6]*Ak_joints*[e_th1 e_th2 e_th3 e_th4 e_th5 e_th6].'  )*(1-sw);
-        h3= h3 + ((i/N)^m_b)*(  [ex_ee ey_ee ez_ee]*Ak_ee(1:3,1:3)*[ex_ee ey_ee ez_ee].'  )*sw;
+        h3= h3 + ((i/N)^m_b)*(  [ex_ee ey_ee ez_ee ethx_ee ethz_ee]*Ak_ee*[ex_ee ey_ee ez_ee ethx_ee ethz_ee].'  )*sw;
         h4= h4 + ((i/N)^m_b)*(  Ak_mm/(man_i).^2  )*sw;
         h5= h5 + ((i/N)^m_b)*(  u(1:2).'*Ak_ub*u(1:2)  )*sw;
        

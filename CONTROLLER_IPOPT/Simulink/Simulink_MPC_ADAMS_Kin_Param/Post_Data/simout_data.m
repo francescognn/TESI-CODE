@@ -1,4 +1,4 @@
-% %%%%%% DA ESEGUIRE UNA VOLTA SOLA ALL'INIZIO
+% % %%%%%% DA ESEGUIRE UNA VOLTA SOLA ALL'INIZIO
 
 robot=mobile_manipulator(0.185,0,0.7,pi/2);
 
@@ -15,7 +15,7 @@ clc
 
 % save data = 1 (YES)
 % save data = 0 (NO)
-savedata = 0; 
+savedata = 1; 
 
 %% Richiamo e Ricostruisco vettore X
 
@@ -29,7 +29,7 @@ for i=1:size(simoutin,2)
     X(2,i)       = simoutin(2,i);
     X(3,i)       = simoutin(3,i);
     X(4:9,i)     = simoutin(4:9,i);
-    X(10:15,i)   = X_steps.signals.values(10:15,1,i);
+    X(10:18,i)   = X_steps.signals.values(10:18,1,i);
     
 end
 
@@ -89,12 +89,11 @@ title('Manipulability Index')
 fig6=figure(6);
 
 fig6.Position = [0 1200-900 1440 900];
-[Xc,Yc,Zc]=cylinder(0.13,10000);
+[Xc0,Yc0,Zc0]=cylinder(0.13,10000);
 
-Zc=Zc+0.5;
+Zc=Zc0+0.5;
 [Xcc,Ycc,Zcc]=cylinder(0.7384,10000);
-Xc=Xc-0.76/2;
-Yc=Yc-0.2;
+
 Zc2=Ycc;
 [Xs,Ys,Zs] = sphere(10);
 rs=0.2;
@@ -105,8 +104,12 @@ Zs=Zs*rs;
 Xc2=Zcc-0.4;
 Yc2=Xcc;
 
-    
+F_video = struct('cdata', cell(1,size(X,2)), 'colormap', cell(1,size(X,2)));
+   
 for j=1:size(X,2)
+    
+    Xc=Xc0-0.76/2+X(1,j);
+    Yc=Yc0-0.2+X(2,j);
     
     [P_ee,Psi_ee,T]=FK(X(:,j));
     
@@ -129,8 +132,8 @@ for j=1:size(X,2)
     plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
     surf(Xc,Yc,Zc,'facealpha',0.4,'edgealpha',0.3,'LineWidth',5)
 %     surf(Xc2,Yc2,Zc2,'facealpha',0.02,'edgealpha',0.03)
-    surf(Xss,Yss,Zss,'facealpha',0.5,'edgealpha',0.06)
-    view(0,0);%-10, 20);
+    surf(Xss,Yss,Zss,'facealpha',0.4,'edgealpha',0.04)
+    view(15,20);%-10, 20);
     drawnow();
     
 
@@ -152,16 +155,18 @@ for j=1:size(X,2)
 %     xlabel('x')
 %     ylabel('y')
 %     zlabel('z')
-
-      delete(gca)
-%     F_video(j)=getframe(gcf); % get frame for the video
+     F_video(j) = getframe;
+     if j~=size(X,2)
+       delete(gca)
+     end
+       % get frame for the video
 end
 
-% video= VideoWriter('Sim_MM.avi');
-% myVideo.FrameRate = 40;
-% open(video)
-% writeVideo(video,F_video)
-% close(video)
+video= VideoWriter('Sim_MM.avi');
+myVideo.FrameRate = 10;
+open(video)
+writeVideo(video,F_video)
+close(video)
 
 %% PLOT t_elapsed
 

@@ -4,7 +4,7 @@ clear
 
 nometraj='collision_kinect';
 
-q0=[0 0 0  -deg2rad(169)  -deg2rad(164)  deg2rad(101)   -deg2rad(139)   deg2rad(270)   deg2rad(83)]';
+q0=[0 0 0  -deg2rad(250)  -deg2rad(164)  deg2rad(101)   -deg2rad(139)   deg2rad(270)   deg2rad(83)]';
 [Pee0,A]=FK(q0);
 
 p0=Pee0(1:3);
@@ -17,8 +17,8 @@ tc = 6;     %ACCELERATION TIME [s]
 tf = 15;    %FINISH TIME [s]
 deltaz=0.3;
 
-delta_th=300;%DELTA ORIENTATION [deg]
-dis=-0.3;     %SPATIAL DISPLACEMENT [m]
+delta_th=355;%DELTA ORIENTATION [deg]
+dis=1;     %SPATIAL DISPLACEMENT [m]
 Tsample=0.01;
 
 
@@ -27,7 +27,7 @@ Tsample=0.01;
 tt = 0:T:tf;
 z=zeros(1,length(tt));
 v=z; om =z;
-r=(dis/2)/sin(deg2rad(delta_th/2));
+r=0.5;
 l = r*deg2rad(delta_th);
 s0 = 0; 
 sf = l; 
