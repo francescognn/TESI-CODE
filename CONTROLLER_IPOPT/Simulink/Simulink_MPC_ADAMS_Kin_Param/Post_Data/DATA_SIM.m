@@ -1,9 +1,16 @@
-savedata           = 0;
-visualize_plot     = 0;
+
+savedata           = 1;
+visualize_plot     = 1;
 visualize_3d_plot  = 1;
-plot_position_3d   = [-40,10]; % AZ,EL
-visualize_spheres  = 0;
-record_video       = 0;
+plot_position_3d   = [40,10]; % AZ,EL
+visualize_spheres  = 1;
+record_video       = 1;
+visualize_horizons = 0;
+static_3d_plot     = 0;
+
+prompt             = 'Is this a Real test? (y/n)  ';
+real_sim           = input(prompt,'s');
+
 
 %% DIMENSION SET
 
@@ -19,6 +26,9 @@ if size(state_x,2)>=size(xd,2)
 else
     xd=xd(:,1:size(state_x,2));
 end
+
+close all
+% warning off
 
 %% CALCOLO P_EE DAI JOINTS
 if exist('P_ee_out')==0
@@ -169,7 +179,7 @@ ylabel('Time [s]')
 
 figure(6)
 
-plot(u_given(1:2,:))
+plot(u_given(1:2,:).')
 grid on
 legend('v','omega')
 title('Base control action')
@@ -181,19 +191,45 @@ plot(state_x(1,:),state_x(2,:))
 grid on
 title('Base motion XY')
 
+%% J FUNCTION COMPONENTS (8)
+
+for aa=1:size(X_steps.signals.values,3)    
+    J_parts(aa,:)=J_comp(:,:,aa);
+end
+figure(8)
+title('cost function terms')
+subplot(211)
+plot(J_parts)
+grid on
+legend('J','h1','h2','h3','h4','h5')
+subplot(212)
+stem(1,sum(J_parts(:,2))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
+hold on
+stem(2,sum(J_parts(:,3))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
+stem(3,sum(J_parts(:,4))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
+stem(4,sum(J_parts(:,5))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
+xlabel('cost function components')
+ylabel('% of the total cost')
+
+%% MANIPULABILIY INDEX (9)
+
+figure(9)
+plot(man_index)
+grid on
+title('Manipulability Index')
+
 end
 
 %% >>>> 3D PLOTS <<<<
+
 if visualize_3d_plot == 1
 
-%% 3D PLOT OF MM (8)  
+%% 3D PLOT OF MM (10)  
 
-fig8=figure(8);
+fig11=figure(10);
 
 %figure proprietà
-fig8.Position = [0 1200-900 1440 900];
-camlight;
-material metal;
+fig11.Position = [0 1200-900 1440 900];
 
 % Genero il robot
 robot=mobile_manipulator(0.185,0,0.7,pi/2);
@@ -208,12 +244,15 @@ F_video = struct('cdata', cell(1,size(X,2)), 'colormap', cell(1,size(X,2)));
     
     for j=1:size(state_x,2)
 
+        camlight;
+        material metal;
         hold on
-        robot.visualize_mm(state_x(1:9,j).',fig8);
+        robot.visualize_mm(state_x(1:9,j).',fig11);
         plot3(xd(10,:),xd(11,:),xd(12,:),'r')
         plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
+        if visualize_spheres == 1
         spheres_gen(state_x(:,j),T{j})
-
+        end
         xlabel('x')
         ylabel('y')
         zlabel('z')
@@ -232,9 +271,40 @@ F_video = struct('cdata', cell(1,size(X,2)), 'colormap', cell(1,size(X,2)));
          end
            % get frame for the video
     end
-
+F_video(1)=F_video(2);
 end
 
+%% STATIC 3D PLOT (11)
+if static_3d_plot
+    if exist('robot')~=1
+        robot=mobile_manipulator(0.185,0,0.7,pi/2);
+        cd Post_Data/PLOTMM/ur_kinematics;
+        run compile_ur5kinematics.m
+        cd ..
+        cd ..
+        cd ..
+    end
+    fig11=figure(11);
+
+    %figure proprietà
+    fig11.Position = [0 1200-900 1440 900];
+
+    camlight;
+    material metal;
+    robot.visualize_mm(state_x(1:9,1).',fig11)
+     plot3(xd(10,:),xd(11,:),xd(12,:),'r')
+        plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
+        if visualize_spheres == 1
+        spheres_gen(state_x(:,1),T{1})
+        end
+        xlabel('x')
+        ylabel('y')
+        zlabel('z')
+        grid on
+        axis([-1.5+min(state_x(10,:)) 1.5+max(state_x(10,:)) -1.5+min(state_x(11,:)) 1.5+max(state_x(11,:)) 0 2])
+        view(plot_position_3d(1),plot_position_3d(2));%-10, 20);
+end
+    
 %%  VIDEO RECORDING
 
 if record_video == 1 
@@ -249,13 +319,52 @@ if record_video == 1
     close(video)
 
 end
-    
+
+%%  HORIZONS PLOTS (12)
+if visualize_horizons == 1
+    for aa=1:size(xd,2)
+
+            J_parts(aa,:)=J_comp(:,:,aa);
+
+            for j=1:N+1
+                xhee(j)=X_steps.signals.values(10,j,aa);
+                yhee(j)=X_steps.signals.values(11,j,aa);
+                zhee(j)=X_steps.signals.values(12,j,aa);
+
+                cc(:,j)  = SCA(X_steps.signals.values(1:9,j,aa));
+            end
+
+        figure(12)
+        plot3(xd(10,:),xd(11,:),xd(12,:))
+        hold on
+        plot3(xhee,yhee,zhee,'linewidth',2)
+        grid on
+        view(0,0)
+        % axis([-1 1 -1 1 -1 1])
+        xlabel('x')
+        ylabel('y')
+        zlabel('z')
+        drawnow()
+        pause(0.05)
+        hold off
+        
+    end
+end
+
 %% DATA SAVE
 
 if savedata ==1
-
-savename = [nometraj '_'  datestr(now, 'HH-MM dd-mmm-yyyy')];
+    
+    if real_sim == 'y'
+        Type_sym='REAL_';
+    else
+        Type_sym='SIM_';
+    end
+savename = ['REAL_' nometraj '_'  datestr(now, 'HH-MM dd-mmm-yyyy')];
+    
 matfile = fullfile('Data_saved/', savename);
 save(matfile)
 
 end
+
+clc

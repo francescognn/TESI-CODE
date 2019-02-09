@@ -1,5 +1,5 @@
 
-clearvars -EXCEPT  xd x0_val Pee0 N T Tsample tt nometraj
+clearvars -EXCEPT xd x0_val Pee0 N T Tsample tt nometraj
 
 import casadi.*
 
@@ -10,9 +10,9 @@ m_m       = m_b;
 m_j       = m_m;
 Ak_base   = diag([100  100  100]);
 Ak_joints = diag([100 100 100 100 100 100]);
-Ak_ee     = diag([1e8 1e8 1e8 5e6 5e6]);
-Ak_mm     = 0.5;
-Ak_ub     = diag([1e7 1e7]);
+Ak_ee     = diag([1e3 1e3 1e3 5e4 5e4]);
+Ak_mm     = 1e2;
+Ak_ub     = diag([0.5e4 0.5e4]);
 
 
 const_vec = [  0.6    0.2    2        2       2       2       2       2 ].'; 
@@ -58,8 +58,8 @@ u = [            Fb                  zeros(size(Fb,1),size(Fm,2))  ; ...
 %% Writing differential equation
  
 [P_ee,Psi_ee,Rot_T] = FK(x(1:9));    
-%  G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
-  G=zeros(3,2);
+  G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
+%   G=zeros(3,2);
 xdot = [G zeros(3,6); zeros(6,2) eye(6); zeros(9,8)]*u;
 
 % 
