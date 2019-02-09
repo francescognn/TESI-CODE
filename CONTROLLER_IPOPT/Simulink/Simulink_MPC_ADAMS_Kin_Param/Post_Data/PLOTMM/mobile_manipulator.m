@@ -778,9 +778,9 @@ classdef mobile_manipulator
             fill3(P11r(1,:),P11r(2,:),P11r(3,:),'k')
             fill3(P12r(1,:),P12r(2,:),P12r(3,:),'k')
             
-            ur5_disp = UR5Display(f);
-            
-            ur5_disp.draw_configuration(in_mm_pose, self.T_ur5_mobilebase);
+             ur5_disp = UR5Display(f);
+
+             ur5_disp.draw_configuration(in_mm_pose, self.T_ur5_mobilebase);
            
             
         end

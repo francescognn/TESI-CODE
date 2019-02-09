@@ -5,8 +5,8 @@ clear
 nometraj='sin_';
 
 % q0=[0 0 0  1.1352   -1.3124    1.4284   -1.9527    4.4346   -0.0100]';
-q0=[0 0 0  -deg2rad(177)  -deg2rad(73)  deg2rad(104)   -deg2rad(203)   deg2rad(263)   deg2rad(91)]';
-[Pee0,A]=FK(q0);
+q0=[0 0 0  -0.3271   -1.6893    1.4493   -0.1655    1.2337    1.1716]';
+[Pee0,A, B]=FK(q0);
 
 p0=Pee0(1:3);
 
@@ -28,11 +28,18 @@ Tsample=0.01;
 %  xx=spline(t,xp',tt);
 %  yy=spline(t,yp',tt);
 %  
- xd=[xx+Pee0(2);0.5.*ones(size(xx))+Pee0(2)/0.4;yy+1.2/0.4].*0.4;
+
+load('Data_saved/datax_y.mat')
+
+sc=0.5;
+
+xx=xx.*0.6;
+yy=yy.*0.6;
+
+ xd=[xx+Pee0(1)-xx(1);Pee0(2).*ones(size(xx));yy+Pee0(3)-yy(1)];
  
  plot3(xd(1,:),xd(2,:),xd(3,:));
  
- xd=[zeros(9,size(xd,2));xd;-ones(1,size(xd,2));zeros(1,size(xd,2));zeros(1,size(xd,2));zeros(1,size(xd,2));ones(1,size(xd,2));zeros(1,size(xd,2))];
- 
- 
+ xd=[zeros(9,size(xd,2));xd;zeros(1,size(xd,2));zeros(1,size(xd,2));ones(1,size(xd,2));-ones(1,size(xd,2));zeros(1,size(xd,2));zeros(1,size(xd,2))];
+
  
