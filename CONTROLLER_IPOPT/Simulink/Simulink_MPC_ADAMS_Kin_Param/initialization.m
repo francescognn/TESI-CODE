@@ -10,8 +10,8 @@ m_m       = m_b;
 m_j       = m_m;
 Ak_base   = diag([100  100  100]);
 Ak_joints = diag([100 100 100 100 100 100]);
-Ak_ee     = diag([1e8 1e8 1e8 1e8 1e8]);
-Ak_mm     = 0;
+Ak_ee     = diag([1e8 1e8 1e8 5e6 5e6]);
+Ak_mm     = 0.5;
 Ak_ub     = diag([1e7 1e7]);
 
 
@@ -58,8 +58,8 @@ u = [            Fb                  zeros(size(Fb,1),size(Fm,2))  ; ...
 %% Writing differential equation
  
 [P_ee,Psi_ee,Rot_T] = FK(x(1:9));    
- G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
-%  G=zeros(3,2);
+%  G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
+  G=zeros(3,2);
 xdot = [G zeros(3,6); zeros(6,2) eye(6); zeros(9,8)]*u;
 
 % 
@@ -133,8 +133,8 @@ e_th6    = (X_forecast(9,i)-Xd(9,i));
 ex_ee    = (X_forecast(10,i)-Xd(10,i));
 ey_ee    = (X_forecast(11,i)-Xd(11,i));
 ez_ee    = (X_forecast(12,i)-Xd(12,i));
-ethx_ee  = dot(X_forecast(13:15,i),Xd(13:15,i));
-ethz_ee  = dot(X_forecast(16:18,i),Xd(16:18,i));
+ethx_ee  = dot(X_forecast(13:15,i),Xd(13:15,i))-1;
+ethz_ee  = dot(X_forecast(16:18,i),Xd(16:18,i))-1;
 man_i    =  manipulability_index(X_forecast(1:9,i));
 
 u        = Usym(p,T_horizon(i));
@@ -148,24 +148,23 @@ u        = Usym(p,T_horizon(i));
 J = h1 + h2 + h3 + h4 + h5;
 % CONSTRAINTS FUNCTION ( lbg<=g<=ubg )
 
- [scav1,scav2]=SCA(X_forecast(1:9,i));
+ sca_val=SCA(X_forecast(1:9,i));
 
 if i==1
     
-g = {g{:}, [u-U0; X_forecast(4,i); scav1; scav2; X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
+g = {g{:}, [u-U0; X_forecast(4,i); sca_val; X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
 
 else
 
- g = {g{:}, [u-Usym(p,T_horizon(i-1)); scav1; scav2; X_forecast(4,i); X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
+ g = {g{:}, [u-Usym(p,T_horizon(i-1)); sca_val; X_forecast(4,i); X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
 
 
 end
     
-lbg = [lbg; -const_vec; -inf;  0; -deg2rad(350); -deg2rad(180); -deg2rad(145); -deg2rad(180); -deg2rad(350); -deg2rad(350)];
-ubg = [ubg;  const_vec; inf; inf; deg2rad(350); deg2rad(0); deg2rad(145); deg2rad(0); deg2rad(350); deg2rad(350) ];
+lbg = [lbg; -const_vec; 0;  0;  0; -deg2rad(350); -deg2rad(180); -deg2rad(145); -deg2rad(180); -deg2rad(350); -deg2rad(350)];
+ubg = [ubg;  const_vec; inf; inf; inf; deg2rad(350); deg2rad(0); deg2rad(145); deg2rad(0); deg2rad(350); deg2rad(350) ];
 
 end
-
 
 %% CREATING FUNCTION FOR J AND G
  
