@@ -20,7 +20,7 @@ Tsample=0.01;
 %  
 %  [xp,yp]=ginput(25);
 %  grid on
- %%
+
 %  t=1:25;
 %  
 %  tt=linspace(t(1),t(end),200);

@@ -13,11 +13,11 @@ initialize_starting_point = init;
 q0 = [0 0 0 pi/2 -pi/4 -pi/4 -pi/2 pi 0];
 p0 = [0.4855;-0.1069;1.5766];
 
-if isstring(type)==false
-    error('the input trajectory type is not a string');
-elseif isstring(what)==false
-    error('choose between <<base>> and <<MM>> to control');
-end
+% if isstring(type)==false
+%     error('the input trajectory type is not a string');
+% elseif isstring(what)==false
+%     error('choose between <<base>> and <<MM>> to control');
+% end
 
 switch what
     case 'base'
@@ -62,6 +62,8 @@ switch what
             otherwise
                 error('invalid trajectory type');
         end
+        plot(xd(1,:),xd(2,:),'-o','MarkerSize',2)
+        grid on; axis equal; title('Trajectory');
     case 'MM'
         switch type 
             case 'line'
@@ -99,14 +101,18 @@ switch what
                 xd = [zeros(9,length(tt));xd;[x_axis;z_axis]*ones(1,length(tt))];
                 nometraj='MM_sineOrient';
             case 'NO'
-                xd=[xx+P0(2);0.5.*ones(size(xx))+P0(2)/0.4;yy+1.2/0.4].*0.4;
-                plot3(xd(1,:),xd(2,:),xd(3,:));
-                xd=[zeros(9,size(xd,2));xd;-ones(1,size(xd,2));zeros(1,size(xd,2));zeros(1,size(xd,2));zeros(1,size(xd,2));ones(1,size(xd,2));zeros(1,size(xd,2))];
-
+                load('../Data_saved/datax_y.mat')
+                xx=xx.*0.6;
+                yy=yy.*0.6;
+                xd=[xx+p0(1)-xx(1);p0(2).*ones(size(xx));yy+p0(3)-yy(1)];
+                z_axis = [0;-1;0]; x_axis=[0;0;1];
+                xd = [zeros(9,length(xx));xd;[x_axis;z_axis]*ones(1,length(xx))];
                 nometraj='MM_NO';
             otherwise
                 error('invalid trajectory type');
         end
+        plot3(xd(10,:),xd(11,:),xd(12,:),'-o','MarkerSize',2);
+        grid on; axis equal; title('Trajectory');
     otherwise
         error('invalid trajectory type');
 end
