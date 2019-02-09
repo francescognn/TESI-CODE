@@ -26,14 +26,13 @@ const_vec = const_vec*T;
 fs = 1/T; % Sampling frequency [hz]
 T_horizon=(0:N-1)*T;
 
+
 %% MODELING 
 x   = MX.sym('x',18); % [x y th TH1 TH2 TH3 TH4 TH5 TH6 manipulability_index]
-p   = MX.sym('p',14); % [p1 p2 p3 p4 ... p14]
 Xd  = MX.sym('Xd',18,N); % [x y th TH1 TH2 TH3 TH4 TH5 TH6 x_ee y_ee th_ee th1_ee th2_ee th3_ee]
 t   = MX.sym('t');
 U0  = MX.sym('U0',8,1); % [V W THP1 THP2 THP3 THP4 THP5 THP6]
 x0  = MX.sym('x0',18);
-p0  = MX.sym('p0',14);
 sw  = MX.sym('sw',1); 
 
 %%  Definisco il vettore u 
@@ -41,9 +40,14 @@ sw  = MX.sym('sw',1);
 Ff = [t^3  t^2  t   1];
 Fp = [ 1 ];
 
-Fb = [Ff 0 0 0 0; 0 0 0 0 Ff];
+Lp = length(Ff); 
+Lm = length(Fp);
+Np = Lp*2 + Lm*6;   % TOTAL NUMBER OF PARAMETERS (Unknowns)
 
-Lp = length(Fp);
+p   = MX.sym('p',Np); % [p1 p2 p3 p4 ... p_Np]
+p0  = MX.sym('p0',Np);
+
+Fb = [Ff , zeros(1,Lp); zeros(1,Lp) , Ff];
 
 Fm = [                          Fp      zeros(1,Lp*5)   ; ...
             zeros(1,Lp*1)       Fp      zeros(1,Lp*4)   ; ...
