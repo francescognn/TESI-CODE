@@ -43,8 +43,8 @@ Jp_nh = [Jp(:,1:3)*G , Jp(:,4:end)];
 Jo_nh = [Jo(:,1:3)*G , Jo(:,4:end)];
 
 J_ee = [Jp_nh;Jo_nh];
-J_ee = J_ee(4:end,:);
+J_ee = J_ee(:,3:end);
 
-man=det(J_ee*J_ee');
+man=det(J_ee*J_ee.');
 man=simplify(man);
-man_f = matlabFunction(man,'File','myfile');
+man_f = matlabFunction(man,'File','myfile.m');
