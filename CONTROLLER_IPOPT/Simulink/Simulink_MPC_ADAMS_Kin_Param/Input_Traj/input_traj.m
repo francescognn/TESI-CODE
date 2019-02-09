@@ -1,4 +1,4 @@
-function [N,T,Tsample,xd,nometraj,initialize_starting_point]=input_traj(N,T,Tsample,what,type,init)
+function [N,T,Tsample,xd,nometraj,initialize_starting_point,x0_val]=input_traj(N,T,Tsample,what,type,init)
 % Function that returns the reference trajectory for our controller 
 %      together with some parameters necessary for Simulink
 %
@@ -10,9 +10,10 @@ function [N,T,Tsample,xd,nometraj,initialize_starting_point]=input_traj(N,T,Tsam
 % RESTARTING FROM P0??
 initialize_starting_point = init;
 
-q0 = [0 0 0 pi/2 -pi/4 -pi/4 -pi/2 pi 0];
-p0 = [0.4855;-0.1069;1.5766];
+q0 = [0 0 0 pi/2 -pi/6 -pi/4 -pi/2 pi 0];
+p0 = [0.6791;-0.1069;1.4720];
 
+x0_val = [q0,p0',zeros(1,6)]';
 % if isstring(type)==false
 %     error('the input trajectory type is not a string');
 % elseif isstring(what)==false
@@ -23,14 +24,14 @@ switch what
     case 'base'
         switch type 
             case 'line'
-                t_total = 10;
+                t_total = 35;
                 tt = 0:T:t_total;
                 v = 0.3;
                 xd = [v*tt;zeros(2,length(tt))];
                 xd = [xd;q0(4:end)'*ones(1,length(tt));zeros(9,length(tt))];
                 nometraj='Base_line';
             case 'curve'
-                t_total = 10;
+                t_total = 30;
                 radius = 3;
                 thf = pi/2;
                 tt = 0:T:t_total;
@@ -39,7 +40,7 @@ switch what
                 xd = [xd;q0(4:end)'*ones(1,length(tt));zeros(9,length(tt))];
                 nometraj='Base_curve';
             case 'L'
-                t_total=15;
+                t_total=30;
                 tt = 0:T:t_total;
                 t1=7;t2=10;
                 th=linspace(0,pi/2,length(t1:T:t2)); j=1;
@@ -67,14 +68,14 @@ switch what
     case 'MM'
         switch type 
             case 'line'
-                t_total=15; tt=0:T:t_total;
+                t_total=30; tt=0:T:t_total;
                 dist = 1.2;
                 v=dist/t_total; 
                 xd=[p0(1)+v*tt;p0(2)+v*tt;p0(3)+0.1/t_total*tt];
                 xd = [zeros(9,length(tt));xd;zeros(6,length(tt))];
                 nometraj='MM_line';
             case 'line_orient'
-                t_total=15; tt=0:T:t_total;
+                t_total=30; tt=0:T:t_total;
                 dist = 1.2;
                 v=dist/t_total; 
                 z_axis = [0;-1;0]; x_axis=[0;0;1];
@@ -82,22 +83,22 @@ switch what
                 xd = [zeros(9,length(tt));xd;[x_axis;z_axis]*ones(1,length(tt))];
                 nometraj='MM_lineOrient';
             case 'sine'
-                t_total=15; tt=0:T:t_total;
+                t_total=60; tt=0:T:t_total;
                 dist = 1.2;
                 noscillazioni = 2;
                 om=(noscillazioni*2*pi)/t_total;
                 v=dist/t_total; 
-                xd=[p0(1)+v*tt;p0(2)+v*tt;p0(3)+0.2-0.2*cos(om*tt)];
+                xd=[p0(1)+v*tt;p0(2)+v*tt;p0(3)-0.2*sin(om*tt)];
                 xd = [zeros(9,length(tt));xd;zeros(6,length(tt))];
                 nometraj='MM_sine';
             case 'sine_orient'
-                t_total=15; tt=0:T:t_total;
+                t_total=60; tt=0:T:t_total;
                 dist = 1.2;
                 z_axis = [0;-1;0]; x_axis=[0;0;1];
                 noscillazioni = 2;
                 om=(noscillazioni*2*pi)/t_total;
                 v=dist/t_total; 
-                xd=[p0(1)+v*tt;p0(2)+v*tt;p0(3)+0.2-0.2*cos(om*tt)];
+                xd=[p0(1)+v*tt;p0(2)+v*tt;p0(3)-0.2*sin(om*tt)];
                 xd = [zeros(9,length(tt));xd;[x_axis;z_axis]*ones(1,length(tt))];
                 nometraj='MM_sineOrient';
             case 'NO'
