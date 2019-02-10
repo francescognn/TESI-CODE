@@ -1,5 +1,5 @@
 
-clearvars -EXCEPT xd x0_val Pee0 N T Tsample tt nometraj
+clearvars -EXCEPT xd x0_val Pee0 N T Tsample tt nometraj initialize_starting_point
 
 import casadi.*
 
@@ -11,11 +11,11 @@ m_j       = m_m;
 Ak_base   = diag([100  100  100]);
 Ak_joints = diag([100 100 100 100 100 100]);
 Ak_ee     = diag([1e3 1e3 1e3 5e4 5e4]);
-Ak_mm     = 1e2;
+Ak_mm     = 0;
 Ak_ub     = diag([0.5e4 0.5e4]);
 
 
-const_vec = [  0.6    0.2    2        2       2       2       2       2 ].'; 
+const_vec = [  0.4    0.2    2        2       2       2       2       2 ].'; 
 %         = [Vpmax Wpmax TH1pmax TH2pmax TH3pmax TH4pmax TH5pmax TH6pmax] 
 %          [m/s^2][rad/s^2][rad/s][rad/s] [rad/s][rad/s] [rad/s] [rad/s]  
 const_vec = const_vec*T;
@@ -37,17 +37,18 @@ sw  = MX.sym('sw',1);
 
 %%  Definisco il vettore u 
 
-Ff = [t^3  t^2  t   1];
+Ff = [t^2  t   1];
 Fp = [ 1 ];
 
-Lp = length(Ff); 
-Lm = length(Fp);
-Np = Lp*2 + Lm*6;   % TOTAL NUMBER OF PARAMETERS (Unknowns)
+
+Lf = length(Ff);
+Lp = length(Fp);
+Np = Lf*2 + Lp*6;   % TOTAL NUMBER OF PARAMETERS (Unknowns)
 
 p   = MX.sym('p',Np); % [p1 p2 p3 p4 ... p_Np]
 p0  = MX.sym('p0',Np);
 
-Fb = [Ff , zeros(1,Lp); zeros(1,Lp) , Ff];
+Fb = [Ff , zeros(1,Lf); zeros(1,Lf) , Ff];
 
 Fm = [                          Fp      zeros(1,Lp*5)   ; ...
             zeros(1,Lp*1)       Fp      zeros(1,Lp*4)   ; ...

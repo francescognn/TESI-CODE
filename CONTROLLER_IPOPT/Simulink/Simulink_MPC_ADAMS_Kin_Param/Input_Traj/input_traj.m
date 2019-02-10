@@ -10,8 +10,9 @@ function [N,T,Tsample,xd,nometraj,initialize_starting_point,x0_val]=input_traj(N
 % RESTARTING FROM P0??
 initialize_starting_point = init;
 
-q0 = [0 0 0 pi/2 -pi/6 -pi/4 -pi/2 pi 0];
-p0 = [0.6791;-0.1069;1.4720];
+q0 = [-0.0000   -0.0000   -0.0001   -5.2235   -1.0817   -2.0377    0.3426    0.6332    1.3451];
+p0 = FK(q0);
+% p0 = [0.6791;-0.1069;1.4720];
 
 x0_val = [q0,p0',zeros(1,6)]';
 % if isstring(type)==false

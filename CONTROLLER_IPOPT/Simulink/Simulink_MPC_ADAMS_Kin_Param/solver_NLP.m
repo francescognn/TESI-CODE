@@ -39,16 +39,15 @@ pnew=full(sol.x);
 
 unew = zeros(8,N);
 
-%Nel caso volessi tutto u durante la predizione
-% 
-% for k=1:length(T_horizon)
-% 
-% unew(:,k) = full(Usym(pnew,T_horizon(k)).');
-% 
-% end
-% U =  unew(:,1);
+% Nel caso volessi tutto u durante la predizione
 
-U = [pnew(4);pnew(8);pnew(9:end)];
+for k=1:length(T_horizon)
+
+unew(:,k) = full(Usym(pnew,T_horizon(k)).');
+
+end
+U =  unew(:,1);
+
  
 %% Computing Xcomputed for the predicted Horizon 
 
