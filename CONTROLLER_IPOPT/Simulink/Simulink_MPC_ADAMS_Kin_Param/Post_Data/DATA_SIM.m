@@ -3,13 +3,13 @@ savedata           = 1;
 visualize_plot     = 1;
 visualize_3d_plot  = 0;
 plot_position_3d   = [40,10]; % AZ,EL
-visualize_spheres  = 1;
+visualize_spheres  = 0;
 record_video       = 0;
 visualize_horizons = 0;
 static_3d_plot     = 0;
 
 prompt             = 'Is this a Real test? (y/n)  ';
-real_sim           = input(prompt,'s');
+real_sim           = 'n';%input(prompt,'s');
 
 
 %% DIMENSION SET

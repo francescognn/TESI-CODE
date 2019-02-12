@@ -1,4 +1,4 @@
-function [N,T,Tsample,xd,nometraj,initialize_starting_point,x0_val]=input_traj(N,T,Tsample,what,type,init)
+function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val]=input_traj(N,T,Tsample,what,type,init)
 % Function that returns the reference trajectory for our controller 
 %      together with some parameters necessary for Simulink
 %
@@ -109,6 +109,7 @@ switch what
                 xd=[xx+p0(1)-xx(1);p0(2).*ones(size(xx));yy+p0(3)-yy(1)];
                 z_axis = [0;-1;0]; x_axis=[0;0;1];
                 xd = [zeros(9,length(xx));xd;[x_axis;z_axis]*ones(1,length(xx))];
+                t_total=length(xx)*T;
                 nometraj='MM_NO';
             otherwise
                 error('invalid trajectory type');
