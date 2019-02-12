@@ -1,7 +1,10 @@
 
-clearvars -EXCEPT xd x0_val Pee0 N T Tsample tt nometraj initialize_starting_point
+FK_generation
+
+clearvars -EXCEPT xd x0_val Pee0 N T Tsample tt nometraj initialize_starting_point FK_casadi
 
 import casadi.*
+
 
 %% PARAMETERS OF THE PROBLEM
 
@@ -75,7 +78,7 @@ u = [            Fb                  zeros(size(Fb,1),size(Fm,2))  ; ...
   
 %% Writing differential equation
  
-[P_ee,Psi_ee,Rot_T] = FK(x(1:9));    
+[P_ee,Psi_ee,Rot_T] = FK_casadi(x);    
   G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
 %   G=zeros(3,2);
 xdot = [G zeros(3,6); zeros(6,2) eye(6); zeros(9,8)]*u;

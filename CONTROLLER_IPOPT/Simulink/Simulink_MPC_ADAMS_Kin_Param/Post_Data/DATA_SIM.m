@@ -1,7 +1,7 @@
 
-savedata           = 0;
+savedata           = 1;
 visualize_plot     = 1;
-visualize_3d_plot  = 1;
+visualize_3d_plot  = 0;
 plot_position_3d   = [40,10]; % AZ,EL
 visualize_spheres  = 1;
 record_video       = 0;
