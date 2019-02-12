@@ -43,8 +43,15 @@ Jp_nh = [Jp(:,1:3)*G , Jp(:,4:end)];
 Jo_nh = [Jo(:,1:3)*G , Jo(:,4:end)];
 
 J_ee = [Jp_nh;Jo_nh];
-J_ee = J_ee(:,3:end);
+J_ee = J_ee(1:3,3:end);
+% J_ee = simplify(J_ee);
 
 man=det(J_ee*J_ee.');
-man=simplify(man);
+% man=simplify(man);
 man_f = matlabFunction(man,'File','myfile.m');
+
+tstart=tic;
+
+[aa bb cc]=FK([1 2 3 4 5 6 7 8 9]);
+
+tel=toc(tstart);

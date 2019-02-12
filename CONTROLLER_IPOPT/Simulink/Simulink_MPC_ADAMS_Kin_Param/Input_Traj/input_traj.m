@@ -95,7 +95,7 @@ switch what
             case 'sine_orient'
                 t_total=60; tt=0:T:t_total;
                 dist = 1.2;
-                z_axis = [0;-1;0]; x_axis=[0;0;1];
+                z_axis = [0;1;0]; x_axis=[1;0;0];
                 noscillazioni = 2;
                 om=(noscillazioni*2*pi)/t_total;
                 v=dist/t_total; 

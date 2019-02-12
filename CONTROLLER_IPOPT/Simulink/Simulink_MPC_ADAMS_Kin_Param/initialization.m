@@ -10,15 +10,28 @@ m_m       = m_b;
 m_j       = m_m;
 Ak_base   = diag([100  100  100]);
 Ak_joints = diag([100 100 100 100 100 100]);
-Ak_ee     = diag([1e3 1e3 1e3 5e4 5e4]);
+Ak_ee     = diag([1e4 1e4 1e4 1e4 1e4]);
 Ak_mm     = 0;
-Ak_ub     = diag([0.5e4 0.5e4]);
+Ak_ub     = diag([0.5e3 0.5e4]);
 
 
-const_vec = [  0.4    0.2    2        2       2       2       2       2 ].'; 
-%         = [Vpmax Wpmax TH1pmax TH2pmax TH3pmax TH4pmax TH5pmax TH6pmax] 
-%          [m/s^2][rad/s^2][rad/s][rad/s] [rad/s][rad/s] [rad/s] [rad/s]  
-const_vec = const_vec*T;
+const_vec = [  -0.4  0.4;  %Vpmin    Vpmax      [m/s^2]
+               -0.2  0.2;  %Wpmin    Wpmax      [rad/s^2]
+                 -2    2;  %TH1pmin  TH1pmax    [rad/s]
+                 -2    2;  %TH2pmin  TH2pmax    [rad/s]
+                 -2    2;  %TH3pmin  TH3pmax    [rad/s]
+                 -2    2;  %TH4pmin  TH4pmax    [rad/s]
+                 -2    2;  %TH5pmin  TH5pmax    [rad/s]
+                 -2    2;  %TH6pmin  TH6pmax    [rad/s]
+               -350  350;  %TH1min   TH1max    [rad/s]
+               -180    0;  %TH2min   TH2max    [rad/s]
+               -145  145;  %TH3min   TH3max    [rad/s]
+               -180    0;  %TH4min   TH4max    [rad/s]
+               -350  350;  %TH5min   TH5max    [rad/s]
+               -350  350]; %TH6min   TH6max    [rad/s] 
+             
+const_vec(1:8,:)  = const_vec(1:8,:).*T;
+const_vec(9:14,:) = deg2rad(const_vec(9:14,:));
 
 %%% NB xd è valutato a partire dal passo 1, non dal passo 0 dell'orizzonte
 %%% di predizione
@@ -38,7 +51,7 @@ sw  = MX.sym('sw',1);
 %%  Definisco il vettore u 
 
 Ff = [t^2  t   1];
-Fp = [ 1 ];
+Fp = [ t 1 ];
 
 
 Lf = length(Ff);
@@ -157,17 +170,17 @@ J = h1 + h2 + h3 + h4 + h5;
 
 if i==1
     
-g = {g{:}, [u-U0; X_forecast(4,i); sca_val; X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
+g = {g{:}, [u-U0; X_forecast(4:9,i); sca_val]};
 
 else
 
- g = {g{:}, [u-Usym(p,T_horizon(i-1)); sca_val; X_forecast(4,i); X_forecast(5,i); X_forecast(6,i); X_forecast(7,i); X_forecast(8,i); X_forecast(9,i)]};
+ g = {g{:}, [u-Usym(p,T_horizon(i-1)); X_forecast(4:9,i); sca_val]};
 
 
 end
     
-lbg = [lbg; -const_vec; 0;  0;  0; -deg2rad(350); -deg2rad(180); -deg2rad(145); -deg2rad(180); -deg2rad(350); -deg2rad(350)];
-ubg = [ubg;  const_vec; inf; inf; inf; deg2rad(350); deg2rad(0); deg2rad(145); deg2rad(0); deg2rad(350); deg2rad(350) ];
+lbg = [lbg;  const_vec(:,1);   0;   0;  0  ];
+ubg = [ubg;  const_vec(:,2); inf; inf; inf ];
 
 end
 

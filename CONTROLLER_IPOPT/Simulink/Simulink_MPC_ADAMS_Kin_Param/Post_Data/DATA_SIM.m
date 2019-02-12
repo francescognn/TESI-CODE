@@ -1,6 +1,6 @@
 
 savedata           = 0;
-visualize_plot     = 0;
+visualize_plot     = 1;
 visualize_3d_plot  = 1;
 plot_position_3d   = [40,10]; % AZ,EL
 visualize_spheres  = 1;

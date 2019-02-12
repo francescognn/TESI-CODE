@@ -2,9 +2,10 @@ function [] = spheres_gen(X,T)
 %% Cilindro kinect
 
 [X_cyl_kin,Y_cyl_kin,Z_cyl_kin]=cylinder(0.13,50);
-
-X_cyl_kin=X_cyl_kin-0.76/2+X(1,:);
-Y_cyl_kin=Y_cyl_kin-0.2+X(2,:);
+dist_c=sqrt((0.76/2)^2+0.2^2);
+phi_c=0.4845;
+X_cyl_kin = X(1,:)-cos(X(3,:)+phi_c)*dist_c + X_cyl_kin;
+Y_cyl_kin = X(2,:)-sin(X(3,:)+phi_c)*dist_c + Y_cyl_kin;
 Z_cyl_kin=Z_cyl_kin+0.5;
 
 %% Sfera EE
