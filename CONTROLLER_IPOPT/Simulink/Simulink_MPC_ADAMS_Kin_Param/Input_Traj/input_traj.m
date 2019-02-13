@@ -10,7 +10,7 @@ function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val]=inpu
 % RESTARTING FROM P0??
 initialize_starting_point = init;
 
-q0 = [-0.0000   -0.0000   -0.0001   -5.2235   -1.0817   -2.0377    0.3426    0.6332    1.3451];
+q0 = [-0.0000   -0.0000   -0.0001   -5.2235   -1.0817   -2.0377    -0.3426    0.6332    1.3451];
 p0 = FK(q0);
 % p0 = [0.6791;-0.1069;1.4720];
 
@@ -84,8 +84,8 @@ switch what
                 xd = [zeros(9,length(tt));xd;[x_axis;z_axis]*ones(1,length(tt))];
                 nometraj='MM_lineOrient';
             case 'sine'
-                t_total=60; tt=0:T:t_total;
-                dist = 1.2;
+                t_total=30; tt=0:T:t_total;
+                dist = 0.8;
                 noscillazioni = 2;
                 om=(noscillazioni*2*pi)/t_total;
                 v=dist/t_total; 
@@ -93,8 +93,8 @@ switch what
                 xd = [zeros(9,length(tt));xd;zeros(6,length(tt))];
                 nometraj='MM_sine';
             case 'sine_orient'
-                t_total=60; tt=0:T:t_total;
-                dist = 1.2;
+                t_total=30; tt=0:T:t_total;
+                dist = 0.8;
                 z_axis = [0;1;0]; x_axis=[1;0;0];
                 noscillazioni = 2;
                 om=(noscillazioni*2*pi)/t_total;
@@ -103,7 +103,7 @@ switch what
                 xd = [zeros(9,length(tt));xd;[x_axis;z_axis]*ones(1,length(tt))];
                 nometraj='MM_sineOrient';
             case 'NO'
-                load('../Data_saved/datax_y.mat')
+                load('Data_saved/datax_y.mat')
                 xx=xx.*0.6;
                 yy=yy.*0.6;
                 xd=[xx+p0(1)-xx(1);p0(2).*ones(size(xx));yy+p0(3)-yy(1)];
@@ -114,8 +114,8 @@ switch what
             otherwise
                 error('invalid trajectory type');
         end
-        plot3(xd(10,:),xd(11,:),xd(12,:),'-o','MarkerSize',2);
-        grid on; axis equal; title('Trajectory');
+%         plot3(xd(10,:),xd(11,:),xd(12,:),'-o','MarkerSize',2);
+%         grid on; axis equal; title('Trajectory');
     otherwise
         error('invalid trajectory type');
 end

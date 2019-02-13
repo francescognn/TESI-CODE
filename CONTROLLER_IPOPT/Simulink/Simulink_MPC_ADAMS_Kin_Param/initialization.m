@@ -1,7 +1,7 @@
 
-FK_generation
 
-clearvars -EXCEPT xd x0_val Pee0 N T Tsample tt nometraj initialize_starting_point FK_casadi
+
+clearvars -EXCEPT xd x0_val Pee0 N T Tsample tt nometraj initialize_starting_point 
 
 import casadi.*
 
@@ -13,8 +13,8 @@ m_m       = m_b;
 m_j       = m_m;
 Ak_base   = diag([100  100  100]);
 Ak_joints = diag([100 100 100 100 100 100]);
-Ak_ee     = diag([1e4 1e4 1e4 1e4 1e4]);
-Ak_mm     = 0;
+Ak_ee     = diag([2e4 2e4 2e4 1e4 1e4]);
+Ak_mm     = 1;
 Ak_ub     = diag([0.5e3 0.5e4]);
 
 
@@ -78,7 +78,7 @@ u = [            Fb                  zeros(size(Fb,1),size(Fm,2))  ; ...
   
 %% Writing differential equation
  
-[P_ee,Psi_ee,Rot_T] = FK_casadi(x);    
+[P_ee,Psi_ee,Rot_T] = FK(x);    
   G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
 %   G=zeros(3,2);
 xdot = [G zeros(3,6); zeros(6,2) eye(6); zeros(9,8)]*u;
@@ -156,7 +156,7 @@ ey_ee    = (X_forecast(11,i)-Xd(11,i));
 ez_ee    = (X_forecast(12,i)-Xd(12,i));
 ethx_ee  = dot(X_forecast(13:15,i),Xd(13:15,i))-1;
 ethz_ee  = dot(X_forecast(16:18,i),Xd(16:18,i))-1;
-man_i    =  manipulability_index(X_forecast(1:9,i));
+man_i    = manipulability_index(X_forecast(1:9,i));
 
 u        = Usym(p,T_horizon(i));
 

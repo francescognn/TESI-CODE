@@ -1,5 +1,5 @@
 
-savedata           = 1;
+savedata           = 0;
 visualize_plot     = 1;
 visualize_3d_plot  = 0;
 plot_position_3d   = [40,10]; % AZ,EL
@@ -18,8 +18,9 @@ state_x=state_x_sim.';
 if exist('state_qp')==1
 state_qp=state_qp(:,1:6).';
 end
+if size(u_given,1)~=8
 u_given=u_given.';
-
+end
 
 if size(state_x,2)>=size(xd,2)
     state_x=state_x(:,1:size(xd,2));
@@ -208,6 +209,7 @@ hold on
 stem(2,sum(J_parts(:,3))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 stem(3,sum(J_parts(:,4))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 stem(4,sum(J_parts(:,5))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
+stem(5,sum(J_parts(:,6))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 xlabel('cost function components')
 ylabel('% of the total cost')
 
@@ -265,7 +267,7 @@ F_video = struct('cdata', cell(1,size(X,2)), 'colormap', cell(1,size(X,2)));
          % Salvo frame 
          F_video(j) = getframe;
 
-         % tengo iltima schermata
+         % tengo ultima schermata
          if j~=size(state_x,2)
             delete(gca)          
          end
@@ -360,8 +362,8 @@ if savedata ==1
     else
         Type_sym='SIM_';
     end
-savename = ['REAL_' nometraj '_'  datestr(now, 'HH-MM dd-mmm-yyyy')];
-    
+savename = [Type_sym, nometraj '_'  datestr(now, 'HH-MM dd-mmm-yyyy')];
+% savename = [Type_sym, nometraj '_N=',num2str(N),'_'  datestr(now, 'dd-mmm-yyyy'),'MANIP_FINTA'];
 matfile = fullfile('Data_saved/', savename);
 save(matfile)
 
