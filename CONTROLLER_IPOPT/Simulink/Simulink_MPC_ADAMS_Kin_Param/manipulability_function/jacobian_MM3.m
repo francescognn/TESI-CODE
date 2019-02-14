@@ -42,10 +42,10 @@ G = [cos(th),0;  sin(th),0;  0,1];
 Jp_nh = [Jp(:,1:3)*G , Jp(:,4:end)];
 Jo_nh = [Jo(:,1:3)*G , Jo(:,4:end)];
 
-J_ee = [Jp_nh;Jo_nh];
+J_ee = [Jp_nh];
 J_ee = simplify(J_ee(:,3:end));
 
-% man=det(J_ee*J_ee.');
+ man=det(J_ee*J_ee.');
 
-% man_f = matlabFunction(man,'File','man_f.m');
+ man_f = matlabFunction(man,'File','man_f.m');
 

@@ -1,15 +1,15 @@
 
-savedata           = 0;
+savedata           = 1;
 visualize_plot     = 1;
 visualize_3d_plot  = 0;
 plot_position_3d   = [40,10]; % AZ,EL
-visualize_spheres  = 0;
+visualize_spheres  = 1;
 record_video       = 0;
 visualize_horizons = 0;
 static_3d_plot     = 0;
 
 prompt             = 'Is this a Real test? (y/n)  ';
-real_sim           = 'n';%input(prompt,'s');
+real_sim           = input(prompt,'s');
 
 
 %% DIMENSION SET
@@ -129,42 +129,42 @@ end
 warning off
 
 %% ARM JOINTS VELOCITIES ERROR (4)
-if exist('state_qp')==1
-    
-aj_error=state_qp-u_given(3:end,:);
-
-figure(4)
-subplot(321)
-plot(aj_error(1,:))
-grid on
-title('error thetap1')
-
-subplot(322)
-plot(aj_error(2,:))
-grid on
-title('error thetap2')
-
-subplot(323)
-plot(aj_error(3,:))
-grid on
-title('error thetap3')
-
-subplot(324)
-plot(aj_error(4,:))
-grid on
-title('error thetap4')
-
-subplot(325)
-plot(aj_error(4,:))
-grid on
-title('error thetap5')
-
-subplot(326)
-plot(aj_error(6,:))
-grid on
-title('error thetap6')
-
-end
+% if exist('state_qp')==1
+%     
+% aj_error=state_qp-u_given(3:end,:);
+% 
+% figure(4)
+% subplot(321)
+% plot(aj_error(1,:))
+% grid on
+% title('error thetap1')
+% 
+% subplot(322)
+% plot(aj_error(2,:))
+% grid on
+% title('error thetap2')
+% 
+% subplot(323)
+% plot(aj_error(3,:))
+% grid on
+% title('error thetap3')
+% 
+% subplot(324)
+% plot(aj_error(4,:))
+% grid on
+% title('error thetap4')
+% 
+% subplot(325)
+% plot(aj_error(4,:))
+% grid on
+% title('error thetap5')
+% 
+% subplot(326)
+% plot(aj_error(6,:))
+% grid on
+% title('error thetap6')
+% 
+% end
 
 %% T ELAPSED PLOT (5)
 
