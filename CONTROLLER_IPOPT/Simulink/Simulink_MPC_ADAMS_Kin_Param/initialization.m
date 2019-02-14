@@ -13,9 +13,9 @@ m_m       = m_b;
 m_j       = m_m;
 Ak_base   = diag([100  100  100]);
 Ak_joints = diag([100 100 100 100 100 100]);
-Ak_ee     = diag([2e4 2e4 2e4 1e4 1e4]);
+Ak_ee     = diag([3e4 3e4 3e4 2e4 2e4]);
 Ak_mm     = 1;
-Ak_ub     = diag([0.5e3 0.5e4]);
+Ak_ub     = diag([4e2 4e2]);
 
 
 const_vec = [  -0.4  0.4;  %Vpmin    Vpmax      [m/s^2]
@@ -154,8 +154,8 @@ e_th6    = (X_forecast(9,i)-Xd(9,i));
 ex_ee    = (X_forecast(10,i)-Xd(10,i));
 ey_ee    = (X_forecast(11,i)-Xd(11,i));
 ez_ee    = (X_forecast(12,i)-Xd(12,i));
-ethx_ee  = dot(X_forecast(13:15,i),Xd(13:15,i))-1;
-ethz_ee  = dot(X_forecast(16:18,i),Xd(16:18,i))-1;
+ethx_ee  = dot(X_forecast(13:15,i),Xd(13:15,i))-dot(Xd(13:15,i),Xd(13:15,i));
+ethz_ee  = dot(X_forecast(16:18,i),Xd(16:18,i))-dot(Xd(16:18,i),Xd(16:18,i));
 man_i    = manipulability_index(X_forecast(1:9,i));
 
 u        = Usym(p,T_horizon(i));

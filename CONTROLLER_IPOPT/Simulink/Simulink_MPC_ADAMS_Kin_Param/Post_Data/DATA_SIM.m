@@ -204,14 +204,16 @@ plot(J_parts)
 grid on
 legend('J','h1','h2','h3','h4','h5')
 subplot(212)
-stem(1,sum(J_parts(:,2))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
+stem(0,sum(J_parts(:,1))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 hold on
+stem(1,sum(J_parts(:,2))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 stem(2,sum(J_parts(:,3))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 stem(3,sum(J_parts(:,4))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 stem(4,sum(J_parts(:,5))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 stem(5,sum(J_parts(:,6))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 xlabel('cost function components')
 ylabel('% of the total cost')
+grid on; hold off
 
 %% MANIPULABILIY INDEX (9)
 

@@ -1,4 +1,4 @@
-function A = rototrasl(DHTABLE)
+function A = rototrasl2(DHTABLE)
 % RETURNS A CELL OF ALL ROTOTRASLATION MATRIX OF A MANIPULATOR
 N = size(DHTABLE,1);
 

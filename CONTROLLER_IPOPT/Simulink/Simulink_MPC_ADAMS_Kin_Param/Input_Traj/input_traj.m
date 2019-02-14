@@ -15,11 +15,12 @@ p0 = FK(q0);
 % p0 = [0.6791;-0.1069;1.4720];
 
 x0_val = [q0,p0',zeros(1,6)]';
-% if isstring(type)==false
-%     error('the input trajectory type is not a string');
-% elseif isstring(what)==false
-%     error('choose between <<base>> and <<MM>> to control');
-% end
+
+if ischar(type)==false
+    error('the input trajectory type is not a string');
+elseif ischar(what)==false
+    error('choose between <<base>> and <<MM>> to control');
+end
 
 switch what
     case 'base'
@@ -84,7 +85,7 @@ switch what
                 xd = [zeros(9,length(tt));xd;[x_axis;z_axis]*ones(1,length(tt))];
                 nometraj='MM_lineOrient';
             case 'sine'
-                t_total=30; tt=0:T:t_total;
+                t_total=40; tt=0:T:t_total;
                 dist = 0.8;
                 noscillazioni = 2;
                 om=(noscillazioni*2*pi)/t_total;
@@ -93,7 +94,7 @@ switch what
                 xd = [zeros(9,length(tt));xd;zeros(6,length(tt))];
                 nometraj='MM_sine';
             case 'sine_orient'
-                t_total=30; tt=0:T:t_total;
+                t_total=40; tt=0:T:t_total;
                 dist = 0.8;
                 z_axis = [0;1;0]; x_axis=[1;0;0];
                 noscillazioni = 2;
