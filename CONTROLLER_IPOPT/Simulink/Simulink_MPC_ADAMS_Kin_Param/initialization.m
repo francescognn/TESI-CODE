@@ -1,7 +1,7 @@
 
 
 
-clearvars -EXCEPT xd x0_val Pee0 N T Tsample tt nometraj initialize_starting_point 
+clearvars -EXCEPT xd x0_val Pee0 N T Tsample tt nometraj initialize_starting_point x0_actualrobot
 
 import casadi.*
 
@@ -13,9 +13,9 @@ m_m       = m_b;
 m_j       = m_m;
 Ak_base   = diag([100  100  100]);
 Ak_joints = diag([100 100 100 100 100 100]);
-Ak_ee     = diag([3e4 3e4 3e4 2e4 2e4]);
-Ak_mm     = 1;
-Ak_ub     = diag([4e2 4e2]);
+Ak_ee     = diag([1e4 1e4 1e4 1e4 1e4]);
+Ak_mm     = 0;
+Ak_ub     = diag([5e3 5e3]);
 
 
 const_vec = [  -0.4  0.4;  %Vpmin    Vpmax      [m/s^2]
@@ -102,7 +102,7 @@ k2 = ode(x+dt/2.0*k1,p,t+dt/2.0);
 k3 = ode(x+dt/2.0*k2,p,t+dt/2.0);
 k4 = ode(x+dt*k3,p,t+dt/2.0);
 
-xstep = [x+dt/6.0*(k1+2*k2+2*k3+k4)];
+xstep = x+dt/6.0*(k1+2*k2+2*k3+k4);
 
 %%%%%%%%%%%% Adding EE pose calculation %%%%%%%%%%%%
 
@@ -156,14 +156,14 @@ ey_ee    = (X_forecast(11,i)-Xd(11,i));
 ez_ee    = (X_forecast(12,i)-Xd(12,i));
 ethx_ee  = dot(X_forecast(13:15,i),Xd(13:15,i))-dot(Xd(13:15,i),Xd(13:15,i));
 ethz_ee  = dot(X_forecast(16:18,i),Xd(16:18,i))-dot(Xd(16:18,i),Xd(16:18,i));
-man_i    = manipulability_index(X_forecast(1:9,i));
+man_i    = man_index_f(X_forecast(1:9,i));
 
 u        = Usym(p,T_horizon(i));
 
         h1= h1 + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].'  )*(1-sw);
         h2= h2 + ((i/N)^m_b)*(  [e_th1 e_th2 e_th3 e_th4 e_th5 e_th6]*Ak_joints*[e_th1 e_th2 e_th3 e_th4 e_th5 e_th6].'  )*(1-sw);
         h3= h3 + ((i/N)^m_b)*(  [ex_ee ey_ee ez_ee ethx_ee ethz_ee]*Ak_ee*[ex_ee ey_ee ez_ee ethx_ee ethz_ee].'  )*sw;
-        h4= h4 + ((i/N)^m_b)*(  Ak_mm/(man_i).^2  )*sw;
+        h4= h4 + ((i/N)^m_b)*(  Ak_mm/(man_i)^2  )*sw;
         h5= h5 + ((i/N)^m_b)*(  u(1:2).'*Ak_ub*u(1:2)  )*sw;
        
 J = h1 + h2 + h3 + h4 + h5;

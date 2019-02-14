@@ -1,9 +1,8 @@
-function [pnew, U, unew, Xcomp,telapsed,man,J_comp] = solver_NLP(xd_val,p0,x0,u0_val,sw)
+function [pnew, U, unew, Xcomp, telapsed, man, J_comp] = solver_NLP(xd_val,p0,x0,u0_val,sw)
 
 import casadi.*
 
 %% TIC
-tstart=tic;
 
 %% Recall the MXsym functions and variables to define the problem
 
@@ -21,19 +20,19 @@ lbg=evalin('base', 'lbg');
 ubg=evalin('base', 'ubg');
 
 %% Defining the problem (i.e. giving xd,u0 and x0)
+tstart=tic;
 
 nlp    = struct('x', p, 'f', Costfunction(xd_val,p,x0,sw),'g', Gfunction(p,u0_val,x0));
 options = struct;
 options.ipopt.tol=1e-9;
 solver = nlpsol('solver','ipopt', nlp, options);
-
 %% SOLVING PROBLEM (i.e. giving p0)
 
 sol = solver('x0',p0,'lbg', lbg, 'ubg', ubg);
 
-sol.x
-
 pnew=full(sol.x);
+
+telapsed=toc(tstart);
 
 %% COMPUTING U
 
@@ -48,16 +47,16 @@ unew(:,k) = full(Usym(pnew,T_horizon(k)).');
 end
 U =  unew(:,1);
 
- 
+
 %% Computing Xcomputed for the predicted Horizon 
 
  Xcomp=[full(all_samples(x0, repmat(pnew,1,N),T_horizon))];
 
- man=manipulability_index(Xcomp(1:9,1));
+ man=man_index_f(Xcomp(1:9,1));
 % Xcomp=zeros(size(16,N+1));
 
 %% TOC
-telapsed=toc(tstart);
+
 
 [J,h1,h2,h3,h4,h5]=(J_component(xd_val,pnew,x0,sw));
 
