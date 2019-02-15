@@ -13,12 +13,12 @@ m_m       = m_b;
 m_j       = m_m;
 Ak_base   = diag([100  100  100]);
 Ak_joints = diag([100 100 100 100 100 100]);
-Ak_ee     = diag([2e4 2e4 2e4 1e4 1e4]);
+Ak_ee     = diag([1e4 1e4 1e4 1e4 1e4]);
 Ak_mm     = 0.1;
 Ak_ub     = diag([5e3 5e3]);
 
 
-const_vec = [  -0.4  0.4;  %Vpmin    Vpmax      [m/s^2]
+const_vec = [  -0.2  0.2;  %Vpmin    Vpmax      [m/s^2]
                -0.2  0.2;  %Wpmin    Wpmax      [rad/s^2]
                  -2    2;  %TH1pmin  TH1pmax    [rad/s]
                  -2    2;  %TH2pmin  TH2pmax    [rad/s]

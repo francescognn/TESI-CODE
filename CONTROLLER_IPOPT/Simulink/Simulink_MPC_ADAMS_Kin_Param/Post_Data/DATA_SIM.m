@@ -22,12 +22,11 @@ if size(u_given,1)~=8
 u_given=u_given.';
 end
 
-if size(state_x,2)>=size(xd,2)
-    state_x=state_x(:,1:size(xd,2));
-else
-    xd=xd(:,1:size(state_x,2));
-end
-
+    if size(state_x,2)>=size(xd,2)
+        state_x=state_x(:,1:size(xd,2));
+    else
+        xd=xd(:,1:size(state_x,2));
+    end
 close all
 % warning off
 
@@ -43,9 +42,9 @@ end
 
 %% CALCOLO ERROR EE XYZ
 
-if exist('error_abs_xyz')==0
-error_abs_xyz=sqrt((P_ee_out(1,:)-xd(10,:)).^2+(P_ee_out(2,:)-xd(11,:)).^2+(P_ee_out(3,:)-xd(12,:)).^2);
-end
+    if exist('error_abs_xyz')==0
+        error_abs_xyz=sqrt((P_ee_out(1,:)-xd(10,:)).^2+(P_ee_out(2,:)-xd(11,:)).^2+(P_ee_out(3,:)-xd(12,:)).^2);
+    end
 
 %% >>>> STATICS PLOTS <<<<
 if visualize_plot == 1
@@ -67,11 +66,10 @@ axis equal
 
 %% ERROR ABS XYZ PLOT (2)
 
-
-figure(2)
-plot(error_abs_xyz)
-grid on
-title('error xyz')
+    figure(2)
+    plot(error_abs_xyz)
+    grid on
+    title('error xyz')
 
 %% ARM JOINTS VELOCITIES PLOTS (3) 
 if exist('state_qp')==1
@@ -365,8 +363,8 @@ if savedata ==1
         Type_sym='SIM_';
     end
 savename = [Type_sym, nometraj '_'  datestr(now, 'HH-MM dd-mmm-yyyy')];
-% savename = [Type_sym, nometraj '_N=',num2str(N),'_'  datestr(now, 'dd-mmm-yyyy'),'MANIP_FINTA'];
-matfile = fullfile('Data_saved/', savename);
+% savename = [Type_sym, nometraj '_N=',num2str(N),'_' , 'pesoManip=10_2'];
+matfile = fullfile('Data_saved/Simulazioni14feb', savename);
 save(matfile)
 
 end
