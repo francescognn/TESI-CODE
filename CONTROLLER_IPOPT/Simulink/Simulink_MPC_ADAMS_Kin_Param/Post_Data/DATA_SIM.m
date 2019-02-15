@@ -1,5 +1,5 @@
 
-savedata           = 1;
+savedata           = 0;
 visualize_plot     = 1;
 visualize_3d_plot  = 0;
 plot_position_3d   = [40,10]; % AZ,EL
@@ -9,7 +9,7 @@ visualize_horizons = 0;
 static_3d_plot     = 0;
 
 prompt             = 'Is this a Real test? (y/n)  ';
-real_sim           = input(prompt,'s');
+real_sim           = 'n';%input(prompt,'s');
 
 
 %% DIMENSION SET
@@ -218,7 +218,7 @@ grid on; hold off
 %% MANIPULABILIY INDEX (9)
 
 figure(9)
-plot(man_index)
+plot(man_index,'LineWidth',0.8); ylim([0 1])
 grid on
 title('Manipulability Index')
 

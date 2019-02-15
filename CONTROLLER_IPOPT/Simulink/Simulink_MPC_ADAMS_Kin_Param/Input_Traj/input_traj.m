@@ -110,8 +110,8 @@ switch what
                 xd = [zeros(9,length(tt));xd;zeros(6,length(tt))];
                 nometraj='MM_sine';
             case 'sine_orient'
-                t_total=60; tt=0:T:t_total;
-                dist = 0.8;
+                t_total=40; tt=0:T:t_total;
+                dist = 0.6;
                 z_axis = [0;1;0]; x_axis=[1;0;0];
                 noscillazioni = 2;
                 om=(noscillazioni*2*pi)/t_total;
