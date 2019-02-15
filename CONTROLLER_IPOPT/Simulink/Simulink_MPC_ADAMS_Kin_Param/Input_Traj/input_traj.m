@@ -32,6 +32,12 @@ end
 %     error('choose between <<base>> and <<MM>> to control');
 % end
 
+if ischar(type)==false
+    error('the input trajectory type is not a string');
+elseif ischar(what)==false
+    error('choose between <<base>> and <<MM>> to control');
+end
+
 switch what
     case 'base'
         switch type 
