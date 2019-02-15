@@ -14,11 +14,11 @@ m_j       = m_m;
 Ak_base   = diag([100  100  100]);
 Ak_joints = diag([100 100 100 100 100 100]);
 Ak_ee     = diag([1e4 1e4 1e4 1e4 1e4]);
-Ak_mm     = 0;
+Ak_mm     = 0.1;
 Ak_ub     = diag([5e3 5e3]);
 
 
-const_vec = [  -0.4  0.4;  %Vpmin    Vpmax      [m/s^2]
+const_vec = [  -0.2  0.2;  %Vpmin    Vpmax      [m/s^2]
                -0.2  0.2;  %Wpmin    Wpmax      [rad/s^2]
                  -2    2;  %TH1pmin  TH1pmax    [rad/s]
                  -2    2;  %TH2pmin  TH2pmax    [rad/s]
@@ -156,7 +156,7 @@ ey_ee    = (X_forecast(11,i)-Xd(11,i));
 ez_ee    = (X_forecast(12,i)-Xd(12,i));
 ethx_ee  = dot(X_forecast(13:15,i),Xd(13:15,i))-dot(Xd(13:15,i),Xd(13:15,i));
 ethz_ee  = dot(X_forecast(16:18,i),Xd(16:18,i))-dot(Xd(16:18,i),Xd(16:18,i));
-man_i    = man_index_f(X_forecast(1:9,i));
+man_i    = sin(X_forecast(6,i));%man_index_f(X_forecast(1:9,i));
 
 u        = Usym(p,T_horizon(i));
 
