@@ -1,6 +1,7 @@
-function  [fun,fun1] = self_collision(q)
+function  fun = self_collision(q)
 x1=q(4);x2=q(5);x3=q(6);x4=q(7);x5=q(8);x6=q(9);
  
+% syms x1 x2 x3 x4 x5 x6 
 base_length =0.76;
 base_width=0.46;
 base_height=0.7;
@@ -33,13 +34,14 @@ dist_sph2 =  sqrt(sum((sphere_center-cent_sph_base2).^2));
 fun(1,1)=dist_sph1-sphere_radius-rad_sph_base;
 fun(2,1)=dist_sph2-sphere_radius-rad_sph_base;
 
-x_kinect = -0.76/2; y_kinect=-0.4; radius_kinect = 0.13;
-fun1=(sqrt((x_kinect-sphere_center(1))^2 + (y_kinect-sphere_center(2))^2)-sphere_radius-radius_kinect);
+% x_kinect = -0.76/2; y_kinect=-0.4; radius_kinect = 0.13;
+% fun(3,1)=(sqrt((x_kinect-sphere_center(1))^2 + (y_kinect-sphere_center(2))^2)-sphere_radius-radius_kinect);
 
+x_wall=-base_length/2;
+fun(3,1)=sphere_center(1)-x_wall-sphere_radius;
+fun =simplify(fun);
 
-
-
-
+% matlabFunction(fun,'File','SCA')  
 
 
 
