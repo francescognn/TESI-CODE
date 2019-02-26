@@ -1,4 +1,4 @@
-aclear all
+clear all
 close all
 clc
 
@@ -43,8 +43,8 @@ hold on
 grid on
 plot(Nvect,Tmean_param,'s','MarkerSize',8,'MarkerEdgeColor','r','MarkerFaceColor','r')
 lsline
-title('Mean Optimization times')
-legend('PIECEWISE','PARAMETRIZED')
+% title('Mean Optimization times')
+legend('NOT PARAMETERIZED','PARAMETERIZED')
 xlabel('Horizon length (N)')
 ylabel('Time [s]')
 

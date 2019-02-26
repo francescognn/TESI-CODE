@@ -3,7 +3,7 @@ savedata           = 0;
 visualize_plot     = 1;
 visualize_3d_plot  = 0;
 plot_position_3d   = [40,10]; % AZ,EL
-visualize_spheres  = 0;
+visualize_spheres  = 1;
 record_video       = 0;
 visualize_horizons = 0;
 static_3d_plot     = 0;
@@ -22,12 +22,11 @@ if size(u_given,1)~=8
 u_given=u_given.';
 end
 
-if size(state_x,2)>=size(xd,2)
-    state_x=state_x(:,1:size(xd,2));
-else
-    xd=xd(:,1:size(state_x,2));
-end
-
+    if size(state_x,2)>=size(xd,2)
+        state_x=state_x(:,1:size(xd,2));
+    else
+        xd=xd(:,1:size(state_x,2));
+    end
 close all
 % warning off
 
@@ -43,9 +42,9 @@ end
 
 %% CALCOLO ERROR EE XYZ
 
-if exist('error_abs_xyz')==0
-error_abs_xyz=sqrt((P_ee_out(1,:)-xd(10,:)).^2+(P_ee_out(2,:)-xd(11,:)).^2+(P_ee_out(3,:)-xd(12,:)).^2);
-end
+    if exist('error_abs_xyz')==0
+        error_abs_xyz=sqrt((P_ee_out(1,:)-xd(10,:)).^2+(P_ee_out(2,:)-xd(11,:)).^2+(P_ee_out(3,:)-xd(12,:)).^2);
+    end
 
 %% >>>> STATICS PLOTS <<<<
 if visualize_plot == 1
@@ -67,11 +66,10 @@ axis equal
 
 %% ERROR ABS XYZ PLOT (2)
 
-
-figure(2)
-plot(error_abs_xyz)
-grid on
-title('error xyz')
+    figure(2)
+    plot(error_abs_xyz)
+    grid on
+    title('error xyz')
 
 %% ARM JOINTS VELOCITIES PLOTS (3) 
 if exist('state_qp')==1
@@ -129,42 +127,42 @@ end
 warning off
 
 %% ARM JOINTS VELOCITIES ERROR (4)
-if exist('state_qp')==1
-    
-aj_error=state_qp-u_given(3:end,:);
-
-figure(4)
-subplot(321)
-plot(aj_error(1,:))
-grid on
-title('error thetap1')
-
-subplot(322)
-plot(aj_error(2,:))
-grid on
-title('error thetap2')
-
-subplot(323)
-plot(aj_error(3,:))
-grid on
-title('error thetap3')
-
-subplot(324)
-plot(aj_error(4,:))
-grid on
-title('error thetap4')
-
-subplot(325)
-plot(aj_error(4,:))
-grid on
-title('error thetap5')
-
-subplot(326)
-plot(aj_error(6,:))
-grid on
-title('error thetap6')
-
-end
+% if exist('state_qp')==1
+%     
+% aj_error=state_qp-u_given(3:end,:);
+% 
+% figure(4)
+% subplot(321)
+% plot(aj_error(1,:))
+% grid on
+% title('error thetap1')
+% 
+% subplot(322)
+% plot(aj_error(2,:))
+% grid on
+% title('error thetap2')
+% 
+% subplot(323)
+% plot(aj_error(3,:))
+% grid on
+% title('error thetap3')
+% 
+% subplot(324)
+% plot(aj_error(4,:))
+% grid on
+% title('error thetap4')
+% 
+% subplot(325)
+% plot(aj_error(4,:))
+% grid on
+% title('error thetap5')
+% 
+% subplot(326)
+% plot(aj_error(6,:))
+% grid on
+% title('error thetap6')
+% 
+% end
 
 %% T ELAPSED PLOT (5)
 
@@ -204,19 +202,21 @@ plot(J_parts)
 grid on
 legend('J','h1','h2','h3','h4','h5')
 subplot(212)
-stem(1,sum(J_parts(:,2))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
+stem(0,sum(J_parts(:,1))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 hold on
+stem(1,sum(J_parts(:,2))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 stem(2,sum(J_parts(:,3))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 stem(3,sum(J_parts(:,4))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 stem(4,sum(J_parts(:,5))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 stem(5,sum(J_parts(:,6))/sum(J_parts(:,1))*100,'linewidth',2,'MarkerSize',3)
 xlabel('cost function components')
 ylabel('% of the total cost')
+grid on; hold off
 
 %% MANIPULABILIY INDEX (9)
 
 figure(9)
-plot(man_index)
+plot(man_index,'LineWidth',0.8); ylim([0 1])
 grid on
 title('Manipulability Index')
 
@@ -363,8 +363,8 @@ if savedata ==1
         Type_sym='SIM_';
     end
 savename = [Type_sym, nometraj '_'  datestr(now, 'HH-MM dd-mmm-yyyy')];
-% savename = [Type_sym, nometraj '_N=',num2str(N),'_'  datestr(now, 'dd-mmm-yyyy'),'MANIP_FINTA'];
-matfile = fullfile('Data_saved/', savename);
+% savename = [Type_sym, nometraj '_N=',num2str(N),'_' , 'pesoManip=10_2'];
+matfile = fullfile('Data_saved/Simulazioni14feb', savename);
 save(matfile)
 
 end

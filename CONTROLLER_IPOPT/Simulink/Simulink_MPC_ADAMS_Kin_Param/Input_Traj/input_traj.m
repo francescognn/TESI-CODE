@@ -1,4 +1,4 @@
-function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val]=input_traj(N,T,Tsample,what,type,init)
+function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val,x0_actualrobot]=input_traj(N,T,Tsample,what,type,init)
 % Function that returns the reference trajectory for our controller 
 %      together with some parameters necessary for Simulink
 %
@@ -10,16 +10,33 @@ function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val]=inpu
 % RESTARTING FROM P0??
 initialize_starting_point = init;
 
-q0 = [-0.0000   -0.0000   -0.0001   -5.2235   -1.0817   -2.0377    -0.3426    0.6332    1.3451];
+q0 = [0   0   0   -5.2235   -1.0817   -2.0377    -0.3426    0.6332    1.3451];
 p0 = FK(q0);
 % p0 = [0.6791;-0.1069;1.4720];
 
 x0_val = [q0,p0',zeros(1,6)]';
+
+if init==1
+q0_actualrobot=[0.0814   -0.0010   -0.0210    0.4242   -1.4188   -1.5546   -1.0824    2.4520    0.0116 ]';
+
+x0_actualrobot=[q0_actualrobot; FK(q0_actualrobot);zeros(6,1)];
+
+else
+    x0_actualrobot=x0_val;
+end
+
+
 % if isstring(type)==false
 %     error('the input trajectory type is not a string');
 % elseif isstring(what)==false
 %     error('choose between <<base>> and <<MM>> to control');
 % end
+
+if ischar(type)==false
+    error('the input trajectory type is not a string');
+elseif ischar(what)==false
+    error('choose between <<base>> and <<MM>> to control');
+end
 
 switch what
     case 'base'
@@ -69,22 +86,22 @@ switch what
     case 'MM'
         switch type 
             case 'line'
-                t_total=30; tt=0:T:t_total;
+                t_total=40; tt=0:T:t_total;
                 dist = 1.2;
                 v=dist/t_total; 
                 xd=[p0(1)+v*tt;p0(2)+v*tt;p0(3)+0.1/t_total*tt];
                 xd = [zeros(9,length(tt));xd;zeros(6,length(tt))];
                 nometraj='MM_line';
             case 'line_orient'
-                t_total=30; tt=0:T:t_total;
+                t_total=40; tt=0:T:t_total;
                 dist = 1.2;
                 v=dist/t_total; 
-                z_axis = [0;-1;0]; x_axis=[0;0;1];
+                z_axis = [0;1;0]; x_axis=[0;0;-1];
                 xd=[p0(1)+v*tt;p0(2)+v*tt;p0(3)+0.1/t_total*tt];
                 xd = [zeros(9,length(tt));xd;[x_axis;z_axis]*ones(1,length(tt))];
                 nometraj='MM_lineOrient';
             case 'sine'
-                t_total=30; tt=0:T:t_total;
+                t_total=40; tt=0:T:t_total;
                 dist = 0.8;
                 noscillazioni = 2;
                 om=(noscillazioni*2*pi)/t_total;
@@ -93,9 +110,9 @@ switch what
                 xd = [zeros(9,length(tt));xd;zeros(6,length(tt))];
                 nometraj='MM_sine';
             case 'sine_orient'
-                t_total=30; tt=0:T:t_total;
-                dist = 0.8;
-                z_axis = [0;1;0]; x_axis=[1;0;0];
+                t_total=40; tt=0:T:t_total;
+                dist = 0.6;
+                z_axis = [0;1;0]; x_axis=[0;0;-1];
                 noscillazioni = 2;
                 om=(noscillazioni*2*pi)/t_total;
                 v=dist/t_total; 
@@ -107,7 +124,7 @@ switch what
                 xx=xx.*0.6;
                 yy=yy.*0.6;
                 xd=[xx+p0(1)-xx(1);p0(2).*ones(size(xx));yy+p0(3)-yy(1)];
-                z_axis = [0;-1;0]; x_axis=[0;0;1];
+                z_axis = [0;1;0]; x_axis=[0;0;-1];
                 xd = [zeros(9,length(xx));xd;[x_axis;z_axis]*ones(1,length(xx))];
                 t_total=length(xx)*T;
                 nometraj='MM_NO';
