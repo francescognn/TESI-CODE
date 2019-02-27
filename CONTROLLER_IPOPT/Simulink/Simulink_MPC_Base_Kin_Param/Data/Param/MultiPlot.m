@@ -3,8 +3,8 @@ close all
 clc
 
 Nvect=[10 15 20 25];
-Distvect=[0 1 3 6];
-col=['b','c','g','r'];
+Distvect=[0 1 3];
+col=['b','g','r','c'];
 
 load('MPC_kin_Param_N=10_trajCurves_r=0.6_dist=0.mat')
 clearvars -EXCEPT xd Nvect Distvect col
@@ -27,13 +27,13 @@ for ii=1:length(Nvect)
             xd=xd(:,1:size(X,2));
         end
         x=X(1,:);y=X(2,:);th=X(3,:);
-        plot(x,y,'-.','Color',col(j),'LineWidth',j/length(Distvect))
+        plot(x,y,'.-','Color',col(j),'LineWidth',j/length(Distvect))
         set(gcf,'color','white')
         grid on
         clearvars -EXCEPT xd Nvect Distvect ii j col
 
     end
-    legend('REFERENCE','no disturb','small disturb','medium disturb','big disturb')
+    legend('REFERENCE','no disturb','small disturb','big disturb','very big disturb')
     title(['N=',num2str(Nvect(ii)),' r=0.6m'])
     axis equal
     hold off
@@ -68,7 +68,7 @@ for ii=1:length(Nvect)
         clearvars -EXCEPT mean_error mean_telaps Nvect Distvect ii j col
 
     end
-    legend('no disturb','small disturb','medium disturb','big disturb')
+    legend('no disturb','small disturb','big disturb','very big disturb')
     title(['N=',num2str(Nvect(ii)),' r=0.6m'])
     hold off
     
@@ -95,7 +95,7 @@ for ii=1:length(Nvect)
         clearvars -EXCEPT mean_error mean_telaps Nvect Distvect ii j col
 
     end
-    legend('no disturb','small disturb','medium disturb','big disturb')
+    legend('no disturb','small disturb','big disturb','very big disturb')
     title(['N=',num2str(Nvect(ii)),' r=0.6m'])
     hold off
 end
@@ -116,7 +116,7 @@ for j = 1:length(Distvect)
     xlabel('Prediction horizon')
     hold on
 end
-legend('no disturb','small disturb','medium disturb','big disturb')
+legend('no disturb','small disturb','big disturb','very big disturb')
 errors_poly3=mean(mean_error,2);
 telaps_poly3=mean(mean_telaps,2);
 %%
@@ -147,9 +147,9 @@ for ii=1:length(Nvect)
         clearvars -EXCEPT xd Nvect Distvect ii j errors_poly3 telaps_poly3 col
 
     end
-    legend('REFERENCE','no disturb','small disturb','medium disturb','big disturb')
+    legend('REFERENCE','no disturb','small disturb','big disturb','very big disturb')
     title(['N=',num2str(Nvect(ii)),'r=0.3m'])
-    axis equal
+%     axis equal
     hold off
 end
 mean_error=zeros(length(Nvect),length(Distvect));
@@ -182,7 +182,7 @@ for ii=1:length(Nvect)
         clearvars -EXCEPT mean_error mean_telaps Nvect Distvect ii j errors_poly3 telaps_poly3 col
 
     end
-    legend('no disturb','small disturb','medium disturb','big disturb')
+    legend('no disturb','small disturb','big disturb','very big disturb')
     title(['N=',num2str(Nvect(ii)),' r=0.3m'])
     hold off
     
@@ -209,7 +209,7 @@ for ii=1:length(Nvect)
         clearvars -EXCEPT mean_error mean_telaps Nvect Distvect ii j errors_poly3 telaps_poly3 col
 
     end
-    legend('no disturb','small disturb','medium disturb','big disturb')
+    legend('no disturb','small disturb','big disturb','very big disturb')
     title(['N=',num2str(Nvect(ii)),' r=0.3m'])
     hold off
 end
@@ -229,7 +229,7 @@ for j = 1:length(Distvect)
     xlabel('Prediction horizon')
     hold on
 end
-legend('no disturb','small disturb','medium disturb','big disturb')
+legend('no disturb','small disturb','big disturb','very big disturb')
 
 %%
 load('MPC_kin_Param2_N=10_trajCurves_r=0.6_dist=0.mat')
@@ -259,7 +259,7 @@ for ii=1:length(Nvect)
         clearvars -EXCEPT xd Nvect Distvect ii j errors_poly3 telaps_poly3 col
 
     end
-    legend('REFERENCE','no disturb','small disturb','medium disturb','big disturb')
+    legend('REFERENCE','no disturb','small disturb','big disturb','very big disturb')
     title(['N=',num2str(Nvect(ii)),' r=0.6m  POLY5'])
     axis equal
     hold off
@@ -294,7 +294,7 @@ for ii=1:length(Nvect)
         clearvars -EXCEPT mean_error mean_telaps Nvect Distvect ii j errors_poly3 telaps_poly3 col
 
     end
-    legend('no disturb','small disturb','medium disturb','big disturb')
+    legend('no disturb','small disturb','big disturb','very big disturb')
     title(['N=',num2str(Nvect(ii)),' r=0.6m  POLY5'])
     hold off
     
@@ -321,7 +321,7 @@ for ii=1:length(Nvect)
         clearvars -EXCEPT mean_error mean_telaps Nvect Distvect ii j errors_poly3 telaps_poly3 col
 
     end
-    legend('no disturb','small disturb','medium disturb','big disturb')
+    legend('no disturb','small disturb','big disturb','very big disturb')
     title(['N=',num2str(Nvect(ii)),' r=0.6m  POLY5'])
     hold off
 end
@@ -343,7 +343,7 @@ for j = 1:length(Distvect)
     xlabel('Prediction horizon')
     hold on
 end
-legend('no disturb','small disturb','medium disturb','big disturb')
+legend('no disturb','small disturb','big disturb','very big disturb')
 
 telaps_poly5=mean(mean_telaps,2);
 errors_poly5=mean(mean_error,2);

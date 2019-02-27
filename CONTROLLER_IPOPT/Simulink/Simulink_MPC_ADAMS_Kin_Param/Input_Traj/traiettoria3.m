@@ -16,8 +16,8 @@ t0 = 0;     %START TIME [s]
 tc = 2;     %ACCELERATION TIME [s]
 tf = 10;    %FINISH TIME [s]
 
-delta_th=90;%DELTA ORIENTATION [deg]
-dis=15;     %SPATIAL DISPLACEMENT [m]
+delta_th=180;%DELTA ORIENTATION [deg]
+dis=3;     %SPATIAL DISPLACEMENT [m]
 Tsample=0.01;
 
 
@@ -101,9 +101,9 @@ for i = 2:length(tt)
     y(i) = y(i-1) + v(i-1)*T*sin(th(i-1));    
 end
 
-% figure;
-% plot(x,y,'*')
-% axis([0 30 0 30]);
+figure;
+plot(x,y,'*')
+axis([0 30 0 30]);
 
 Ttot=tf;
 
