@@ -18,14 +18,17 @@ Ak_mm     = 0.1;
 Ak_ub     = diag([5e3 5e3]);
 
 
-const_vec = [  -0.2  0.2;  %Vpmin    Vpmax      [m/s^2]
-               -0.2  0.2;  %Wpmin    Wpmax      [rad/s^2]
-                 -2    2;  %TH1pmin  TH1pmax    [rad/s]
-                 -2    2;  %TH2pmin  TH2pmax    [rad/s]
-                 -2    2;  %TH3pmin  TH3pmax    [rad/s]
-                 -2    2;  %TH4pmin  TH4pmax    [rad/s]
-                 -2    2;  %TH5pmin  TH5pmax    [rad/s]
-                 -2    2;  %TH6pmin  TH6pmax    [rad/s]
+const_vec = [  -0.08  0.08;  %Vpmin    Vpmax      [m/s^2]
+               -0.08  0.08;  %Wpmin    Wpmax      [rad/s^2]
+               -0.2  0.2;  %TH1pmin  TH1pmax    [rad/s]
+               -0.2  0.2;  %TH2pmin  TH2pmax    [rad/s]
+               -0.2  0.2;  %TH3pmin  TH3pmax    [rad/s]
+               -0.2  0.2;  %TH4pmin  TH4pmax    [rad/s]
+               -0.2  0.2;  %TH5pmin  TH5pmax    [rad/s]
+               -0.2  0.2;  %TH6pmin  TH6pmax    [rad/s]
+               0.05 1.30;  %Xmin     Xmax       [m]
+               0.05  2.2;  %Ymin     Ymax       [m]
+               -inf  inf;  %THmin    THmax      [deg]
                -350  350;  %TH1min   TH1max     [deg]
                -180    0;  %TH2min   TH2max     [deg]
                -140  140;  %TH3min   TH3max     [deg]
@@ -34,8 +37,7 @@ const_vec = [  -0.2  0.2;  %Vpmin    Vpmax      [m/s^2]
                -360  360]; %TH6min   TH6max     [deg] 
               
 const_vec(1:8,:)  = const_vec(1:8,:).*T;
-const_vec(9:14,:) = deg2rad(const_vec(9:14,:));
-
+const_vec(11:17,:) = deg2rad(const_vec(11:17,:));
 %%% NB xd è valutato a partire dal passo 1, non dal passo 0 dell'orizzonte
 %%% di predizione
 
@@ -173,11 +175,11 @@ J = h1 + h2 + h3 + h4 + h5;
 
 if i==1
     
-g = {g{:}, [u-U0; X_forecast(4:9,i); sca_val]};
+g = {g{:}, [u-U0; X_forecast(1:9,i); sca_val]};
 
 else
 
- g = {g{:}, [u-Usym(p,T_horizon(i-1)); X_forecast(4:9,i); sca_val]};
+ g = {g{:}, [u-Usym(p,T_horizon(i-1)); X_forecast(1:9,i); sca_val]};
 
 
 end

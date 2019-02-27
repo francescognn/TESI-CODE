@@ -10,14 +10,14 @@ function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val,x0_ac
 % RESTARTING FROM P0??
 initialize_starting_point = init;
 
-q0 = [0   0   0   -5.2235   -1.0817   -2.0377    -0.3426    0.6332    1.3451];
+q0 = [-0.0161    0.0345   -0.0485   -3.4697   -1.2111   -1.5979   -1.4277    0.6084    6.1949 ];
 p0 = FK(q0);
 % p0 = [0.6791;-0.1069;1.4720];
 
 x0_val = [q0,p0',zeros(1,6)]';
 
 if init==1
-q0_actualrobot=[0.0814   -0.0010   -0.0210    0.4242   -1.4188   -1.5546   -1.0824    2.4520    0.0116 ]';
+q0_actualrobot=[-0.0018    0.0172    0.0067   -1.8968   -1.1036   -2.0592   -0.3560    1.4787    3.7750]';
 
 x0_actualrobot=[q0_actualrobot; FK(q0_actualrobot);zeros(6,1)];
 
@@ -128,6 +128,12 @@ switch what
                 xd = [zeros(9,length(xx));xd;[x_axis;z_axis]*ones(1,length(xx))];
                 t_total=length(xx)*T;
                 nometraj='MM_NO';
+                
+            case 'grasp'
+                load('Input_Traj/traj_grasp.mat');
+                xd=[zeros(9,size(traj_grasp,2));traj_grasp(1:3,:);traj_grasp(7:9,:);traj_grasp(4:6,:)];
+                t_total=size(xd,2)*T;
+                nometraj='grasping';
             otherwise
                 error('invalid trajectory type');
         end

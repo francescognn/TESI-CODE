@@ -1,15 +1,15 @@
 
-savedata           = 0;
+savedata           = 1;
 visualize_plot     = 1;
 visualize_3d_plot  = 0;
 plot_position_3d   = [40,10]; % AZ,EL
-visualize_spheres  = 1;
+visualize_spheres  = 0;
 record_video       = 0;
 visualize_horizons = 0;
 static_3d_plot     = 0;
 
 prompt             = 'Is this a Real test? (y/n)  ';
-real_sim           = 'n';%input(prompt,'s');
+real_sim           = input(prompt,'s');
 
 
 %% DIMENSION SET
@@ -260,7 +260,7 @@ F_video = struct('cdata', cell(1,size(X,2)), 'colormap', cell(1,size(X,2)));
         zlabel('z')
         grid on
 
-        axis([-1.5+min(state_x(10,:)) 1.5+max(state_x(10,:)) -1.5+min(state_x(11,:)) 1.5+max(state_x(11,:)) 0 2])
+        axis([-1.5+min(P_ee_out(1,:)) 1.5+max(P_ee_out(1,:)) -1.5+min(P_ee_out(2,:)) 1.5+max(P_ee_out(2,:)) 0 2])
         view(plot_position_3d(1),plot_position_3d(2));%-10, 20);
         drawnow();
 
@@ -364,7 +364,7 @@ if savedata ==1
     end
 savename = [Type_sym, nometraj '_'  datestr(now, 'HH-MM dd-mmm-yyyy')];
 % savename = [Type_sym, nometraj '_N=',num2str(N),'_' , 'pesoManip=10_2'];
-matfile = fullfile('Data_saved/Simulazioni14feb', savename);
+matfile = fullfile('Data_saved/', savename);
 save(matfile)
 
 end
