@@ -71,7 +71,7 @@ title('Mean Optimization times with piecewise')
 legend('CONSTRAINED','NOT CONSTRAINED')
 xlabel('Horizon length (N)')
 ylabel('Time [s]')
-
+%%
 figure(4)
 
 plot(Nvect,Tmean_no_param_vinc,'*','MarkerSize',8,'MarkerEdgeColor','b','MarkerFaceColor','b')
@@ -84,6 +84,17 @@ legend('CLASSICAL MPC','PARAMETRIZED CONSTRAINTS-FREE')
 xlabel('Horizon length (N)')
 ylabel('Time [s]')
 
+figure(5)
 
+plot(Nvect,Tmean_no_param_vinc,'*','MarkerSize',8,'MarkerEdgeColor','b','MarkerFaceColor','b')
+hold on
+grid on
+plot(Nvect,Tmean_param,'s','MarkerSize',8,'MarkerEdgeColor','r','MarkerFaceColor','r')
+P1=polyfit(Nvect,Tmean_no_param_vinc,2); f1 = polyval(P1,Nvect); plot(Nvect,f1,'b')
+P2=polyfit(Nvect,Tmean_param,2); f2 = polyval(P2,Nvect); plot(Nvect,f2,'r')
+title('Mean Optimization times comparison')
+legend('CLASSICAL MPC','PARAMETRIZED CONSTRAINTS-FREE')
+xlabel('Horizon length (N)')
+ylabel('Time [s]')
 
 
