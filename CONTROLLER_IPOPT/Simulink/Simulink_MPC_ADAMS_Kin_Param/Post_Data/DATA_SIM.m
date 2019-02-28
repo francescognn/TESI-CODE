@@ -1,5 +1,5 @@
 
-savedata           = 1;
+savedata           = 0;
 visualize_plot     = 1;
 visualize_3d_plot  = 0;
 plot_position_3d   = [40,10]; % AZ,EL
@@ -31,6 +31,7 @@ close all
 % warning off
 
 %% CALCOLO P_EE DAI JOINTS
+
 if exist('P_ee_out')==0
 T=cell(size(state_x,2),1);
 Psi_ee_out=cell(size(state_x,2),1);
