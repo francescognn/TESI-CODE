@@ -11,6 +11,11 @@ function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val,x0_ac
 initialize_starting_point = init;
 
 q0 = [-0.0161    0.0345   -0.0485   -3.4697   -1.2111   -1.5979   -1.4277    0.6084    6.1949 ];
+if q0(4)>6.28 || q0(5)>0 || q0(6)>2.443 || q0(7)>0 || q0(8)>1.74 || q0(0)>6.23
+    error('ATTENZIONE! UR5 Joint Values out of admissible range')
+elseif q0(4)<-6.28 || q0(5)<-3.1415 || q0(6)<-2.443 || q0(7)<-3.1415 || q0(8)<-2.443 || q0(0)<-6.23
+    error('ATTENZIONE! UR5 Joint Values out of admissible range')
+end
 p0 = FK(q0);
 % p0 = [0.6791;-0.1069;1.4720];
 
