@@ -14,27 +14,27 @@ m_j       = m_m;
 Ak_base   = diag([100  100  100]);
 Ak_joints = diag([100 100 100 100 100 100]);
 Ak_ee     = diag([1e4 1e4 1e4 1e4 1e4]);
-Ak_mm     = 0.1;
+Ak_mm     = 10;
 Ak_ub     = diag([5e3 5e3]);
 
 
-const_vec = [  -0.08  0.08;  %Vpmin    Vpmax      [m/s^2]
-               -0.08  0.08;  %Wpmin    Wpmax      [rad/s^2]
+const_vec = [  -0.1  0.1;  %Vpmin    Vpmax      [m/s^2]
+               -0.1  0.1;  %Wpmin    Wpmax      [rad/s^2]
                -0.2  0.2;  %TH1pmin  TH1pmax    [rad/s]
                -0.2  0.2;  %TH2pmin  TH2pmax    [rad/s]
                -0.2  0.2;  %TH3pmin  TH3pmax    [rad/s]
                -0.2  0.2;  %TH4pmin  TH4pmax    [rad/s]
                -0.2  0.2;  %TH5pmin  TH5pmax    [rad/s]
                -0.2  0.2;  %TH6pmin  TH6pmax    [rad/s]
-               0.05 1.30;  %Xmin     Xmax       [m]
-               0.05  2.2;  %Ymin     Ymax       [m]
+               -0.3 1.30;  %Xmin     Xmax       [m]
+               -0.5  2.0;  %Ymin     Ymax       [m]
                -inf  inf;  %THmin    THmax      [deg]
                -350  350;  %TH1min   TH1max     [deg]
                -180    0;  %TH2min   TH2max     [deg]
                -140  140;  %TH3min   TH3max     [deg]
                -180    0;  %TH4min   TH4max     [deg]
-               -140   90;  %TH5min   TH5max     [deg]
-               -360  360]; %TH6min   TH6max     [deg] 
+               -140   97;  %TH5min   TH5max     [deg]
+               -357  357]; %TH6min   TH6max     [deg] 
               
 const_vec(1:8,:)  = const_vec(1:8,:).*T;
 const_vec(11:17,:) = deg2rad(const_vec(11:17,:));
@@ -184,7 +184,7 @@ else
 
 end
     
-lbg = [lbg;  const_vec(:,1);   0;   0;  0  ];
+lbg = [lbg;  const_vec(:,1);   0;   0;  -inf  ];
 ubg = [ubg;  const_vec(:,2); inf; inf; inf ];
 
 end
