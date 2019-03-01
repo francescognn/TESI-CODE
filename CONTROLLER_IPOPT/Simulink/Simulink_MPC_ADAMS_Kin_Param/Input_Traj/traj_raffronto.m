@@ -10,18 +10,18 @@ clear
 %%%%%%%%%%%%  DATA  %%%%%%%%%%%%%
 nometraj='traj_raffronto_NO_param_vinc';
 T = 0.5;    %TIME STEP [s]
-N = 15;      %N 
+N = 10;      %N 
 
 t0 = 0;     %START TIME [s]
 tc = 10;     %ACCELERATION TIME [s]
-tf = 20;    %FINISH TIME [s]
+tf = 60;    %FINISH TIME [s]
 
 delta_th=30;%DELTA ORIENTATION [deg]
 dis=10;     %SPATIAL DISPLACEMENT [m]
 Tsample=0.01;
 
 q0=[0 0 0 pi/4 -pi/4 pi/4 -pi/4 pi/4 pi/4]';
-[Pee0,A]=jacobian_MM(q0);
+[Pee0,A]=FK(q0);
 
 x0_val = [q0;Pee0];
 
@@ -106,9 +106,9 @@ for i = 2:length(tt)
     y(i) = y(i-1) + v(i-1)*T*sin(th(i-1));    
 end
 
-% figure;
-% plot(x,y,'*')
-% axis([0 30 0 30]);
+figure;
+plot(x,y,'*')
+axis([0 30 0 30]);
 
 Ttot=tf;
 

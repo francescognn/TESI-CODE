@@ -3,7 +3,7 @@ savedata           = 0;
 visualize_plot     = 1;
 visualize_3d_plot  = 0;
 plot_position_3d   = [40,10]; % AZ,EL
-visualize_spheres  = 0;
+visualize_spheres  = 1;
 record_video       = 0;
 visualize_horizons = 0;
 static_3d_plot     = 0;
@@ -55,14 +55,14 @@ close all
 
 figure(1)
 
-plot3(P_ee_out(1,:),P_ee_out(2,:),P_ee_out(3,:))
+plot3(P_ee_out(1,20:end),P_ee_out(2,20:end),P_ee_out(3,20:end),'linewidth',1.5)
 hold on
 grid on
-plot3(xd(10,:),xd(11,:),xd(12,:),'*')
-xlabel('x')
-ylabel('y')
-zlabel('z')
-legend('robot','desired')
+plot3(xd(10,20:end),xd(11,20:end),xd(12,20:end),'--','linewidth',1.5)
+xlabel('x [m]')
+ylabel('y [m]')
+zlabel('z [m]')
+legend('Real','Desired')
 axis equal
 
 %% ERROR ABS XYZ PLOT (2)
@@ -189,6 +189,8 @@ title('Base control action')
 figure(7)
 plot(state_x(1,:),state_x(2,:))
 grid on
+hold on
+plot(xd(1,:),xd(2,:))
 title('Base motion XY')
 
 %% J FUNCTION COMPONENTS (8)
@@ -295,7 +297,7 @@ if static_3d_plot
     camlight;
     material metal;
     robot.visualize_mm(state_x(1:9,1).',fig11)
-     plot3(xd(10,:),xd(11,:),xd(12,:),'r')
+%      plot3(xd(10,:),xd(11,:),xd(12,:),'r')
         plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
         if visualize_spheres == 1
         spheres_gen(state_x(:,1),T{1})
@@ -371,3 +373,55 @@ save(matfile)
 end
 
 clc
+
+%% PLOT AGGIUNTIVI (13 e 14)
+
+figure(13)
+
+subplot(311)
+plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],P_ee_out(1,:),'linewidth',1.7)
+grid on
+hold on
+plot([0:0.5:size(xd(1,1:end-1),2)*0.5],xd(10,:),'--','linewidth',1.7)
+xlabel('Time [s]')
+ylabel('Distance [m]')
+legend('Real','Desired')
+title('X End-Effector')
+
+subplot(312)
+plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],P_ee_out(2,:),'linewidth',1.7)
+grid on
+hold on
+plot([0:0.5:size(xd(1,1:end-1),2)*0.5],xd(11,:),'--','linewidth',1.7)
+xlabel('Time [s]')
+ylabel('Distance [m]')
+title('Y End-Effector')
+
+subplot(313)
+plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],P_ee_out(3,:),'linewidth',1.7)
+grid on
+hold on
+plot([0:0.5:size(xd(1,1:end-1),2)*0.5],xd(12,:),'--','linewidth',1.7)
+xlabel('Time [s]')
+ylabel('Distance [m]')
+title('Z End-Effector')
+
+
+for i =1:size(P_ee_out,2)
+
+    e_orient_x(i) = 1-dot(Psi_ee_out{i}(:,1),xd(13:15,i));
+    e_orient_z(i) = 1-dot(Psi_ee_out{i}(:,2),xd(16:18,i));
+    
+end
+
+figure(14)
+
+subplot(211)
+plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],e_orient_x)
+grid on
+title('orientation error on X')
+
+subplot(212)
+plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],e_orient_z)
+grid on
+title('orientation error on Z')

@@ -11,23 +11,23 @@ import casadi.*
 m_b       = 2; 
 m_m       = m_b;
 m_j       = m_m;
-Ak_base   = diag([100  100  100]);
+Ak_base   = diag([1e3  1e3  0]);
 Ak_joints = diag([100 100 100 100 100 100]);
 Ak_ee     = diag([1e4 1e4 1e4 1e4 1e4]);
-Ak_mm     = 10;
+Ak_mm     = 0.1;
 Ak_ub     = diag([5e3 5e3]);
 
 
-const_vec = [  -0.1  0.1;  %Vpmin    Vpmax      [m/s^2]
-               -0.1  0.1;  %Wpmin    Wpmax      [rad/s^2]
+const_vec = [  -0.15  0.15;  %Vpmin    Vpmax      [m/s^2]
+               -0.15  0.15;  %Wpmin    Wpmax      [rad/s^2]
                -0.2  0.2;  %TH1pmin  TH1pmax    [rad/s]
                -0.2  0.2;  %TH2pmin  TH2pmax    [rad/s]
                -0.2  0.2;  %TH3pmin  TH3pmax    [rad/s]
                -0.2  0.2;  %TH4pmin  TH4pmax    [rad/s]
                -0.2  0.2;  %TH5pmin  TH5pmax    [rad/s]
-               -0.2  0.2;  %TH6pmin  TH6pmax    [rad/s]
-               -0.3 1.30;  %Xmin     Xmax       [m]
-               -0.5  2.0;  %Ymin     Ymax       [m]
+               -0.8  0.8;  %TH6pmin  TH6pmax    [rad/s]
+               -0.15 1.40;  %Xmin     Xmax       [m]
+               -2.6  0.2;  %Ymin     Ymax       [m]
                -inf  inf;  %THmin    THmax      [deg]
                -350  350;  %TH1min   TH1max     [deg]
                -180    0;  %TH2min   TH2max     [deg]
@@ -162,7 +162,7 @@ man_i    = sin(X_forecast(6,i));%man_index_f(X_forecast(1:9,i));
 
 u        = Usym(p,T_horizon(i));
 
-        h1= h1 + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].'  )*(1-sw);
+        h1= h1 + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].'  );%*(1-sw);
         h2= h2 + ((i/N)^m_b)*(  [e_th1 e_th2 e_th3 e_th4 e_th5 e_th6]*Ak_joints*[e_th1 e_th2 e_th3 e_th4 e_th5 e_th6].'  )*(1-sw);
         h3= h3 + ((i/N)^m_b)*(  [ex_ee ey_ee ez_ee ethx_ee ethz_ee]*Ak_ee*[ex_ee ey_ee ez_ee ethx_ee ethz_ee].'  )*sw;
         h4= h4 + ((i/N)^m_b)*(  Ak_mm/(man_i)^2  )*sw;
@@ -184,7 +184,7 @@ else
 
 end
     
-lbg = [lbg;  const_vec(:,1);   0;   0;  -inf  ];
+lbg = [lbg;  const_vec(:,1);   0;   0;  -inf ];
 ubg = [ubg;  const_vec(:,2); inf; inf; inf ];
 
 end

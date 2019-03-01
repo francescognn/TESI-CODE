@@ -38,7 +38,7 @@ Ysfera_base_re=Ysfera_base+X(2)-0.19*sin(X(3));
 
 %% SURFING
 
-surf(X_cyl_kin,Y_cyl_kin,Z_cyl_kin,'facealpha',0.001,'edgealpha',0.3,'LineWidth',5)
+% surf(X_cyl_kin,Y_cyl_kin,Z_cyl_kin,'facealpha',0.001,'edgealpha',0.3,'LineWidth',5)
 hold on
 surf(Xsfera_ee,Ysfera_ee,Zsfera_ee,'facealpha',0.4,'edgealpha',0.04)
 surf(Xsfera_base_fr,Ysfera_base_fr,Zsfera_base,'facealpha',0.4,'edgealpha',0.04)
