@@ -30,7 +30,12 @@ for ii=1:length(Nvect)
     
     subplot(2,2,4)
     hold on; grid on
-    plot(T_elapsed_vect(1:length(x_ee))*0.5,'Color',col(ii),'LineWidth',1)
+    if ii == 1 || ii==2
+        fatt=0.5;
+    else 
+        fatt=0.5*0.8;
+    end
+    plot(T_elapsed_vect(1:length(x_ee))*fatt,'Color',col(ii),'LineWidth',1)
     title('Time Elapsed')
      
     clearvars -EXCEPT xd Nvect Distvect ii j col
