@@ -1,12 +1,12 @@
 
 savedata           = 0;
-visualize_plot     = 1;
+visualize_plot     = 0;
 visualize_3d_plot  = 0;
 plot_position_3d   = [40,10]; % AZ,EL
 visualize_spheres  = 1;
 record_video       = 0;
 visualize_horizons = 0;
-static_3d_plot     = 0;
+static_3d_plot     = 1;
 
 prompt             = 'Is this a Real test? (y/n)  ';
 real_sim           = input(prompt,'s');
@@ -245,7 +245,7 @@ cd ..
 cd ..
 
 % inizializzo funzione frame per il video
-F_video = struct('cdata', cell(1,size(X,2)), 'colormap', cell(1,size(X,2)));
+F_video = struct('cdata', cell(1,size(XX,2)), 'colormap', cell(1,size(XX,2)));
     
     for j=1:size(state_x,2)
 
@@ -298,7 +298,13 @@ if static_3d_plot
     material metal;
     robot.visualize_mm(state_x(1:9,1).',fig11)
 %      plot3(xd(10,:),xd(11,:),xd(12,:),'r')
-        plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
+%         plot3(xd(1,:),xd(2,:),xd(12,:).*0,'k')
+%         XX = [const_vec(9,1),const_vec(9,2),const_vec(9,2),const_vec(9,1)];
+%         YY = [const_vec(10,1),const_vec(10,1),const_vec(10,2),const_vec(10,2)];
+%         ZZ = [0,0,0,0];
+%         h2=fill3(XX,YY,ZZ,[0 0 1]);
+%         h2.FaceAlpha=0.3;
+        
         if visualize_spheres == 1
         spheres_gen(state_x(:,1),T{1})
         end
@@ -306,7 +312,7 @@ if static_3d_plot
         ylabel('y')
         zlabel('z')
         grid on
-        axis([-1.5+min(state_x(10,:)) 1.5+max(state_x(10,:)) -1.5+min(state_x(11,:)) 1.5+max(state_x(11,:)) 0 2])
+        axis([-1.5+const_vec(9,1) 1.5+const_vec(9,2) -1.5+const_vec(10,1) 1.5+const_vec(10,2) 0 2])
         view(plot_position_3d(1),plot_position_3d(2));%-10, 20);
 end
     
