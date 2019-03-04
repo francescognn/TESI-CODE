@@ -1,12 +1,12 @@
 
 savedata           = 0;
-visualize_plot     = 0;
+visualize_plot     = 1;
 visualize_3d_plot  = 0;
 plot_position_3d   = [40,10]; % AZ,EL
-visualize_spheres  = 1;
+visualize_spheres  = 0;
 record_video       = 0;
 visualize_horizons = 0;
-static_3d_plot     = 1;
+static_3d_plot     = 0;
 
 prompt             = 'Is this a Real test? (y/n)  ';
 real_sim           = input(prompt,'s');
@@ -55,10 +55,10 @@ close all
 
 figure(1)
 
-plot3(P_ee_out(1,20:end),P_ee_out(2,20:end),P_ee_out(3,20:end),'linewidth',1.5)
+plot3(P_ee_out(1,:),P_ee_out(2,:),P_ee_out(3,:),'linewidth',1.5)
 hold on
 grid on
-plot3(xd(10,20:end),xd(11,20:end),xd(12,20:end),'--','linewidth',1.5)
+plot3(xd(10,:),xd(11,:),xd(12,:),'--','linewidth',1.5)
 xlabel('x [m]')
 ylabel('y [m]')
 zlabel('z [m]')
@@ -187,10 +187,10 @@ title('Base control action')
 %% BASE MOTION (7)
 
 figure(7)
-plot(state_x(1,:),state_x(2,:))
+plot(state_x(1,:),state_x(2,:),'-*')
 grid on
 hold on
-plot(xd(1,:),xd(2,:))
+plot(xd(1,:),xd(2,:),'-o')
 title('Base motion XY')
 
 %% J FUNCTION COMPONENTS (8)
@@ -245,7 +245,7 @@ cd ..
 cd ..
 
 % inizializzo funzione frame per il video
-F_video = struct('cdata', cell(1,size(XX,2)), 'colormap', cell(1,size(XX,2)));
+F_video = struct('cdata', cell(1,size(X,2)), 'colormap', cell(1,size(X,2)));
     
     for j=1:size(state_x,2)
 
@@ -341,16 +341,22 @@ if visualize_horizons == 1
                 xhee(j)=X_steps.signals.values(10,j,aa);
                 yhee(j)=X_steps.signals.values(11,j,aa);
                 zhee(j)=X_steps.signals.values(12,j,aa);
+                
+                xhb(j)=X_steps.signals.values(1,j,aa);
+                yhb(j)=X_steps.signals.values(2,j,aa);
 
                 cc(:,j)  = SCA(X_steps.signals.values(1:9,j,aa));
             end
 
         figure(12)
+        
+        %%%% EE
+        subplot(211)
         plot3(xd(10,:),xd(11,:),xd(12,:))
         hold on
         plot3(xhee,yhee,zhee,'linewidth',2)
         grid on
-        view(0,0)
+%         view(0,0)
         % axis([-1 1 -1 1 -1 1])
         xlabel('x')
         ylabel('y')
@@ -358,6 +364,22 @@ if visualize_horizons == 1
         drawnow()
         pause(0.05)
         hold off
+        
+        %%%% BASE
+        subplot(212)
+        plot3(xd(1,:),xd(2,:),xd(1,:).*0)
+        hold on
+        plot3(xhb,yhb,xhb.*0,'linewidth',2)
+          grid on
+%         view(0,0)
+        % axis([-1 1 -1 1 -1 1])
+        xlabel('x')
+        ylabel('y')
+        zlabel('z')
+        drawnow()
+        pause(0.05)
+        hold off
+        
         
     end
 end

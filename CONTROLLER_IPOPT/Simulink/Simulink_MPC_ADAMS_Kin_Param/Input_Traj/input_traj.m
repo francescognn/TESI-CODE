@@ -1,4 +1,4 @@
-function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val,x0_actualrobot]=input_traj(N,T,Tsample,what,type,init)
+function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val,x0_actualrobot,gr_cl_sam]=input_traj(N,T,Tsample,what,type,init)
 % Function that returns the reference trajectory for our controller 
 %      together with some parameters necessary for Simulink
 %
@@ -10,7 +10,7 @@ function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val,x0_ac
 % RESTARTING FROM P0??
 initialize_starting_point = init;
 
-q0 = [ 0    0       0   -2.6503   -1.8238    1.8241   -1.5125   -1.6905   -0.9991 ];
+q0 = [ 0    0       0   -1.3505   -1.5489   -1.7055   -1.0298    1.3691    0.0688 ];
 
 if q0(4)>6.28 || q0(5)>0 || q0(6)>2.443 || q0(7)>0 || q0(8)>1.74 || q0(9)>6.23
     error('ATTENZIONE! UR5 Joint Values out of admissible range')
@@ -141,14 +141,16 @@ switch what
                 xd=[traj_grasp(1,:).*0.82;-traj_grasp(2,:);zeros(7,size(traj_grasp,2));traj_grasp(1,:);-traj_grasp(2,:)+0.15;traj_grasp(3,:);traj_grasp(7:9,:);traj_grasp(4:6,:)];
                 t_total=size(xd,2)*T;
                 nometraj='grasping';
+                gr_cl_sam=40;
                 
             case 'grasp2'
                 
                 load('Input_Traj/Traj_grasp_2.mat');
                 tempp  = cat(1,Psi_ee_st{:});
-                xd = [x_st(2,:)-1;(x_st(1,:)-1).*-1;x_st(3:9,:);P_ee_st(2,:)-1;(P_ee_st(1,:)-1).*-1;P_ee_st(3,:);reshape(tempp(:,1),3,size(P_ee_st,2));reshape(tempp(:,2),3,size(P_ee_st,2))];
+                xd = [x_st(2,:)-1;(x_st(1,:)-1).*-1;-(pi/2-x_st(3,:));x_st(4:9,:);P_ee_st(2,:)-1;(P_ee_st(1,:)-1).*-1;P_ee_st(3,:)+0.08;[0;-1;0]*ones(1,size(x_st,2));[0;0;-1]*ones(1,size(x_st,2))];%reshape(tempp(:,1),3,size(P_ee_st,2));reshape(tempp(:,2),3,size(P_ee_st,2))];
                 t_total=size(xd,2)*T;
                 nometraj='grasping2';
+                gr_cl_sam=46;
                 
             otherwise
                 error('invalid trajectory type');

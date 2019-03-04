@@ -1,31 +1,31 @@
 
 
 
-clearvars -EXCEPT xd x0_val Pee0 N T Tsample tt nometraj initialize_starting_point x0_actualrobot
+clearvars -EXCEPT xd x0_val Pee0 N T Tsample tt nometraj initialize_starting_point x0_actualrobot gr_cl_sam
 
 import casadi.*
 
 
 %% PARAMETERS OF THE PROBLEM
 
-m_b       = 2; 
+m_b       = 3; 
 m_m       = m_b;
 m_j       = m_m;
-Ak_base   = diag([1e3  1e3  0]);
+Ak_base   = diag([1e5  1e5  1e5]);
 Ak_joints = diag([100 100 100 100 100 100]);
-Ak_ee     = diag([1e4 1e4 1e4 1e4 1e4]);
-Ak_mm     = 0.1;
-Ak_ub     = diag([5e3 5e3]);
+Ak_ee     = diag([1e6 1e6 1e6 1e6 1e6]);
+Ak_mm     = 0.5;
+Ak_ub     = diag([5e4 5e4]);
 
 
-const_vec = [  -0.15  0.15;  %Vpmin    Vpmax      [m/s^2]
-               -0.15  0.15;  %Wpmin    Wpmax      [rad/s^2]
+const_vec = [  -0.1  0.1;  %Vpmin    Vpmax      [m/s^2]
+               -0.1  0.1;  %Wpmin    Wpmax      [rad/s^2]
                -0.2  0.2;  %TH1pmin  TH1pmax    [rad/s]
                -0.2  0.2;  %TH2pmin  TH2pmax    [rad/s]
                -0.2  0.2;  %TH3pmin  TH3pmax    [rad/s]
                -0.2  0.2;  %TH4pmin  TH4pmax    [rad/s]
                -0.2  0.2;  %TH5pmin  TH5pmax    [rad/s]
-               -0.8  0.8;  %TH6pmin  TH6pmax    [rad/s]
+               -0.3  0.3;  %TH6pmin  TH6pmax    [rad/s]
                -0.15 1.40;  %Xmin     Xmax       [m]
                -2.6  0.2;  %Ymin     Ymax       [m]
                -inf  inf;  %THmin    THmax      [deg]
@@ -43,7 +43,6 @@ const_vec(11:17,:) = deg2rad(const_vec(11:17,:));
 
 fs = 1/T; % Sampling frequency [hz]
 T_horizon=(0:N-1)*T;
-
 
 %% MODELING 
 x   = MX.sym('x',18); % [x y th TH1 TH2 TH3 TH4 TH5 TH6 manipulability_index]
@@ -158,11 +157,11 @@ ey_ee    = (X_forecast(11,i)-Xd(11,i));
 ez_ee    = (X_forecast(12,i)-Xd(12,i));
 ethx_ee  = dot(X_forecast(13:15,i),Xd(13:15,i))-dot(Xd(13:15,i),Xd(13:15,i));
 ethz_ee  = dot(X_forecast(16:18,i),Xd(16:18,i))-dot(Xd(16:18,i),Xd(16:18,i));
-man_i    = sin(X_forecast(6,i));%man_index_f(X_forecast(1:9,i));
+man_i    = man_index_f(X_forecast(1:9,i));
 
 u        = Usym(p,T_horizon(i));
 
-        h1= h1 + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].'  );%*(1-sw);
+        h1= h1 + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].');%*(1-sw);
         h2= h2 + ((i/N)^m_b)*(  [e_th1 e_th2 e_th3 e_th4 e_th5 e_th6]*Ak_joints*[e_th1 e_th2 e_th3 e_th4 e_th5 e_th6].'  )*(1-sw);
         h3= h3 + ((i/N)^m_b)*(  [ex_ee ey_ee ez_ee ethx_ee ethz_ee]*Ak_ee*[ex_ee ey_ee ez_ee ethx_ee ethz_ee].'  )*sw;
         h4= h4 + ((i/N)^m_b)*(  Ak_mm/(man_i)^2  )*sw;
