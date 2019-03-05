@@ -14,8 +14,8 @@ m_j       = m_m;
 Ak_base   = diag([1e5  1e5  1e5]);
 Ak_joints = diag([100 100 100 100 100 100]);
 Ak_ee     = diag([1e6 1e6 1e6 1e6 1e6]);
-Ak_mm     = 0.5;
-Ak_ub     = diag([5e4 5e4]);
+Ak_mm     = 1;
+Ak_ub     = diag([5e3 5e3]);
 
 
 const_vec = [  -0.1  0.1;  %Vpmin    Vpmax      [m/s^2]
@@ -26,7 +26,7 @@ const_vec = [  -0.1  0.1;  %Vpmin    Vpmax      [m/s^2]
                -0.2  0.2;  %TH4pmin  TH4pmax    [rad/s]
                -0.2  0.2;  %TH5pmin  TH5pmax    [rad/s]
                -0.3  0.3;  %TH6pmin  TH6pmax    [rad/s]
-               -0.15 1.40;  %Xmin     Xmax       [m]
+               -0.15 1.5;  %Xmin     Xmax       [m]
                -2.6  0.2;  %Ymin     Ymax       [m]
                -inf  inf;  %THmin    THmax      [deg]
                -350  350;  %TH1min   TH1max     [deg]

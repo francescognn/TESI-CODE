@@ -145,12 +145,21 @@ switch what
                 
             case 'grasp2'
                 
-                load('Input_Traj/Traj_grasp_2.mat');
-                tempp  = cat(1,Psi_ee_st{:});
-                xd = [x_st(2,:)-1;(x_st(1,:)-1).*-1;-(pi/2-x_st(3,:));x_st(4:9,:);P_ee_st(2,:)-1;(P_ee_st(1,:)-1).*-1;P_ee_st(3,:)+0.08;[0;-1;0]*ones(1,size(x_st,2));[0;0;-1]*ones(1,size(x_st,2))];%reshape(tempp(:,1),3,size(P_ee_st,2));reshape(tempp(:,2),3,size(P_ee_st,2))];
+                load('Input_Traj/Traj_grasp_3.mat');
                 t_total=size(xd,2)*T;
+                xd(1,:)=xd(1,:).*0.9;
                 nometraj='grasping2';
-                gr_cl_sam=46;
+                gr_cl_sam=43;
+            
+            case 'grasp3'
+                
+                load('Input_Traj/Traj_grasp_3.mat');
+                t_total=size(xd,2)*T;
+                xd(1,:)=xd(1,:).*0.9;
+                xd(16:end,:)=[0;-1;0]*ones(1,size(xd,2));
+                xd(13:15,:)=[1;0;0]*ones(1,size(xd,2));
+                nometraj='grasping3';
+                gr_cl_sam=43;
                 
             otherwise
                 error('invalid trajectory type');
