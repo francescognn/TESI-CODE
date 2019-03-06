@@ -155,11 +155,25 @@ switch what
                 
                 load('Input_Traj/Traj_grasp_3.mat');
                 t_total=size(xd,2)*T;
-                xd(1,:)=xd(1,:).*0.9;
+                xd(1,:)=xd(1,:).*0.95;
                 xd(16:end,:)=[0;-1;0]*ones(1,size(xd,2));
+                xd(12,:)=xd(12,:)+0.05;
                 xd(13:15,:)=[1;0;0]*ones(1,size(xd,2));
                 nometraj='grasping3';
-                gr_cl_sam=43;
+                gr_cl_sam=40;
+                
+            case 'move'    
+                
+                t_total=30;
+                tt = 0:T:t_total;
+                omg=3*pi/t_total;
+                x = 2.9/t_total*tt+0.25*sin(omg*tt);
+                y = -2.3/t_total*tt+0.25*sin(omg*tt);
+                th = atan2(diff(y),diff(x));
+                x=x(1:end-1); y=y(1:end-1);
+                xd=[x;y;th;[pi/2;-pi/2;-pi/2;-pi/2;pi/2;0]*ones(1,length(x));zeros(9,length(x))];
+                gr_cl_sam=200;
+                nometraj='move';
                 
             otherwise
                 error('invalid trajectory type');

@@ -16,7 +16,10 @@ real_sim           = input(prompt,'s');
 
 state_x=state_x_sim.';
 if exist('state_qp')==1
-state_qp=state_qp(:,1:6).';
+    if size(state_qp,1)==6
+    else
+    state_qp=state_qp(:,1:6).';
+    end
 end
 if size(u_given,1)~=8
 u_given=u_given.';
@@ -55,10 +58,10 @@ close all
 
 figure(1)
 
-plot3(P_ee_out(1,:),P_ee_out(2,:),P_ee_out(3,:),'linewidth',1.5)
+plot3(P_ee_out(1,:),P_ee_out(2,:),P_ee_out(3,:),'linewidth',2)
 hold on
 grid on
-plot3(xd(10,:),xd(11,:),xd(12,:),'--','linewidth',1.5)
+plot3(xd(10,:),xd(11,:),xd(12,:),'--','linewidth',2)
 xlabel('x [m]')
 ylabel('y [m]')
 zlabel('z [m]')
@@ -77,50 +80,50 @@ if exist('state_qp')==1
     
 figure(3)
 subplot(321)
-plot(state_qp(1,:))
+plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(1,:))
 hold on
 grid on
-plot(u_given(3,:))
+plot(0:dt:(size(u_given,2)-1)*dt,u_given(3,:))
 title('thetap1')
 legend('meas','giv')
 
 subplot(322)
-plot(state_qp(2,:))
+plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(2,:))
 hold on
 grid on
-plot(u_given(4,:))
+plot(0:dt:(size(u_given,2)-1)*dt,u_given(4,:))
 title('thetap2')
 legend('meas','giv')
 
 subplot(323)
-plot(state_qp(3,:))
+plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(3,:))
 hold on
 grid on
-plot(u_given(5,:))
+plot(0:dt:(size(u_given,2)-1)*dt,u_given(5,:))
 title('thetap3')
 legend('meas','giv')
 
 subplot(324)
-plot(state_qp(4,:))
+plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(4,:))
 hold on
 grid on
-plot(u_given(6,:))
+plot(0:dt:(size(u_given,2)-1)*dt,u_given(6,:))
 title('thetap4')
 legend('meas','giv')
 
 subplot(325)
-plot(state_qp(5,:))
+plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(5,:))
 hold on
 grid on
-plot(u_given(7,:))
+plot(0:dt:(size(u_given,2)-1)*dt,u_given(7,:))
 title('thetap5')
 legend('meas','giv')
 
 subplot(326)
-plot(state_qp(6,:))
+plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(6,:))
 hold on
 grid on
-plot(u_given(8,:))
+plot(0:dt:(size(u_given,2)-1)*dt,u_given(8,:))
 title('thetap6')
 legend('meas','giv')
 end

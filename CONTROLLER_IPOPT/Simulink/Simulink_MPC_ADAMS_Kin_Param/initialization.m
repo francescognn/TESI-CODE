@@ -11,11 +11,11 @@ import casadi.*
 m_b       = 3; 
 m_m       = m_b;
 m_j       = m_m;
-Ak_base   = diag([1e5  1e5  1e5]);
+Ak_base   = diag([1e6  1e6  1e6]);
 Ak_joints = diag([100 100 100 100 100 100]);
 Ak_ee     = diag([1e6 1e6 1e6 1e6 1e6]);
-Ak_mm     = 1;
-Ak_ub     = diag([5e3 5e3]);
+Ak_mm     = 50;
+Ak_ub     = diag([1e3 1e3]);
 
 
 const_vec = [  -0.1  0.1;  %Vpmin    Vpmax      [m/s^2]
@@ -26,7 +26,7 @@ const_vec = [  -0.1  0.1;  %Vpmin    Vpmax      [m/s^2]
                -0.2  0.2;  %TH4pmin  TH4pmax    [rad/s]
                -0.2  0.2;  %TH5pmin  TH5pmax    [rad/s]
                -0.3  0.3;  %TH6pmin  TH6pmax    [rad/s]
-               -0.15 1.5;  %Xmin     Xmax       [m]
+               -0.15   3;  %Xmin     Xmax       [m]
                -2.6  0.2;  %Ymin     Ymax       [m]
                -inf  inf;  %THmin    THmax      [deg]
                -350  350;  %TH1min   TH1max     [deg]
@@ -161,7 +161,7 @@ man_i    = man_index_f(X_forecast(1:9,i));
 
 u        = Usym(p,T_horizon(i));
 
-        h1= h1 + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].');%*(1-sw);
+        h1= h1 + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].')*(1-sw);
         h2= h2 + ((i/N)^m_b)*(  [e_th1 e_th2 e_th3 e_th4 e_th5 e_th6]*Ak_joints*[e_th1 e_th2 e_th3 e_th4 e_th5 e_th6].'  )*(1-sw);
         h3= h3 + ((i/N)^m_b)*(  [ex_ee ey_ee ez_ee ethx_ee ethz_ee]*Ak_ee*[ex_ee ey_ee ez_ee ethx_ee ethz_ee].'  )*sw;
         h4= h4 + ((i/N)^m_b)*(  Ak_mm/(man_i)^2  )*sw;
