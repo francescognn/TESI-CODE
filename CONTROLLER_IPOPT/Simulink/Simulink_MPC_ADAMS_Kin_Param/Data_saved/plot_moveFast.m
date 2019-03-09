@@ -15,6 +15,12 @@ hold on
 grid on
 plot(xd(1,:),xd(2,:),'r','LineWidth',4)
 
+figure(3)
+set(gcf,'color','white')
+hold on
+grid on
+plot((sqrt(diff(xd(1,:).').^2+diff(xd(2,:).').^2)/0.4).','r','LineWidth',2)
+
 figure(2)
 set(gcf,'color','white')
 subplot(3,2,1)
@@ -65,8 +71,10 @@ for ii=1:length(Nvect)
     xlabel('Time[s]')
     ylabel('Cartesian error: x_k-x_d_k')
   
+    figure(3)
+    plot((sqrt(diff(state_x(1,:).').^2+diff(state_x(2,:).').^2)/0.4).','-.','Color',col(ii,:),'LineWidth',2)
+    
     figure(2)
-    set(gcf,'color','white')
     subplot(3,2,1)
     plot(0:0.4:29.6, state_x(4,:),'-.','Color',col(ii,:),'LineWidth',2)
     hold on
