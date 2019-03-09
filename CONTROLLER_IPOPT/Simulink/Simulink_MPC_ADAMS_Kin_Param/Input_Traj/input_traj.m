@@ -10,7 +10,7 @@ function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val,x0_ac
 % RESTARTING FROM P0??
 initialize_starting_point = init;
 
-q0 = [ 0    0       0   -1.3505   -1.5489   -1.7055   -1.0298    1.3691    0.0688 ];
+q0 = [ 0    0       0   -1.2174   -1.9836   -1.2454   -1.2891    1.3430    0.4038];
 
 if q0(4)>6.28 || q0(5)>0 || q0(6)>2.443 || q0(7)>0 || q0(8)>1.74 || q0(9)>6.23
     error('ATTENZIONE! UR5 Joint Values out of admissible range')
@@ -155,11 +155,38 @@ switch what
                 
                 load('Input_Traj/Traj_grasp_3.mat');
                 t_total=size(xd,2)*T;
-                xd(1,:)=xd(1,:).*0.9;
+                xd(1,:)=xd(1,:).*0.95;
                 xd(16:end,:)=[0;-1;0]*ones(1,size(xd,2));
+                xd(12,:)=xd(12,:)+0.05;
                 xd(13:15,:)=[1;0;0]*ones(1,size(xd,2));
                 nometraj='grasping3';
-                gr_cl_sam=43;
+                gr_cl_sam=40;
+                
+            case 'move'    
+                
+                t_total=30;
+                tt = 0:T:t_total;
+                omg=3*pi/t_total;
+                x = 2.9/t_total*tt+0.25*sin(omg*tt);
+                y = -2.3/t_total*tt+0.25*sin(omg*tt);
+                th = atan2(diff(y),diff(x));
+                x=x(1:end-1); y=y(1:end-1);
+                xd=[x;y;th;[pi/2;-pi/2;-pi/2;-pi/2;pi/2;0]*ones(1,length(x));zeros(9,length(x))];
+                gr_cl_sam=200;
+                nometraj='move';
+                
+            case 'move_fast'    
+                
+                t_total=30;
+                tt = 0:T:t_total;
+                omg=3*pi/t_total;
+                x = (2.9/t_total*tt+0.25*sin(omg*tt))*3;
+                y = (-2.3/t_total*tt+0.25*sin(omg*tt))*3;
+                th = atan2(diff(y),diff(x));
+                x=x(1:end-1); y=y(1:end-1);
+                xd=[x;y;th;[pi/2;-pi/2;-pi/2;-pi/2;pi/2;0]*ones(1,length(x));zeros(9,length(x))];
+                gr_cl_sam=200;
+                nometraj='moveFast';
                 
             otherwise
                 error('invalid trajectory type');

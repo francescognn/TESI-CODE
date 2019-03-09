@@ -1,6 +1,6 @@
 
 savedata           = 1;
-visualize_plot     = 1;
+visualize_plot     = 1; 
 visualize_3d_plot  = 0;
 plot_position_3d   = [40,10]; % AZ,EL
 visualize_spheres  = 0;
@@ -9,14 +9,17 @@ visualize_horizons = 0;
 static_3d_plot     = 0;
 
 prompt             = 'Is this a Real test? (y/n)  ';
-real_sim           = input(prompt,'s');
+real_sim           =  input(prompt,'s');
 
 
 %% DIMENSION SET
 
 state_x=state_x_sim.';
 if exist('state_qp')==1
-state_qp=state_qp(:,1:6).';
+    if size(state_qp,1)==6
+    else
+    state_qp=state_qp(:,1:6).';
+    end
 end
 if size(u_given,1)~=8
 u_given=u_given.';
@@ -55,14 +58,15 @@ close all
 
 figure(1)
 
-plot3(P_ee_out(1,:),P_ee_out(2,:),P_ee_out(3,:),'linewidth',1.5)
+plot3(xd(10,:),xd(11,:),xd(12,:),'--','color','r','linewidth',2)
 hold on
 grid on
-plot3(xd(10,:),xd(11,:),xd(12,:),'--','linewidth',1.5)
+plot3(P_ee_out(1,:),P_ee_out(2,:),P_ee_out(3,:),'color','b','linewidth',2)
+% plot3(P_ee_out_s(1,:),P_ee_out_s(2,:),P_ee_out_s(3,:),'color','c','linewidth',2)
 xlabel('x [m]')
 ylabel('y [m]')
 zlabel('z [m]')
-legend('Real','Desired')
+legend('Desired','Simulated');%Real','Simulated')
 axis equal
 
 %% ERROR ABS XYZ PLOT (2)
@@ -77,50 +81,50 @@ if exist('state_qp')==1
     
 figure(3)
 subplot(321)
-plot(state_qp(1,:))
+plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(1,:))
 hold on
 grid on
-plot(u_given(3,:))
+plot(0:dt:(size(u_given,2)-1)*dt,u_given(3,:))
 title('thetap1')
 legend('meas','giv')
 
 subplot(322)
-plot(state_qp(2,:))
+plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(2,:))
 hold on
 grid on
-plot(u_given(4,:))
+plot(0:dt:(size(u_given,2)-1)*dt,u_given(4,:))
 title('thetap2')
 legend('meas','giv')
 
 subplot(323)
-plot(state_qp(3,:))
+plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(3,:))
 hold on
 grid on
-plot(u_given(5,:))
+plot(0:dt:(size(u_given,2)-1)*dt,u_given(5,:))
 title('thetap3')
 legend('meas','giv')
 
 subplot(324)
-plot(state_qp(4,:))
+plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(4,:))
 hold on
 grid on
-plot(u_given(6,:))
+plot(0:dt:(size(u_given,2)-1)*dt,u_given(6,:))
 title('thetap4')
 legend('meas','giv')
 
 subplot(325)
-plot(state_qp(5,:))
+plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(5,:))
 hold on
 grid on
-plot(u_given(7,:))
+plot(0:dt:(size(u_given,2)-1)*dt,u_given(7,:))
 title('thetap5')
 legend('meas','giv')
 
 subplot(326)
-plot(state_qp(6,:))
+plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(6,:))
 hold on
 grid on
-plot(u_given(8,:))
+plot(0:dt:(size(u_given,2)-1)*dt,u_given(8,:))
 title('thetap6')
 legend('meas','giv')
 end
@@ -187,11 +191,14 @@ title('Base control action')
 %% BASE MOTION (7)
 
 figure(7)
-plot(state_x(1,:),state_x(2,:),'-*')
+plot(state_x(1,:),state_x(2,:),'-*','linewidth',1.5,'MarkerSize',4)
 grid on
 hold on
-plot(xd(1,:),xd(2,:),'-o')
-title('Base motion XY')
+plot(xd(1,:),xd(2,:),'-o','linewidth',1.5,'MarkerSize',4)
+xlabel('x [m]')
+ylabel('y [m]')
+axis([min(xd(1,:))-0.2 max(xd(1,:))+0.2 min(xd(2,:))-0.2 max(xd(2,:))+0.2])
+% title('Base motion XY')
 
 %% J FUNCTION COMPONENTS (8)
 
@@ -222,6 +229,90 @@ figure(9)
 plot(man_index,'LineWidth',0.8); ylim([0 1])
 grid on
 title('Manipulability Index')
+
+%% X-Y-Z EE COMPARISON WITH XD (13)
+
+
+figure(13)
+
+subplot(311)
+plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],P_ee_out(1,:),'linewidth',1.7)
+grid on
+hold on
+plot([0:0.5:size(xd(1,1:end-1),2)*0.5],xd(10,:),'--','linewidth',1.7)
+xlabel('Time [s]')
+ylabel('Distance [m]')
+legend('Real','Desired')
+title('X End-Effector')
+
+subplot(312)
+plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],P_ee_out(2,:),'linewidth',1.7)
+grid on
+hold on
+plot([0:0.5:size(xd(1,1:end-1),2)*0.5],xd(11,:),'--','linewidth',1.7)
+xlabel('Time [s]')
+ylabel('Distance [m]')
+title('Y End-Effector')
+
+subplot(313)
+plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],P_ee_out(3,:),'linewidth',1.7)
+grid on
+hold on
+plot([0:0.5:size(xd(1,1:end-1),2)*0.5],xd(12,:),'--','linewidth',1.7)
+xlabel('Time [s]')
+ylabel('Distance [m]')
+title('Z End-Effector')
+
+%% ORIENTATION ERROR (14)
+
+for i =1:size(P_ee_out,2)
+
+    e_orient_x(i) = 1-dot(Psi_ee_out{i}(:,1),xd(13:15,i));
+    e_orient_z(i) = 1-dot(Psi_ee_out{i}(:,2),xd(16:18,i));
+    
+end
+
+figure(14)
+
+subplot(211)
+plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],e_orient_x)
+grid on
+title('orientation error on X')
+
+subplot(212)
+plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],e_orient_z)
+grid on
+title('orientation error on Z')
+
+%% BASE X-Y ERROR PLOT (15)
+
+figure(15)
+plot(0:dt:(length(xd(1,:))-1)*dt,sqrt((state_x(1,:)-xd(1,:)).^2+(state_x(2,:)-xd(2,:)).^2),'linewidth',2);
+grid on
+xlabel('Time [s]')
+ylabel('Cartesian error base[m]')
+
+%% BASE PLOT X and Y (16)
+
+figure(16)
+
+subplot(211)
+plot(0:dt:(length(xd(1,:))-1)*dt,xd(1,:),'linewidth',2)
+grid on
+hold on
+plot(0:dt:(length(xd(1,:))-1)*dt,state_x(1,:),'linewidth',2)
+xlabel('Time [s]')
+ylabel('x [m]')
+legend('Desired','Real')
+
+subplot(212)
+plot(0:dt:(length(xd(2,:))-1)*dt,xd(2,:),'linewidth',2)
+grid on
+hold on
+plot(0:dt:(length(xd(2,:))-1)*dt,state_x(2,:),'linewidth',2)
+xlabel('Time [s]')
+ylabel('y [m]')
+% legend('Desired','Real')
 
 end
 
@@ -394,7 +485,7 @@ if savedata ==1
         Type_sym='SIM_';
     end
 savename = [Type_sym, nometraj '_'  datestr(now, 'HH-MM dd-mmm-yyyy')];
-% savename = [Type_sym, nometraj '_N=',num2str(N),'_' , 'pesoManip=10_2'];
+% savename = [Type_sym, nometraj '_N=',num2str(N),'_', datestr(now, 'HH-MM dd-mmm-yyyy')];
 matfile = fullfile('Data_saved/', savename);
 save(matfile)
 
@@ -404,52 +495,4 @@ clc
 
 %% PLOT AGGIUNTIVI (13 e 14)
 
-figure(13)
 
-subplot(311)
-plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],P_ee_out(1,:),'linewidth',1.7)
-grid on
-hold on
-plot([0:0.5:size(xd(1,1:end-1),2)*0.5],xd(10,:),'--','linewidth',1.7)
-xlabel('Time [s]')
-ylabel('Distance [m]')
-legend('Real','Desired')
-title('X End-Effector')
-
-subplot(312)
-plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],P_ee_out(2,:),'linewidth',1.7)
-grid on
-hold on
-plot([0:0.5:size(xd(1,1:end-1),2)*0.5],xd(11,:),'--','linewidth',1.7)
-xlabel('Time [s]')
-ylabel('Distance [m]')
-title('Y End-Effector')
-
-subplot(313)
-plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],P_ee_out(3,:),'linewidth',1.7)
-grid on
-hold on
-plot([0:0.5:size(xd(1,1:end-1),2)*0.5],xd(12,:),'--','linewidth',1.7)
-xlabel('Time [s]')
-ylabel('Distance [m]')
-title('Z End-Effector')
-
-
-for i =1:size(P_ee_out,2)
-
-    e_orient_x(i) = 1-dot(Psi_ee_out{i}(:,1),xd(13:15,i));
-    e_orient_z(i) = 1-dot(Psi_ee_out{i}(:,2),xd(16:18,i));
-    
-end
-
-figure(14)
-
-subplot(211)
-plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],e_orient_x)
-grid on
-title('orientation error on X')
-
-subplot(212)
-plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],e_orient_z)
-grid on
-title('orientation error on Z')
