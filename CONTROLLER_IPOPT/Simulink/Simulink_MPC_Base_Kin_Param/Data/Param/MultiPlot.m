@@ -4,7 +4,7 @@ clc
 
 Nvect=[10 15 20 25];
 Distvect=[0 1 3];
-col=['b','g','r','c'];
+col=[0 1 1; 0 0.5 1; 0 0 1];
 
 load('MPC_kin_Param_N=10_trajCurves_r=0.6_dist=0.mat')
 clearvars -EXCEPT xd Nvect Distvect col
@@ -12,7 +12,7 @@ clearvars -EXCEPT xd Nvect Distvect col
 for ii=1:length(Nvect)
     figure(1)
     subplot(1,4,ii)
-    plot(xd(1,:),xd(2,:),'k-','LineWidth',3)
+    plot(xd(1,:),xd(2,:),'r','LineWidth',3)
     hold on
     for j=1:length(Distvect)
         load(['MPC_kin_Param_N=',num2str(Nvect(ii)),'_trajCurves_r=0.6_dist=',num2str(Distvect(j)),'.mat'])
@@ -27,7 +27,7 @@ for ii=1:length(Nvect)
             xd=xd(:,1:size(X,2));
         end
         x=X(1,:);y=X(2,:);th=X(3,:);
-        plot(x,y,'.-','Color',col(j),'LineWidth',j/length(Distvect))
+        plot(x,y,'.-','Color',col(j,:),'LineWidth',1)
         set(gcf,'color','white')
         grid on
         clearvars -EXCEPT xd Nvect Distvect ii j col
@@ -61,7 +61,7 @@ for ii=1:length(Nvect)
         CartError=sqrt(errore(:,1).^2+errore(:,2).^2);
         mean_error(ii,j)=mean(CartError);
         set(gcf,'color','white')
-        plot(tt,CartError,'-','Color',col(j),'LineWidth',j/length(Distvect))
+        plot(tt,CartError,'-','Color',col(j,:),'LineWidth',1)
         ylabel('Cartesian Error')
         hold on
         grid on
@@ -87,7 +87,7 @@ for ii=1:length(Nvect)
             xd=xd(:,1:size(X,2));
         end
         set(gcf,'color','white')
-        plot(tt,T_elapsed_vect(1:length(tt)),'-','Color',col(j),'LineWidth',j/length(Distvect))
+        plot(tt,T_elapsed_vect(1:length(tt)),'-','Color',col(j,:),'LineWidth',1)
         mean_telaps(ii,j)=mean(T_elapsed_vect(1:length(tt)));
         ylabel('T Elapsed')
         hold on
@@ -104,13 +104,13 @@ figure(4)
 title('r=0.6m')
 for j = 1:length(Distvect)
     subplot(2,1,1)
-    plot(Nvect,mean_error(:,j),'-o','Color',col(j),'LineWidth',j/length(Distvect))
+    plot(Nvect,mean_error(:,j),'-o','Color',col(j,:),'LineWidth',1)
     hold on
     title('r=0.6m');
     ylabel('Mean Cartesian error')
     xlabel('Prediction horizon')
     subplot(2,1,2)
-    plot(Nvect,mean_telaps(:,j),'-o','Color',col(j),'LineWidth',j/length(Distvect))
+    plot(Nvect,mean_telaps(:,j),'-o','Color',col(j,:),'LineWidth',1)
     title('r=0.6m');
     ylabel('Mean time elapsed')
     xlabel('Prediction horizon')
@@ -126,7 +126,7 @@ clearvars -EXCEPT xd Nvect Distvect errors_poly3 telaps_poly3 col
 for ii=1:length(Nvect)
     figure(5)
     subplot(1,4,ii)
-    plot(xd(1,:),xd(2,:),'k-','LineWidth',2)
+    plot(xd(1,:),xd(2,:),'r','LineWidth',2)
     hold on
     for j=1:length(Distvect)
         load(['MPC_kin_Param_N=',num2str(Nvect(ii)),'_trajCurves_r=0.3_dist=',num2str(Distvect(j)),'.mat'])
@@ -141,7 +141,7 @@ for ii=1:length(Nvect)
             xd=xd(:,1:size(X,2));
         end
         x=X(1,:);y=X(2,:);th=X(3,:);
-        plot(x,y,'.-','Color',col(j),'LineWidth',j/length(Distvect))
+        plot(x,y,'.-','Color',col(j,:),'LineWidth',1)
         set(gcf,'color','white')
         grid on
         clearvars -EXCEPT xd Nvect Distvect ii j errors_poly3 telaps_poly3 col
@@ -175,7 +175,7 @@ for ii=1:length(Nvect)
         CartError=sqrt(errore(:,1).^2+errore(:,2).^2);
         mean_error(ii,j)=mean(CartError);
         set(gcf,'color','white')
-        plot(tt,CartError,'-','Color',col(j),'LineWidth',j/length(Distvect))
+        plot(tt,CartError,'-','Color',col(j,:),'LineWidth',1)
         ylabel('Cartesian Error')
         hold on
         grid on
@@ -201,7 +201,7 @@ for ii=1:length(Nvect)
             xd=xd(:,1:size(X,2));
         end
         set(gcf,'color','white')
-        plot(tt,T_elapsed_vect(1:length(tt)),'-','Color',col(j),'LineWidth',j/length(Distvect))
+        plot(tt,T_elapsed_vect(1:length(tt)),'-','Color',col(j,:),'LineWidth',1)
         mean_telaps(ii,j)=mean(T_elapsed_vect(1:length(tt)));
         ylabel('T Elapsed')
         hold on
@@ -218,13 +218,13 @@ figure(8)
 
 for j = 1:length(Distvect)
     subplot(2,1,1)
-    plot(Nvect,mean_error(:,j),'-o','Color',col(j),'LineWidth',j/length(Distvect))
+    plot(Nvect,mean_error(:,j),'-o','Color',col(j,:),'LineWidth',1)
     hold on
     title('r=0.3m');
     ylabel('Mean Cartesian error')
     xlabel('Prediction horizon')
     subplot(2,1,2)
-    plot(Nvect,mean_telaps(:,j),'-o','Color',col(j),'LineWidth',j/length(Distvect))
+    plot(Nvect,mean_telaps(:,j),'-o','Color',col(j,:),'LineWidth',1)
     ylabel('Mean time elapsed')
     xlabel('Prediction horizon')
     hold on
@@ -238,7 +238,7 @@ clearvars -EXCEPT xd Nvect Distvect errors_poly3 telaps_poly3 col
 for ii=1:length(Nvect)
     figure(9)
     subplot(1,4,ii)
-    plot(xd(1,:),xd(2,:),'k-','LineWidth',2)
+    plot(xd(1,:),xd(2,:),'r','LineWidth',2)
     hold on
     for j=1:length(Distvect)
         load(['MPC_kin_Param2_N=',num2str(Nvect(ii)),'_trajCurves_r=0.6_dist=',num2str(Distvect(j)),'.mat'])
@@ -253,7 +253,7 @@ for ii=1:length(Nvect)
             xd=xd(:,1:size(X,2));
         end
         x=X(1,:);y=X(2,:);th=X(3,:);
-        plot(x,y,'-.','Color',col(j),'LineWidth',j/length(Distvect))
+        plot(x,y,'.-','Color',col(j,:),'LineWidth',1)
         set(gcf,'color','white')
         grid on
         clearvars -EXCEPT xd Nvect Distvect ii j errors_poly3 telaps_poly3 col
@@ -287,7 +287,7 @@ for ii=1:length(Nvect)
         CartError=sqrt(errore(:,1).^2+errore(:,2).^2);
         mean_error(ii,j)=mean(CartError);
         set(gcf,'color','white')
-        plot(tt,CartError,'-','Color',col(j),'LineWidth',j/length(Distvect))
+        plot(tt,CartError,'-','Color',col(j,:),'LineWidth',1)
         ylabel('Cartesian Error')
         hold on
         grid on
@@ -313,7 +313,7 @@ for ii=1:length(Nvect)
             xd=xd(:,1:size(X,2));
         end
         set(gcf,'color','white')
-        plot(tt,T_elapsed_vect(1:length(tt)),'-','Color',col(j),'LineWidth',j/length(Distvect))
+        plot(tt,T_elapsed_vect(1:length(tt)),'.-','Color',col(j,:),'LineWidth',1)
         mean_telaps(ii,j)=mean(T_elapsed_vect(1:length(tt)));
         ylabel('T Elapsed')
         hold on
@@ -331,13 +331,13 @@ figure(12)
 
 for j = 1:length(Distvect)
     subplot(2,1,1)
-    plot(Nvect,mean_error(:,j),'-o','Color',col(j),'LineWidth',j/length(Distvect))
+    plot(Nvect,mean_error(:,j),'-o','Color',col(j,:),'LineWidth',1)
     hold on
     title('r=0.6m  POLY5');
     ylabel('Mean Cartesian error')
     xlabel('Prediction horizon')
     subplot(2,1,2)
-    plot(Nvect,mean_telaps(:,j),'-o','Color',col(j),'LineWidth',j/length(Distvect))
+    plot(Nvect,mean_telaps(:,j),'-o','Color',col(j,:),'LineWidth',1)
     title('r=0.6m  POLY5');
     ylabel('Mean time elapsed')
     xlabel('Prediction horizon')
@@ -350,16 +350,16 @@ errors_poly5=mean(mean_error,2);
 
 figure;
 subplot(2,1,1)
-plot(Nvect,errors_poly3,'-o')
+plot(Nvect,errors_poly3,'r-o','LineWidth',1)
 hold on
-plot(Nvect,errors_poly5,'-o')
+plot(Nvect,errors_poly5,'b-*','LineWidth',1)
 title('mean Cartesian Errors');
 xlabel('Prediction horizon')
 legend('POLY3','POLY5')
 subplot(2,1,2)
-plot(Nvect,telaps_poly3,'-o')
+plot(Nvect,telaps_poly3,'r-o','LineWidth',1)
 hold on
-plot(Nvect,telaps_poly5,'-o')
+plot(Nvect,telaps_poly5,'b-*','LineWidth',1)
 title('mean Times elapsed');
 xlabel('Prediction horizon')
 legend('POLY3','POLY5')
