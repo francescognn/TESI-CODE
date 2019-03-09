@@ -1,6 +1,6 @@
 
 savedata           = 1;
-visualize_plot     = 1;
+visualize_plot     = 1; 
 visualize_3d_plot  = 0;
 plot_position_3d   = [40,10]; % AZ,EL
 visualize_spheres  = 0;
@@ -9,7 +9,7 @@ visualize_horizons = 0;
 static_3d_plot     = 0;
 
 prompt             = 'Is this a Real test? (y/n)  ';
-real_sim           = input(prompt,'s');
+real_sim           =  input(prompt,'s');
 
 
 %% DIMENSION SET
@@ -62,11 +62,11 @@ plot3(xd(10,:),xd(11,:),xd(12,:),'--','color','r','linewidth',2)
 hold on
 grid on
 plot3(P_ee_out(1,:),P_ee_out(2,:),P_ee_out(3,:),'color','b','linewidth',2)
-plot3(P_ee_out_s(1,:),P_ee_out_s(2,:),P_ee_out_s(3,:),'color','c','linewidth',2)
+% plot3(P_ee_out_s(1,:),P_ee_out_s(2,:),P_ee_out_s(3,:),'color','c','linewidth',2)
 xlabel('x [m]')
 ylabel('y [m]')
 zlabel('z [m]')
-legend('Desired','Real','Simulated')
+legend('Desired','Simulated');%Real','Simulated')
 axis equal
 
 %% ERROR ABS XYZ PLOT (2)
@@ -287,20 +287,10 @@ title('orientation error on Z')
 %% BASE X-Y ERROR PLOT (15)
 
 figure(15)
-subplot(211)
-plot(0:dt:(length(xd(1,:))-1)*dt,abs(state_x(1,:)-xd(1,:)),'linewidth',2);
+plot(0:dt:(length(xd(1,:))-1)*dt,sqrt((state_x(1,:)-xd(1,:)).^2+(state_x(2,:)-xd(2,:)).^2),'linewidth',2);
 grid on
-subplot(212)
-plot(0:dt:(length(xd(1,:))-1)*dt,abs(state_x(2,:)-xd(2,:)),'linewidth',2);
-grid on
-
-figure(16)
-subplot(211)
-plot(0:dt:(length(xd(1,:))-1)*dt,abs(state_x(1,:)-xd(1,:)),'linewidth',2);
-grid on
-subplot(212)
-plot(0:dt:(length(xd(1,:))-1)*dt,abs(state_x(2,:)-xd(2,:)),'linewidth',2);
-grid on
+xlabel('Time [s]')
+ylabel('Cartesian error base[m]')
 
 %% BASE PLOT X and Y (16)
 
@@ -495,7 +485,7 @@ if savedata ==1
         Type_sym='SIM_';
     end
 savename = [Type_sym, nometraj '_'  datestr(now, 'HH-MM dd-mmm-yyyy')];
-% savename = [Type_sym, nometraj '_N=',num2str(N),'_' , 'pesoManip=10_2'];
+% savename = [Type_sym, nometraj '_N=',num2str(N),'_', datestr(now, 'HH-MM dd-mmm-yyyy')];
 matfile = fullfile('Data_saved/', savename);
 save(matfile)
 

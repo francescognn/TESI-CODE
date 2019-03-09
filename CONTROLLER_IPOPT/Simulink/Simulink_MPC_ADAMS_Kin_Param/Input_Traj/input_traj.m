@@ -175,6 +175,19 @@ switch what
                 gr_cl_sam=200;
                 nometraj='move';
                 
+            case 'move_fast'    
+                
+                t_total=30;
+                tt = 0:T:t_total;
+                omg=3*pi/t_total;
+                x = (2.9/t_total*tt+0.25*sin(omg*tt))*3;
+                y = (-2.3/t_total*tt+0.25*sin(omg*tt))*3;
+                th = atan2(diff(y),diff(x));
+                x=x(1:end-1); y=y(1:end-1);
+                xd=[x;y;th;[pi/2;-pi/2;-pi/2;-pi/2;pi/2;0]*ones(1,length(x));zeros(9,length(x))];
+                gr_cl_sam=200;
+                nometraj='moveFast';
+                
             otherwise
                 error('invalid trajectory type');
         end
