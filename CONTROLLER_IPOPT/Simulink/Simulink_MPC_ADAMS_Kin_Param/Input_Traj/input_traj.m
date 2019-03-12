@@ -10,7 +10,7 @@ function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val,x0_ac
 % RESTARTING FROM P0??
 initialize_starting_point = init;
 
-q0 = [ 0    0       0   -1.2174   -1.9836   -1.2454   -1.2891    1.3430    0.4038];
+q0 = [ 0    0    0   0   -1.1   -2   -1.2891    1.3430    0.4038];
 
 if q0(4)>6.28 || q0(5)>0 || q0(6)>2.443 || q0(7)>0 || q0(8)>1.74 || q0(9)>6.23
     error('ATTENZIONE! UR5 Joint Values out of admissible range')
@@ -190,10 +190,10 @@ switch what
                 
             case 'self_colliding'
                 t_total=15; tt=0:T:t_total;
-                dist = 0.7;
-                xd=[p0(1)+0.4*sin(pi/t_total*tt);p0(2)*ones(1,length(tt));p0(3)-dist*cos(pi/t_total*tt)];
+                xd=[p0(1)*ones(1,length(tt));p0(2)+0.3*sin(pi/t_total*tt);p0(3)-0.4*(1-cos(pi/t_total*tt))];
                 xd = [zeros(9,length(tt));xd;zeros(6,length(tt))];
                 nometraj='selfColl';
+                gr_cl_sam =0;
                 
             otherwise
                 error('invalid trajectory type');
