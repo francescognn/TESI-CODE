@@ -1,5 +1,5 @@
 
-savedata           = 1;
+savedata           = 0;
 visualize_plot     = 0; 
 visualize_3d_plot  = 1;
 plot_position_3d   = [80,10]; % AZ,EL
@@ -465,6 +465,7 @@ if static_3d_plot
         ylabel('y')
         zlabel('z')
         grid on
+%         axis off
         axis([-1.5+const_vec(9,1) 1.5+const_vec(9,2) -1.5+const_vec(10,1) 1.5+const_vec(10,2) 0 2])
         view(plot_position_3d(1),plot_position_3d(2));%-10, 20);
 end
