@@ -191,7 +191,7 @@ switch what
             case 'self_colliding'
                 t_total=15; tt=0:T:t_total;
                 dist = 0.7;
-                xd=[p0(1)+0.4*sin(pi/t_total*tt);p0(2)*ones(1,length(tt));p0(3)-dist*cos(pi/t_total*tt)];
+                xd=[p0(1)*ones(1,length(tt));p0(2)-dist*cos(pi/t_total*tt);p0(3)-linspace(0,dist,)];
                 xd = [zeros(9,length(tt));xd;zeros(6,length(tt))];
                 nometraj='selfColl';
                 

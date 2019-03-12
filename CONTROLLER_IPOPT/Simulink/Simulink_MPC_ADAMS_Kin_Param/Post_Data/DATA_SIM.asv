@@ -79,7 +79,6 @@ plot(0:dt:(size(P_ee_out,2)-3)*dt,error_ee,'linewidth',1)
 % error_ee=sqrt((P_ee_out(1,1:end-1)-xd(10,2:end)).^2+(P_ee_out(2,1:end-1)-xd(11,2:end)).^2+(P_ee_out(3,1:end-1)-xd(12,2:end)).^2);
 % plot(0:dt:(size(P_ee_out,2)-2)*dt,error_ee,'linewidth',1)
 grid on
-axis tight
 ylabel('Cartesian error EE[m]')
 
 %% ARM JOINTS VELOCITIES PLOTS (3) 
@@ -301,7 +300,6 @@ plot([0:dt:size(xd(1,1:end-2),2)*dt],xd(10,2:end),'--','linewidth',1.7)
 xlabel('Time [s]')
 ylabel('Distance [m]')
 legend('Real','Desired')
-axis tight
 title('X End-Effector')
 
 subplot(312)
@@ -310,19 +308,16 @@ grid on
 hold on
 plot([0:dt:size(xd(1,1:end-2),2)*dt],xd(11,2:end),'--','linewidth',1.7)
 xlabel('Time [s]')
-axis tight
 ylabel('Distance [m]')
-
 title('Y End-Effector')
 
 subplot(313)
-plot([0:dt:size(P_ee_out(1,1:end-2),2)*dt],P_ee_out(3,1:end-1),'linewidth',1.7)
+plot([0:dt:size(P_ee_out(1,1:end-1),2)*dt],P_ee_out(3,1:end-1),'linewidth',1.7)
 grid on
 hold on
-plot([0:dt:size(xd(1,1:end-2),2)*dt],xd(12,2:end),'--','linewidth',1.7)
+plot([0:dt:size(xd(1,1:end-1),2)*dt],xd(12,2:end),'--','linewidth',1.7)
 xlabel('Time [s]')
 ylabel('Distance [m]')
-axis tight
 title('Z End-Effector')
 
 %% ORIENTATION ERROR (14)
