@@ -30,7 +30,7 @@ const_vec = [  -0.1  0.1;  %Vpmin    Vpmax      [m/s^2]
                -2.6  0.2;  %Ymin     Ymax       [m]
                -inf  inf;  %THmin    THmax      [deg]
                -350  350;  %TH1min   TH1max     [deg]
-               -180    0;  %TH2min   TH2max     [deg]
+               -180    4;  %TH2min   TH2max     [deg]
                -140  140;  %TH3min   TH3max     [deg]
                -180    0;  %TH4min   TH4max     [deg]
                -140   97;  %TH5min   TH5max     [deg]
@@ -80,8 +80,8 @@ u = [            Fb                  zeros(size(Fb,1),size(Fm,2))  ; ...
 %% Writing differential equation
  
 [P_ee,Psi_ee,Rot_T] = FK(x);    
-  G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
-%   G=zeros(3,2);
+%   G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
+   G=zeros(3,2);
 xdot = [G zeros(3,6); zeros(6,2) eye(6); zeros(9,8)]*u;
 
 % 
