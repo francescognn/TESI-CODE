@@ -10,9 +10,9 @@ function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val,x0_ac
 % RESTARTING FROM P0??
 initialize_starting_point = init;
 
-q0 = [ 0    0       0   -1.2174   -1.9836   -1.2454   -1.2891    1.3430    0.4038];
+q0 = [ 0    0       0   -1.0392   -1.1971    1.2100   -1.6875   -1.5329   -2.6720];
 
-if q0(4)>6.28 || q0(5)>0 || q0(6)>2.443 || q0(7)>0 || q0(8)>1.74 || q0(9)>6.23
+if q0(4)>6.28 || q0(5)>0.0698 || q0(6)>2.443 || q0(7)>0 || q0(8)>1.74 || q0(9)>6.23
     error('ATTENZIONE! UR5 Joint Values out of admissible range')
 elseif q0(4)<-6.28 || q0(5)<-3.1415 || q0(6)<-2.443 || q0(7)<-3.1415 || q0(8)<-2.443 || q0(9)<-6.23
     error('ATTENZIONE! UR5 Joint Values out of admissible range')
@@ -119,13 +119,14 @@ switch what
             case 'sine_orient'
                 t_total=40; tt=0:T:t_total;
                 dist = 0.6;
-                z_axis = [0;1;0]; x_axis=[0;0;-1];
+                z_axis = [0;0;-1]; x_axis=[0;-1;0];
                 noscillazioni = 2;
                 om=(noscillazioni*2*pi)/t_total;
                 v=dist/t_total; 
-                xd=[p0(1)+v*tt;p0(2)+v*tt;p0(3)-0.2*sin(om*tt)];
-                xd = [zeros(9,length(tt));xd;[x_axis;z_axis]*ones(1,length(tt))];
+                xd=[p0(1)+v*tt;p0(2)*ones(1,length(tt));p0(3)-0.15*sin(om*tt)];
+                xd = [(p0(1)+v*tt).*0.85;zeros(8,length(tt));xd;[x_axis;z_axis]*ones(1,length(tt))];
                 nometraj='MM_sineOrient';
+                gr_cl_sam=400;
             case 'NO'
                 load('Data_saved/datax_y.mat')
                 xx=xx.*0.6;

@@ -1,9 +1,9 @@
 
-savedata           = 1;
-visualize_plot     = 1;
-visualize_3d_plot  = 0;
+savedata           = 0;
+visualize_plot     = 0;
+visualize_3d_plot  = 1;
 plot_position_3d   = [40,10]; % AZ,EL
-visualize_spheres  = 0;
+visualize_spheres  = 1;
 record_video       = 0;
 visualize_horizons = 0;
 static_3d_plot     = 0;
@@ -62,11 +62,11 @@ plot3(xd(10,:),xd(11,:),xd(12,:),'--','color','r','linewidth',2)
 hold on
 grid on
 plot3(P_ee_out(1,:),P_ee_out(2,:),P_ee_out(3,:),'color','b','linewidth',2)
-plot3(P_ee_out_s(1,:),P_ee_out_s(2,:),P_ee_out_s(3,:),'color','c','linewidth',2)
+% plot3(P_ee_out_s(1,:),P_ee_out_s(2,:),P_ee_out_s(3,:),'color','c','linewidth',2)
 xlabel('x [m]')
 ylabel('y [m]')
 zlabel('z [m]')
-legend('Desired','Real','Simulated')
+% legend('Desired','Real','Simulated')
 axis equal
 
 %% ERROR ABS XYZ PLOT (2)
