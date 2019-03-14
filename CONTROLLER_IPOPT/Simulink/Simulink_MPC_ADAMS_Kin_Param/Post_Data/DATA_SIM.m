@@ -9,7 +9,7 @@ visualize_horizons = 0;
 static_3d_plot     = 0;
 
 prompt             = 'Is this a Real test? (y/n)  ';
-real_sim           = input(prompt,'s');
+real_sim           =  input(prompt,'s');
 
 
 %% DIMENSION SET
@@ -66,67 +66,125 @@ plot3(P_ee_out(1,:),P_ee_out(2,:),P_ee_out(3,:),'color','b','linewidth',2)
 xlabel('x [m]')
 ylabel('y [m]')
 zlabel('z [m]')
-% legend('Desired','Real','Simulated')
+legend('Desired','Real','Simulated')
 axis equal
 
 %% ERROR ABS XYZ PLOT (2)
 
-    figure(2)
-    plot(error_abs_xyz)
-    grid on
-    title('error xyz')
+figure(2)
+%     plot(error_abs_xyz)
+error_ee=sqrt((P_ee_out(1,1:end-2)-xd(10,3:end)).^2+(P_ee_out(2,1:end-2)-xd(11,3:end)).^2+(P_ee_out(3,1:end-2)-xd(12,3:end)).^2);
+plot(0:dt:(size(P_ee_out,2)-3)*dt,error_ee,'linewidth',1)
+% ACTUALLY MORE CORRECT:
+% error_ee=sqrt((P_ee_out(1,1:end-1)-xd(10,2:end)).^2+(P_ee_out(2,1:end-1)-xd(11,2:end)).^2+(P_ee_out(3,1:end-1)-xd(12,2:end)).^2);
+% plot(0:dt:(size(P_ee_out,2)-2)*dt,error_ee,'linewidth',1)
+grid on
+axis tight
+ylabel('Cartesian error EE[m]')
 
 %% ARM JOINTS VELOCITIES PLOTS (3) 
 if exist('state_qp')==1
     
 figure(3)
-subplot(321)
-plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(1,:))
-hold on
-grid on
-plot(0:dt:(size(u_given,2)-1)*dt,u_given(3,:))
-title('thetap1')
-legend('meas','giv')
 
-subplot(322)
-plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(2,:))
-hold on
-grid on
-plot(0:dt:(size(u_given,2)-1)*dt,u_given(4,:))
-title('thetap2')
-legend('meas','giv')
+fatt=2.4;
+xp_base = [0 diff(state_x(1,:))]./dt/fatt; 
+yp_base = [0 diff(state_x(2,:))]./dt/fatt;
+v_base = xp_base.*cos(state_x(3,:)) + yp_base.*sin(state_x(3,:));
+om_base = [0 diff(state_x(3,:))]./dt/fatt;
+enne= size(state_x,2)-1;
+a_base = [diff(v_base) 0]./dt;
+alph_base = [diff(om_base) 0]./dt;
+a_given = [0 diff(u_given(1,1:enne+1))]./dt;
+alph_given = [0 diff(u_given(2,1:enne+1))]./dt;
 
-subplot(323)
-plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(3,:))
-hold on
+subplot(241)
+plot(0:dt:(enne)*dt,a_base,'-','linewidth',1)
+hold on 
 grid on
-plot(0:dt:(size(u_given,2)-1)*dt,u_given(5,:))
-title('thetap3')
-legend('meas','giv')
+plot(0:dt:(enne)*dt,a_given,'-','linewidth',1)
+plot(ones(1,enne+1)*0.1,'k--','linewidth',1)
+plot(ones(1,enne+1)*-0.1,'k--','linewidth',1)
+axis([0 enne*dt -0.15 0.15])
+title('a_{base} ')
 
-subplot(324)
-plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(4,:))
-hold on
-grid on
-plot(0:dt:(size(u_given,2)-1)*dt,u_given(6,:))
-title('thetap4')
-legend('meas','giv')
 
-subplot(325)
-plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(5,:))
-hold on
+subplot(242)
+plot(0:dt:(enne)*dt,alph_base,'-','linewidth',1)
+hold on 
 grid on
-plot(0:dt:(size(u_given,2)-1)*dt,u_given(7,:))
-title('thetap5')
-legend('meas','giv')
+plot(0:dt:(enne)*dt,alph_given,'-','linewidth',1)
+plot(ones(1,enne+1)*0.1,'k--','linewidth',1)
+plot(ones(1,enne+1)*-0.1,'k--','linewidth',1)
+axis([0 enne*dt -0.15 0.15])
+title('\omega')
 
-subplot(326)
-plot(0:Tsample:(size(state_qp,2)-1)*Tsample,state_qp(6,:))
+subplot(243)
+plot(0:dt:(enne)*dt,state_qp(1,2:enne+2),'-','linewidth',1)
 hold on
 grid on
-plot(0:dt:(size(u_given,2)-1)*dt,u_given(8,:))
-title('thetap6')
-legend('meas','giv')
+plot(0:dt:(enne)*dt,u_given(3,1:enne+1),'-','linewidth',1)
+plot(ones(1,enne+1)*0.2,'k--','linewidth',1)
+plot(ones(1,enne+1)*-0.2,'k--','linewidth',1)
+axis([0 enne*dt -0.25 0.25])
+title('d\theta_1')
+ 
+
+subplot(244)
+plot(0:dt:(enne)*dt,state_qp(2,2:enne+2),'-','linewidth',1)
+hold on
+grid on
+plot(0:dt:(enne)*dt,u_given(4,1:enne+1),'-','linewidth',1)
+plot(ones(1,enne+1)*0.2,'k--','linewidth',1)
+plot(ones(1,enne+1)*-0.2,'k--','linewidth',1)
+axis([0 enne*dt -0.25 0.25])
+title('d\theta_2')
+ 
+
+subplot(245)
+plot(0:dt:(enne)*dt,state_qp(3,2:enne+2),'-','linewidth',1)
+hold on
+grid on
+plot(0:dt:(enne)*dt,u_given(5,1:enne+1),'-','linewidth',1)
+plot(ones(1,enne+1)*0.2,'k--','linewidth',1)
+plot(ones(1,enne+1)*-0.2,'k--','linewidth',1)
+axis([0 enne*dt -0.25 0.25])
+title('d\theta_3')
+ 
+
+subplot(246)
+plot(0:dt:(enne)*dt,state_qp(4,2:enne+2),'-','linewidth',1)
+hold on
+grid on
+plot(0:dt:(enne)*dt,u_given(6,1:enne+1),'-','linewidth',1)
+plot(ones(1,enne+1)*0.2,'k--','linewidth',1)
+plot(ones(1,enne+1)*-0.2,'k--','linewidth',1)
+axis([0 enne*dt -0.25 0.25])
+title('d\theta_4')
+ 
+
+subplot(247)
+plot(0:dt:(enne)*dt,state_qp(5,2:enne+2),'-','linewidth',1)
+hold on
+grid on
+plot(0:dt:(enne)*dt,u_given(7,1:enne+1),'-','linewidth',1)
+plot(ones(1,enne+1)*0.2,'k--','linewidth',1)
+plot(ones(1,enne+1)*-0.2,'k--','linewidth',1)
+axis([0 enne*dt -0.25 0.25])
+title('d\theta_5')
+
+
+subplot(248)
+plot(0:dt:(enne)*dt,state_qp(6,2:enne+2),'-','linewidth',1)
+hold on
+grid on
+plot(0:dt:(enne)*dt,u_given(8,1:enne+1),'-','linewidth',1)
+plot(ones(1,enne+1)*0.2,'k--','linewidth',1)
+plot(ones(1,enne+1)*-0.2,'k--','linewidth',1)
+axis([0 enne*dt -0.25 0.25])
+title('d\theta_6')
+legend('Measured','Given')
+ 
 end
 
 warning off
@@ -236,31 +294,35 @@ title('Manipulability Index')
 figure(13)
 
 subplot(311)
-plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],P_ee_out(1,:),'linewidth',1.7)
+plot([0:dt:size(P_ee_out(1,1:end-2),2)*dt],P_ee_out(1,1:end-1),'linewidth',1.7)
 grid on
 hold on
-plot([0:0.5:size(xd(1,1:end-1),2)*0.5],xd(10,:),'--','linewidth',1.7)
+plot([0:dt:size(xd(1,1:end-2),2)*dt],xd(10,2:end),'--','linewidth',1.7)
 xlabel('Time [s]')
 ylabel('Distance [m]')
 legend('Real','Desired')
+axis tight
 title('X End-Effector')
 
 subplot(312)
-plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],P_ee_out(2,:),'linewidth',1.7)
+plot([0:dt:size(P_ee_out(1,1:end-2),2)*dt],P_ee_out(2,1:end-1),'linewidth',1.7)
 grid on
 hold on
-plot([0:0.5:size(xd(1,1:end-1),2)*0.5],xd(11,:),'--','linewidth',1.7)
+plot([0:dt:size(xd(1,1:end-2),2)*dt],xd(11,2:end),'--','linewidth',1.7)
 xlabel('Time [s]')
+axis tight
 ylabel('Distance [m]')
+
 title('Y End-Effector')
 
 subplot(313)
-plot([0:0.5:size(P_ee_out(1,1:end-1),2)*0.5],P_ee_out(3,:),'linewidth',1.7)
+plot([0:dt:size(P_ee_out(1,1:end-2),2)*dt],P_ee_out(3,1:end-1),'linewidth',1.7)
 grid on
 hold on
-plot([0:0.5:size(xd(1,1:end-1),2)*0.5],xd(12,:),'--','linewidth',1.7)
+plot([0:dt:size(xd(1,1:end-2),2)*dt],xd(12,2:end),'--','linewidth',1.7)
 xlabel('Time [s]')
 ylabel('Distance [m]')
+axis tight
 title('Z End-Effector')
 
 %% ORIENTATION ERROR (14)
@@ -287,27 +349,17 @@ title('orientation error on Z')
 %% BASE X-Y ERROR PLOT (15)
 
 figure(15)
-subplot(211)
-plot(0:dt:(length(xd(1,:))-1)*dt,abs(state_x(1,:)-xd(1,:)),'linewidth',2);
+plot(0:dt:(length(xd(1,:))-1)*dt,sqrt((state_x(1,:)-xd(1,:)).^2+(state_x(2,:)-xd(2,:)).^2),'linewidth',1);
 grid on
-subplot(212)
-plot(0:dt:(length(xd(1,:))-1)*dt,abs(state_x(2,:)-xd(2,:)),'linewidth',2);
-grid on
-
-figure(16)
-subplot(211)
-plot(0:dt:(length(xd(1,:))-1)*dt,abs(state_x(1,:)-xd(1,:)),'linewidth',2);
-grid on
-subplot(212)
-plot(0:dt:(length(xd(1,:))-1)*dt,abs(state_x(2,:)-xd(2,:)),'linewidth',2);
-grid on
+xlabel('Time [s]')
+ylabel('Cartesian error base[m]')
 
 %% BASE PLOT X and Y (16)
 
 figure(16)
 
 subplot(211)
-plot(0:dt:(length(xd(1,:))-1)*dt,xd(1,:),'linewidth',2)
+plot(0:dt:(length(xd(1,:))-1)*dt,xd(1,:),'--','linewidth',2)
 grid on
 hold on
 plot(0:dt:(length(xd(1,:))-1)*dt,state_x(1,:),'linewidth',2)
@@ -316,7 +368,7 @@ ylabel('x [m]')
 legend('Desired','Real')
 
 subplot(212)
-plot(0:dt:(length(xd(2,:))-1)*dt,xd(2,:),'linewidth',2)
+plot(0:dt:(length(xd(2,:))-1)*dt,xd(2,:),'--','linewidth',2)
 grid on
 hold on
 plot(0:dt:(length(xd(2,:))-1)*dt,state_x(2,:),'linewidth',2)
@@ -413,6 +465,7 @@ if static_3d_plot
         ylabel('y')
         zlabel('z')
         grid on
+%         axis off
         axis([-1.5+const_vec(9,1) 1.5+const_vec(9,2) -1.5+const_vec(10,1) 1.5+const_vec(10,2) 0 2])
         view(plot_position_3d(1),plot_position_3d(2));%-10, 20);
 end
@@ -495,7 +548,7 @@ if savedata ==1
         Type_sym='SIM_';
     end
 savename = [Type_sym, nometraj '_'  datestr(now, 'HH-MM dd-mmm-yyyy')];
-% savename = [Type_sym, nometraj '_N=',num2str(N),'_' , 'pesoManip=10_2'];
+% savename = [Type_sym, nometraj '_N=',num2str(N),'_', datestr(now, 'HH-MM dd-mmm-yyyy')];
 matfile = fullfile('Data_saved/', savename);
 save(matfile)
 
