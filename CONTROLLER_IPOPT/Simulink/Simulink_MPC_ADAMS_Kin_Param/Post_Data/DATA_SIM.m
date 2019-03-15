@@ -58,11 +58,11 @@ close all
 
 figure(1)
 
-plot3(xd(10,:),xd(11,:),xd(12,:),'--','color','r','linewidth',2)
+plot3(xd(10,:),xd(11,:),xd(12,:),'r-.','linewidth',1)
 hold on
 grid on
-plot3(P_ee_out(1,:),P_ee_out(2,:),P_ee_out(3,:),'color','b','linewidth',2)
-% plot3(P_ee_out_s(1,:),P_ee_out_s(2,:),P_ee_out_s(3,:),'color','c','linewidth',2)
+plot3(P_ee_out(1,:),P_ee_out(2,:),P_ee_out(3,:),'b','linewidth',1)
+plot3(P_ee_out_s(1,:),P_ee_out_s(2,:),P_ee_out_s(3,:),'c','linewidth',1)
 xlabel('x [m]')
 ylabel('y [m]')
 zlabel('z [m]')
