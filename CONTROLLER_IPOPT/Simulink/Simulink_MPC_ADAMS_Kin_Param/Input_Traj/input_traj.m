@@ -10,7 +10,7 @@ function [N,T,Tsample,t_total,xd,nometraj,initialize_starting_point,x0_val,x0_ac
 % RESTARTING FROM P0??
 initialize_starting_point = init;
 
-q0 = [ 0    0    0   0   -1.1   -2   -1.2891    1.3430    0.4038];
+q0 = [ 0    0   0  -1.3505   -1.5489   -1.7055   -1.0298    1.3691    0.0688];
 
 if q0(4)>6.28 || q0(5)>0.0698 || q0(6)>2.443 || q0(7)>0 || q0(8)>1.74 || q0(9)>6.23
     error('ATTENZIONE! UR5 Joint Values out of admissible range')

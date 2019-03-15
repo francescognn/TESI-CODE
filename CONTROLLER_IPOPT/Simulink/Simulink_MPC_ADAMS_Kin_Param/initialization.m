@@ -11,7 +11,7 @@ import casadi.*
 m_b       = 3; 
 m_m       = m_b;
 m_j       = m_m;
-Ak_base   = diag([1e6  1e6  1e6]);
+Ak_base   = diag([1e4  1e4  1e4]);
 Ak_joints = diag([100 100 100 100 100 100]);
 Ak_ee     = diag([1e6 1e6 1e6 1e6 1e6]);
 Ak_mm     = 10;
@@ -80,8 +80,8 @@ u = [            Fb                  zeros(size(Fb,1),size(Fm,2))  ; ...
 %% Writing differential equation
  
 [P_ee,Psi_ee,Rot_T] = FK(x);    
-%   G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
-   G=zeros(3,2);
+   G=[cos(x(3)) 0; sin(x(3)) 0; 0 1];
+%   G=zeros(3,2);
 xdot = [G zeros(3,6); zeros(6,2) eye(6); zeros(9,8)]*u;
 
 % 
@@ -161,7 +161,7 @@ man_i    = man_index_f(X_forecast(1:9,i));
 
 u        = Usym(p,T_horizon(i));
 
-        h1= h1 + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].')*(1-sw);
+        h1= h1 + ((i/N)^m_b)*(  [ex ey eth]*Ak_base*[ex ey eth].');%*(1-sw);
         h2= h2 + ((i/N)^m_b)*(  [e_th1 e_th2 e_th3 e_th4 e_th5 e_th6]*Ak_joints*[e_th1 e_th2 e_th3 e_th4 e_th5 e_th6].'  )*(1-sw);
         h3= h3 + ((i/N)^m_b)*(  [ex_ee ey_ee ez_ee ethx_ee ethz_ee]*Ak_ee*[ex_ee ey_ee ez_ee ethx_ee ethz_ee].'  )*sw;
         h4= h4 + ((i/N)^m_b)*(  Ak_mm/(man_i)^2  )*sw;
