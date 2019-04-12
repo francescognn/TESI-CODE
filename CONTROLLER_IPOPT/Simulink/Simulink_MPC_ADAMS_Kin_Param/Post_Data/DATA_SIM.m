@@ -2,7 +2,7 @@
 savedata           = 0;
 visualize_plot     = 0;
 visualize_3d_plot  = 1;
-plot_position_3d   = [20,10]; % AZ,EL
+plot_position_3d   = [20,20]; % AZ,EL
 visualize_spheres  = 0;
 record_video       = 1;
 visualize_horizons = 0;
@@ -416,7 +416,7 @@ F_video = struct('cdata', cell(1,size(X,2)), 'colormap', cell(1,size(X,2)));
         zlabel('z')
         grid on
 
-        axis([-0.5+min(P_ee_out(1,:)) 0.5+max(P_ee_out(1,:)) -0.5+min(P_ee_out(2,:)) 0.5+max(P_ee_out(2,:)) 0 2])
+        axis([-1+min(P_ee_out(1,:)) 0.5+max(P_ee_out(1,:)) -1+min(P_ee_out(2,:)) 0.5+max(P_ee_out(2,:)) 0 2])
         view(plot_position_3d(1),plot_position_3d(2));%-10, 20);
         drawnow();
 
@@ -478,7 +478,7 @@ if record_video == 1
     end
     video_savename = ['Videos/REAL_TEST_'  datestr(now, 'HH-MM dd-mmm-yyyy') '.avi'];
     video= VideoWriter(video_savename);
-    myVideo.FrameRate = 5;
+    myVideo.FrameRate = 10;
     open(video)
     writeVideo(video,F_video)
     close(video)
